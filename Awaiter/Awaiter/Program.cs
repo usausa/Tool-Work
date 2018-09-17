@@ -1,12 +1,44 @@
-﻿using System;
-
-namespace Awaiter
+﻿namespace Awaiter
 {
-    class Program
+    using System;
+    using System.Runtime.CompilerServices;
+    using System.Threading.Tasks;
+
+    public static class Program
     {
-        static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var ret = await AwaitableResultCall();
+
+            Console.WriteLine(ret);
+        }
+
+        private static AwaitableResult AwaitableResultCall()
+        {
+            return new AwaitableResult();
+        }
+    }
+
+    public class AwaitableResult
+    {
+        public AwaitableResultAwaiter GetAwaiter()
+        {
+            return new AwaitableResultAwaiter();
+        }
+    }
+
+    public class AwaitableResultAwaiter : INotifyCompletion
+    {
+        public bool IsCompleted => false;
+
+        public void OnCompleted(Action continuation)
+        {
+            continuation();
+        }
+
+        public string GetResult()
+        {
+            return "UsaUsa";
         }
     }
 }
