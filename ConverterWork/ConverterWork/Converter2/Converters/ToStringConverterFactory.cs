@@ -6,9 +6,9 @@
     {
         private static readonly Type StringType = typeof(string);
 
-        private static readonly Func<TypePair, object, object> Converter = (typePair, source) => source.ToString();
+        private static readonly Func<object, object> Converter = source => source.ToString();
 
-        public Func<TypePair, object, object> GetConverter(TypePair typePair)
+        public Func<object, object> GetConverter(TypePair typePair)
         {
             return typePair.TargetType == StringType ? Converter : null;
         }
