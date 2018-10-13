@@ -57,7 +57,12 @@
             }
 
             var typePair = new TypePair(value.GetType(), targetType);
-            var converter = converterCache.AddIfNotExist(
+            if (converterCache.TryGetValue(typePair, out var converter))
+            {
+                return converter;
+            }
+
+            converter = converterCache.AddIfNotExist(
                 typePair,
                 GetConverter);
             if (converter == null)
