@@ -1,4 +1,4 @@
-﻿namespace Smart.Converter.Converters
+﻿namespace Smart.Converter2.Converters
 {
     using System.Collections.Generic;
 
@@ -15,10 +15,11 @@
         {
             return new List<IConverterFactory>
             {
-                new CastConverterFactory(),              // System.Converter
+                new AssignableConverterFactory(),           // IsAssignableFrom
+                new CastConverterFactory(),                 // Cast
+                // TODO Convert!
                 new EnumConverterFactory(),                 // Enum to Enum, String to Enum, Assignable to Enum, Enum to Assignable
                 new ConversionOperatorConverterFactory(),   // Implicit/Explicit operator
-                new AssignableConverterFactory(),           // IsAssignableFrom
                 new ToStringConverterFactory(),             // ToString finally
             };
         }
