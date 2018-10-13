@@ -6,7 +6,7 @@
 
     public sealed class ConversionOperatorConverterFactory : IConverterFactory
     {
-        public Func<object, object> GetConverter(TypePair typePair)
+        public Func<object, object> GetConverter(in TypePair typePair)
         {
             // TODO mode ?
             var methodInfo = GetImplicitConversionOperator(typePair);

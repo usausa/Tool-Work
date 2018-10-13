@@ -8,7 +8,7 @@
 
         private static readonly Func<object, object> Converter = source => source.ToString();
 
-        public Func<object, object> GetConverter(TypePair typePair)
+        public Func<object, object> GetConverter(in TypePair typePair)
         {
             return typePair.TargetType == StringType ? Converter : null;
         }

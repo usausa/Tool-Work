@@ -22,14 +22,13 @@
         /// </summary>
         /// <param name="typePair"></param>
         /// <returns></returns>
-        public Func<object, object> GetConverter(TypePair typePair)
+        public Func<object, object> GetConverter(in TypePair typePair)
         {
-            if (typePair.TargetType.IsNullableType())
-            {
-                typePair = new TypePair(typePair.SourceType, Nullable.GetUnderlyingType(typePair.TargetType));
-            }
-
-            Converters.TryGetValue(typePair, out var converter);
+            Converters.TryGetValue(
+                typePair.TargetType.IsNullableType()
+                    ? new TypePair(typePair.SourceType, Nullable.GetUnderlyingType(typePair.TargetType))
+                    : typePair,
+                out var converter);
             return converter;
         }
     }

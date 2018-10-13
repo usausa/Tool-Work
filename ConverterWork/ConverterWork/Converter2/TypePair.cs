@@ -2,7 +2,7 @@
 {
     using System;
 
-    public struct TypePair : IEquatable<TypePair>
+    public readonly struct TypePair : IEquatable<TypePair>
     {
         private readonly int hashCode;
 

@@ -4,6 +4,6 @@
 
     public interface IConverterFactory
     {
-        Func<object, object> GetConverter(TypePair typePair);
+        Func<object, object> GetConverter(in TypePair typePair);
     }
 }
