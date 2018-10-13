@@ -36,7 +36,6 @@
             converterCache.Clear();
         }
 
-        // TODO inline ?
         public T Convert<T>(object value)
         {
             return (T)Convert(value, typeof(T));
@@ -44,23 +43,23 @@
 
         public object Convert(object value, Type targetType)
         {
-            // TODO check point 1
+            // Specialized null
             if (value == null)
             {
                 return targetType.GetDefaultValue();
             }
 
-            // TODO check point 2
+            // Specialized same type for performance (Nullable is excluded because operation is slow)
             var sourceType = value.GetType();
-            if (sourceType == (targetType.IsNullableType() ? Nullable.GetUnderlyingType(targetType) : targetType))
+            if (sourceType == targetType)
             {
                 return value;
             }
 
-            var typePair = new TypePair(sourceType, targetType);
+            var typePair = new TypePair(value.GetType(), targetType);
             var converter = converterCache.AddIfNotExist(
                 typePair,
-                tp => factories.Select(f => f.GetConverter(tp)).FirstOrDefault(c => c != null));
+                GetConverter);
             if (converter == null)
             {
                 throw new ObjectConverterException(String.Format(CultureInfo.InvariantCulture, "Type {0} can't convert to {1}", value.GetType().ToString(), targetType));
@@ -69,14 +68,14 @@
             return converter(value);
         }
 
-        public Func<TSource, TTarget> GetConverter<TSource, TTarget>()
+        public Func<object, object> GetConverter(Type sourceType, Type targetType)
         {
             throw new NotImplementedException();
         }
 
-        public Func<object, object> GetConverter(Type sourceType, Type targetType)
+        private Func<object, object> GetConverter(TypePair typePair)
         {
-            throw new NotImplementedException();
+            return factories.Select(f => f.GetConverter(typePair)).FirstOrDefault(c => c != null);
         }
     }
 }

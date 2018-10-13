@@ -8,8 +8,6 @@
 
         object Convert(object value, Type targetType);
 
-        Func<TSource, TTarget> GetConverter<TSource, TTarget>();
-
         Func<object, object> GetConverter(Type sourceType, Type targetType);
     }
 }

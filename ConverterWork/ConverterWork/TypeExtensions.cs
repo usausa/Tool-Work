@@ -51,6 +51,7 @@
         /// <param name="type"></param>
         /// <returns></returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "Extensions")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static object GetDefaultValue(this Type type)
         {
             if (type.IsValueType && !type.IsNullableType())
@@ -72,6 +73,7 @@
         /// <param name="type"></param>
         /// <returns></returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "Extensions")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNullableType(this Type type)
         {
             return type.IsGenericType && (type.GetGenericTypeDefinition() == NullableType);
@@ -83,6 +85,7 @@
         /// <param name="type"></param>
         /// <returns></returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "Extensions")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsStruct(this Type type)
         {
             return type.IsValueType && !type.IsEnum && !type.IsPrimitive && !type.IsNullableType();
@@ -110,6 +113,7 @@
         /// <param name="type"></param>
         /// <returns></returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "Extensions")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Type GetCollectionElementType(this Type type)
         {
             if (type.HasElementType)
@@ -142,6 +146,7 @@
         /// <param name="type"></param>
         /// <returns></returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "Extensions")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Type GetEnumType(this Type type)
         {
             if (type.IsEnum)
@@ -164,6 +169,7 @@
         /// <param name="type"></param>
         /// <returns></returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "Extensions")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Type GetValueHolderType(this Type type)
         {
             return type.GetInterfaces().FirstOrDefault(it => it.IsGenericType && it.GetGenericTypeDefinition() == ValueHolderType);
@@ -174,6 +180,7 @@
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static PropertyInfo GetValueHolderProperty(this Type type)
         {
             return type.GetValueHolderType()?.GetRuntimeProperty("Value");
