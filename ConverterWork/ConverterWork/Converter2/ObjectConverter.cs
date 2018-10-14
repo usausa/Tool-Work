@@ -2,8 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
+    using System.Runtime.CompilerServices;
 
     using Smart.Collections.Concurrent;
     using Smart.Converter2.Converters;
@@ -36,6 +36,30 @@
             converterCache.Clear();
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private Func<object, object> FindConverter(TypePair typePair)
+        {
+            return factories.Select(f => f.GetConverter(typePair)).FirstOrDefault(c => c != null);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private Func<object, object> GetConverter(Type sourceType, Type targetType)
+        {
+            var typePair = new TypePair(sourceType, targetType);
+            if (!converterCache.TryGetValue(typePair, out var converter))
+            {
+                converter = converterCache.AddIfNotExist(typePair, FindConverter);
+            }
+
+            if (converter == null)
+            {
+                throw new ObjectConverterException($"Type {sourceType} can't convert to {targetType}");
+            }
+
+            return converter;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T Convert<T>(object value)
         {
             return (T)Convert(value, typeof(T));
@@ -56,31 +80,25 @@
                 return value;
             }
 
-            var typePair = new TypePair(value.GetType(), targetType);
-            if (converterCache.TryGetValue(typePair, out var converter))
-            {
-                return converter;
-            }
-
-            converter = converterCache.AddIfNotExist(
-                typePair,
-                GetConverter);
-            if (converter == null)
-            {
-                throw new ObjectConverterException(String.Format(CultureInfo.InvariantCulture, "Type {0} can't convert to {1}", value.GetType().ToString(), targetType));
-            }
-
+            var converter = GetConverter(value.GetType(), targetType);
             return converter(value);
         }
 
-        public Func<object, object> GetConverter(Type sourceType, Type targetType)
+        public Func<object, object> CreateConverter(Type sourceType, Type targetType)
         {
-            throw new NotImplementedException();
+            return CreateConverter(
+                targetType,
+                targetType.GetDefaultValue(),
+                GetConverter(sourceType, targetType));
         }
 
-        private Func<object, object> GetConverter(TypePair typePair)
+        private static Func<object, object> CreateConverter(Type targetType, object defaultValue, Func<object, object> converter)
         {
-            return factories.Select(f => f.GetConverter(typePair)).FirstOrDefault(c => c != null);
+            return value => value == null
+                ? defaultValue
+                : value.GetType() == targetType
+                    ? value
+                    : converter(value);
         }
     }
 }

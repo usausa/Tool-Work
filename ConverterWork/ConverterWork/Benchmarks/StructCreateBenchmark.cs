@@ -50,7 +50,7 @@
         public long Member20 { get; set; }
     }
 
-    public class CreateStructBenchmark
+    public class StructCreateBenchmark
     {
         private static readonly Type Type2 = typeof(Struct2);
 
@@ -69,39 +69,21 @@
         }
 
         [Benchmark]
-        public object CreateByBox2()
-        {
-            return cache.TryGetValue(Type2, out object value) ? value : null;
-        }
+        public object CreateByBox2() => cache.TryGetValue(Type2, out object value) ? value : null;
 
         [Benchmark]
-        public object CreateByBox10()
-        {
-            return cache.TryGetValue(Type10, out object value) ? value : null;
-        }
+        public object CreateByBox10() => cache.TryGetValue(Type10, out object value) ? value : null;
 
         [Benchmark]
-        public object CreateByBox20L()
-        {
-            return cache.TryGetValue(Type20L, out object value) ? value : null;
-        }
+        public object CreateByBox20L() => cache.TryGetValue(Type20L, out object value) ? value : null;
 
         [Benchmark]
-        public object CreateByReflection2()
-        {
-            return Activator.CreateInstance(Type2);
-        }
+        public object CreateByReflection2() => Activator.CreateInstance(Type2);
 
         [Benchmark]
-        public object CreateByReflection10()
-        {
-            return Activator.CreateInstance(Type10);
-        }
+        public object CreateByReflection10() => Activator.CreateInstance(Type10);
 
         [Benchmark]
-        public object CreateByReflection20L()
-        {
-            return Activator.CreateInstance(Type20L);
-        }
+        public object CreateByReflection20L() => Activator.CreateInstance(Type20L);
     }
 }
