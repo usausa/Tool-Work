@@ -5,7 +5,6 @@
     using System.Linq;
     using System.Runtime.CompilerServices;
 
-    using Smart.Collections.Concurrent;
     using Smart.Converter2.Converters;
 
     /// <summary>
@@ -15,7 +14,7 @@
     {
         public static ObjectConverter Default { get; } = new ObjectConverter();
 
-        private readonly ThreadsafeHashArrayMap<TypePair, Func<object, object>> converterCache = new ThreadsafeHashArrayMap<TypePair, Func<object, object>>();
+        private readonly TypePairHashArray converterCache = new TypePairHashArray();
 
         private IList<IConverterFactory> factories;
 
@@ -37,18 +36,17 @@
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private Func<object, object> FindConverter(TypePair typePair)
+        private Func<object, object> FindConverter(Type sourceType, Type targetType)
         {
-            return factories.Select(f => f.GetConverter(typePair)).FirstOrDefault(c => c != null);
+            return factories.Select(f => f.GetConverter(sourceType, targetType)).FirstOrDefault(c => c != null);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private Func<object, object> GetConverter(Type sourceType, Type targetType)
         {
-            var typePair = new TypePair(sourceType, targetType);
-            if (!converterCache.TryGetValue(typePair, out var converter))
+            if (!converterCache.TryGetValue(sourceType, targetType, out var converter))
             {
-                converter = converterCache.AddIfNotExist(typePair, FindConverter);
+                converter = converterCache.AddIfNotExist(sourceType, targetType, FindConverter);
             }
 
             if (converter == null)

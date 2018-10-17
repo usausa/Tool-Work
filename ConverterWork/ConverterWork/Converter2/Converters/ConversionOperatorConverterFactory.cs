@@ -6,16 +6,15 @@
 
     public sealed class ConversionOperatorConverterFactory : IConverterFactory
     {
-        public Func<object, object> GetConverter(in TypePair typePair)
+        public Func<object, object> GetConverter(Type sourceType, Type targetType)
         {
-            // TODO mode ?
-            var methodInfo = GetImplicitConversionOperator(typePair);
+            var methodInfo = GetImplicitConversionOperator(sourceType, targetType);
             if (methodInfo != null)
             {
                 return source => methodInfo.Invoke(null, new[] { source });
             }
 
-            methodInfo = GetExplicitConversionOperator(typePair);
+            methodInfo = GetExplicitConversionOperator(sourceType, targetType);
             if (methodInfo != null)
             {
                 return source => methodInfo.Invoke(null, new[] { source });
@@ -24,28 +23,28 @@
             return null;
         }
 
-        private static MethodInfo GetImplicitConversionOperator(TypePair typePair)
+        private static MethodInfo GetImplicitConversionOperator(Type sourceType, Type targetType)
         {
-            var targetType = typePair.TargetType.IsNullableType() ? Nullable.GetUnderlyingType(typePair.TargetType) : typePair.TargetType;
+            targetType = targetType.IsNullableType() ? Nullable.GetUnderlyingType(targetType) : targetType;
 
-            var sourceTypeMethod = typePair.SourceType
+            var sourceTypeMethod = sourceType
                 .GetMethods()
                 .FirstOrDefault(mi => mi.IsPublic && mi.IsStatic && mi.Name == "op_Implicit" && mi.ReturnType == targetType);
             return sourceTypeMethod ?? targetType
                 .GetMethods()
-                .FirstOrDefault(mi => mi.IsPublic && mi.IsStatic && mi.Name == "op_Implicit" && mi.GetParameters().Length == 1 && mi.GetParameters()[0].ParameterType == typePair.SourceType);
+                .FirstOrDefault(mi => mi.IsPublic && mi.IsStatic && mi.Name == "op_Implicit" && mi.GetParameters().Length == 1 && mi.GetParameters()[0].ParameterType == sourceType);
         }
 
-        private static MethodInfo GetExplicitConversionOperator(TypePair typePair)
+        private static MethodInfo GetExplicitConversionOperator(Type sourceType, Type targetType)
         {
-            var targetType = typePair.TargetType.IsNullableType() ? Nullable.GetUnderlyingType(typePair.TargetType) : typePair.TargetType;
+            targetType = targetType.IsNullableType() ? Nullable.GetUnderlyingType(targetType) : targetType;
 
-            var sourceTypeMethod = typePair.SourceType.GetTypeInfo()
-                .DeclaredMethods
+            var sourceTypeMethod = sourceType
+                .GetMethods()
                 .FirstOrDefault(mi => mi.IsPublic && mi.IsStatic && mi.Name == "op_Explicit" && mi.ReturnType == targetType);
-            return sourceTypeMethod ?? targetType.GetTypeInfo()
-                .DeclaredMethods
-                .FirstOrDefault(mi => mi.IsPublic && mi.IsStatic && mi.Name == "op_Explicit" && mi.GetParameters().Length == 1 && mi.GetParameters()[0].ParameterType == typePair.SourceType);
+            return sourceTypeMethod ?? targetType
+                .GetMethods()
+                .FirstOrDefault(mi => mi.IsPublic && mi.IsStatic && mi.Name == "op_Explicit" && mi.GetParameters().Length == 1 && mi.GetParameters()[0].ParameterType == sourceType);
         }
     }
 }

@@ -7,10 +7,10 @@
     {
         private static readonly Type StringType = typeof(string);
 
-        public Func<object, object> GetConverter(in TypePair typePair)
+        public Func<object, object> GetConverter(Type sourceType, Type targetType)
         {
-            var sourceEnumType = typePair.SourceType.GetEnumType();
-            var targetEnumType = typePair.TargetType.GetEnumType();
+            var sourceEnumType = sourceType.GetEnumType();
+            var targetEnumType = targetType.GetEnumType();
 
             if ((sourceEnumType != null) && (targetEnumType != null))
             {
@@ -23,13 +23,13 @@
                 // !Enum to Enum
 
                 // String to Enum
-                if (typePair.SourceType == StringType)
+                if (sourceType == StringType)
                 {
                     return source => Enum.Parse(targetEnumType, (string)source, true);
                 }
 
                 // Assignable
-                if (typePair.SourceType.IsAssignableFrom(Enum.GetUnderlyingType(targetEnumType)))
+                if (sourceType.IsAssignableFrom(Enum.GetUnderlyingType(targetEnumType)))
                 {
                     return source => Enum.ToObject(targetEnumType, source);
                 }
@@ -42,9 +42,9 @@
                 // Enum to !Enum
 
                 // Assignable
-                if (typePair.TargetType.IsAssignableFrom(Enum.GetUnderlyingType(sourceEnumType)))
+                if (targetType.IsAssignableFrom(Enum.GetUnderlyingType(sourceEnumType)))
                 {
-                    var targetType = typePair.TargetType.IsNullableType() ? Nullable.GetUnderlyingType(typePair.TargetType) : typePair.TargetType;
+                    targetType = targetType.IsNullableType() ? Nullable.GetUnderlyingType(targetType) : targetType;
                     return source => Convert.ChangeType(source, targetType, CultureInfo.CurrentCulture);
                 }
 

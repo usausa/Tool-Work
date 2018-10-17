@@ -6,9 +6,9 @@
     {
         private static readonly Func<object, object> Converter = source => source;
 
-        public Func<object, object> GetConverter(in TypePair typePair)
+        public Func<object, object> GetConverter(Type sourceType, Type targetType)
         {
-            return typePair.TargetType.IsAssignableFrom(typePair.SourceType) ? Converter : null;
+            return targetType.IsAssignableFrom(sourceType) ? Converter : null;
         }
     }
 }
