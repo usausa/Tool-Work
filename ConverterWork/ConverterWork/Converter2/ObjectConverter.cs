@@ -87,7 +87,7 @@
             return CreateConverter(
                 targetType,
                 targetType.GetDefaultValue(),
-                GetConverter(sourceType, targetType));
+                GetConverter(sourceType.IsNullableType() ? Nullable.GetUnderlyingType(sourceType) : sourceType, targetType));
         }
 
         private static Func<object, object> CreateConverter(Type targetType, object defaultValue, Func<object, object> converter)

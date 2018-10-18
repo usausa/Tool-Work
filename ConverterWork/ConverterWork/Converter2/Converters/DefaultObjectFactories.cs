@@ -16,7 +16,8 @@
             return new List<IConverterFactory>
             {
                 new AssignableConverterFactory(),           // IsAssignableFrom
-                new CastConverterFactory(),                 // Cast
+                new BooleanConverterFactory(),
+                new NumericConverterFactory(),
                 // TODO Convert!
                 new EnumConverterFactory(),                 // Enum to Enum, String to Enum, Assignable to Enum, Enum to Assignable
                 new ConversionOperatorConverterFactory(),   // Implicit/Explicit operator
