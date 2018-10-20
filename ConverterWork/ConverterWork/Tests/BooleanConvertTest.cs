@@ -11,7 +11,7 @@
         //--------------------------------------------------------------------------------
 
         [Fact]
-        public void ConvertBooleanToByte()
+        public void BooleanToByte()
         {
             var converter = new TestObjectConverter();
             Assert.Equal((byte)0, converter.Convert(false, typeof(byte)));
@@ -20,7 +20,7 @@
         }
 
         [Fact]
-        public void ConvertBooleanToNullableByte()
+        public void BooleanToNullableByte()
         {
             var converter = new TestObjectConverter();
             Assert.Equal((byte)0, converter.Convert(false, typeof(byte?)));
@@ -29,7 +29,7 @@
         }
 
         [Fact]
-        public void ConvertBooleanToSByte()
+        public void BooleanToSByte()
         {
             var converter = new TestObjectConverter();
             Assert.Equal((sbyte)0, converter.Convert(false, typeof(sbyte)));
@@ -38,7 +38,7 @@
         }
 
         [Fact]
-        public void ConvertBooleanToNullableSByte()
+        public void BooleanToNullableSByte()
         {
             var converter = new TestObjectConverter();
             Assert.Equal((sbyte)0, converter.Convert(false, typeof(sbyte?)));
@@ -47,7 +47,7 @@
         }
 
         [Fact]
-        public void ConvertBooleanToShort()
+        public void BooleanToShort()
         {
             var converter = new TestObjectConverter();
             Assert.Equal((short)0, converter.Convert(false, typeof(short)));
@@ -56,7 +56,7 @@
         }
 
         [Fact]
-        public void ConvertBooleanToNullableShort()
+        public void BooleanToNullableShort()
         {
             var converter = new TestObjectConverter();
             Assert.Equal((short)0, converter.Convert(false, typeof(short?)));
@@ -65,7 +65,7 @@
         }
 
         [Fact]
-        public void ConvertBooleanToUShort()
+        public void BooleanToUShort()
         {
             var converter = new TestObjectConverter();
             Assert.Equal((ushort)0, converter.Convert(false, typeof(ushort)));
@@ -74,7 +74,7 @@
         }
 
         [Fact]
-        public void ConvertBooleanToNullableUShort()
+        public void BooleanToNullableUShort()
         {
             var converter = new TestObjectConverter();
             Assert.Equal((ushort)0, converter.Convert(false, typeof(ushort?)));
@@ -83,7 +83,7 @@
         }
 
         [Fact]
-        public void ConvertBooleanToInt()
+        public void BooleanToInt()
         {
             var converter = new TestObjectConverter();
             Assert.Equal(0, converter.Convert(false, typeof(int)));
@@ -92,7 +92,7 @@
         }
 
         [Fact]
-        public void ConvertBooleanToNullableInt()
+        public void BooleanToNullableInt()
         {
             var converter = new TestObjectConverter();
             Assert.Equal(0, converter.Convert(false, typeof(int?)));
@@ -101,7 +101,7 @@
         }
 
         [Fact]
-        public void ConvertBooleanToUInt()
+        public void BooleanToUInt()
         {
             var converter = new TestObjectConverter();
             Assert.Equal(0U, converter.Convert(false, typeof(uint)));
@@ -110,7 +110,7 @@
         }
 
         [Fact]
-        public void ConvertBooleanToNullableUInt()
+        public void BooleanToNullableUInt()
         {
             var converter = new TestObjectConverter();
             Assert.Equal(0U, converter.Convert(false, typeof(uint?)));
@@ -119,7 +119,7 @@
         }
 
         [Fact]
-        public void ConvertBooleanToLong()
+        public void BooleanToLong()
         {
             var converter = new TestObjectConverter();
             Assert.Equal(0L, converter.Convert(false, typeof(long)));
@@ -128,7 +128,7 @@
         }
 
         [Fact]
-        public void ConvertBooleanToNullableLong()
+        public void BooleanToNullableLong()
         {
             var converter = new TestObjectConverter();
             Assert.Equal(0L, converter.Convert(false, typeof(long?)));
@@ -137,7 +137,7 @@
         }
 
         [Fact]
-        public void ConvertBooleanToULong()
+        public void BooleanToULong()
         {
             var converter = new TestObjectConverter();
             Assert.Equal(0UL, converter.Convert(false, typeof(ulong)));
@@ -146,7 +146,7 @@
         }
 
         [Fact]
-        public void ConvertBooleanToNullableULong()
+        public void BooleanToNullableULong()
         {
             var converter = new TestObjectConverter();
             Assert.Equal(0UL, converter.Convert(false, typeof(ulong?)));
@@ -155,7 +155,7 @@
         }
 
         [Fact]
-        public void ConvertBooleanToChar()
+        public void BooleanToChar()
         {
             var converter = new TestObjectConverter();
             Assert.Equal((char)0, converter.Convert(false, typeof(char)));
@@ -164,7 +164,7 @@
         }
 
         [Fact]
-        public void ConvertBooleanToNullableChar()
+        public void BooleanToNullableChar()
         {
             var converter = new TestObjectConverter();
             Assert.Equal((char)0, converter.Convert(false, typeof(char?)));
@@ -173,7 +173,7 @@
         }
 
         [Fact]
-        public void ConvertBooleanToDouble()
+        public void BooleanToDouble()
         {
             var converter = new TestObjectConverter();
             Assert.Equal(0d, converter.Convert(false, typeof(double)));
@@ -182,7 +182,7 @@
         }
 
         [Fact]
-        public void ConvertBooleanToNullableDouble()
+        public void BooleanToNullableDouble()
         {
             var converter = new TestObjectConverter();
             Assert.Equal(0d, converter.Convert(false, typeof(double?)));
@@ -191,7 +191,7 @@
         }
 
         [Fact]
-        public void ConvertBooleanToFloat()
+        public void BooleanToFloat()
         {
             var converter = new TestObjectConverter();
             Assert.Equal(0f, converter.Convert(false, typeof(float)));
@@ -200,7 +200,7 @@
         }
 
         [Fact]
-        public void ConvertBooleanToNullableFloat()
+        public void BooleanToNullableFloat()
         {
             var converter = new TestObjectConverter();
             Assert.Equal(0f, converter.Convert(false, typeof(float?)));
@@ -209,7 +209,7 @@
         }
 
         [Fact]
-        public void ConvertBooleanToDecimal()
+        public void BooleanToDecimal()
         {
             var converter = new TestObjectConverter();
             Assert.Equal(0m, converter.Convert(false, typeof(decimal)));
@@ -218,7 +218,7 @@
         }
 
         [Fact]
-        public void ConvertBooleanToNullableDecimal()
+        public void BooleanToNullableDecimal()
         {
             var converter = new TestObjectConverter();
             Assert.Equal(0m, converter.Convert(false, typeof(decimal?)));
@@ -231,7 +231,7 @@
         //--------------------------------------------------------------------------------
 
         [Fact]
-        public void ConvertByteToBoolean()
+        public void ByteToBoolean()
         {
             var converter = new TestObjectConverter();
             Assert.False((bool)converter.Convert((byte)0, typeof(bool)));
@@ -240,7 +240,7 @@
         }
 
         [Fact]
-        public void ConvertByteToNullableBoolean()
+        public void ByteToNullableBoolean()
         {
             var converter = new TestObjectConverter();
             Assert.False((bool)converter.Convert((byte)0, typeof(bool?)));
@@ -249,7 +249,7 @@
         }
 
         [Fact]
-        public void ConvertSByteToBoolean()
+        public void SByteToBoolean()
         {
             var converter = new TestObjectConverter();
             Assert.False((bool)converter.Convert((sbyte)0, typeof(bool)));
@@ -259,7 +259,7 @@
         }
 
         [Fact]
-        public void ConvertSByteToNullableBoolean()
+        public void SByteToNullableBoolean()
         {
             var converter = new TestObjectConverter();
             Assert.False((bool)converter.Convert((sbyte)0, typeof(bool?)));
@@ -269,7 +269,7 @@
         }
 
         [Fact]
-        public void ConvertShortToBoolean()
+        public void ShortToBoolean()
         {
             var converter = new TestObjectConverter();
             Assert.False((bool)converter.Convert((short)0, typeof(bool)));
@@ -279,7 +279,7 @@
         }
 
         [Fact]
-        public void ConvertShortToNullableBoolean()
+        public void ShortToNullableBoolean()
         {
             var converter = new TestObjectConverter();
             Assert.False((bool)converter.Convert((short)0, typeof(bool?)));
@@ -289,7 +289,7 @@
         }
 
         [Fact]
-        public void ConvertUShortToBoolean()
+        public void UShortToBoolean()
         {
             var converter = new TestObjectConverter();
             Assert.False((bool)converter.Convert((short)0, typeof(bool)));
@@ -299,7 +299,7 @@
         }
 
         [Fact]
-        public void ConvertUShortToNullableBoolean()
+        public void UShortToNullableBoolean()
         {
             var converter = new TestObjectConverter();
             Assert.False((bool)converter.Convert((short)0, typeof(bool?)));
@@ -309,7 +309,7 @@
         }
 
         [Fact]
-        public void ConvertIntToBoolean()
+        public void IntToBoolean()
         {
             var converter = new TestObjectConverter();
             Assert.False((bool)converter.Convert(0, typeof(bool)));
@@ -319,7 +319,7 @@
         }
 
         [Fact]
-        public void ConvertIntToNullableBoolean()
+        public void IntToNullableBoolean()
         {
             var converter = new TestObjectConverter();
             Assert.False((bool)converter.Convert(0, typeof(bool?)));
@@ -329,7 +329,7 @@
         }
 
         [Fact]
-        public void ConvertUIntToBoolean()
+        public void UIntToBoolean()
         {
             var converter = new TestObjectConverter();
             Assert.False((bool)converter.Convert(0U, typeof(bool)));
@@ -339,7 +339,7 @@
         }
 
         [Fact]
-        public void ConvertUIntToNullableBoolean()
+        public void UIntToNullableBoolean()
         {
             var converter = new TestObjectConverter();
             Assert.False((bool)converter.Convert(0U, typeof(bool?)));
@@ -349,7 +349,7 @@
         }
 
         [Fact]
-        public void ConvertLongToBoolean()
+        public void LongToBoolean()
         {
             var converter = new TestObjectConverter();
             Assert.False((bool)converter.Convert(0L, typeof(bool)));
@@ -359,7 +359,7 @@
         }
 
         [Fact]
-        public void ConvertLongToNullableBoolean()
+        public void LongToNullableBoolean()
         {
             var converter = new TestObjectConverter();
             Assert.False((bool)converter.Convert(0L, typeof(bool?)));
@@ -369,7 +369,7 @@
         }
 
         [Fact]
-        public void ConvertULongToBoolean()
+        public void ULongToBoolean()
         {
             var converter = new TestObjectConverter();
             Assert.False((bool)converter.Convert(0L, typeof(bool)));
@@ -379,7 +379,7 @@
         }
 
         [Fact]
-        public void ConvertULongToNullableBoolean()
+        public void ULongToNullableBoolean()
         {
             var converter = new TestObjectConverter();
             Assert.False((bool)converter.Convert(0L, typeof(bool?)));
@@ -389,7 +389,7 @@
         }
 
         [Fact]
-        public void ConvertCharToBoolean()
+        public void CharToBoolean()
         {
             var converter = new TestObjectConverter();
             Assert.False((bool)converter.Convert((char)0, typeof(bool)));
@@ -398,7 +398,7 @@
         }
 
         [Fact]
-        public void ConvertCharToNullableBoolean()
+        public void CharToNullableBoolean()
         {
             var converter = new TestObjectConverter();
             Assert.False((bool)converter.Convert((char)0, typeof(bool?)));
@@ -407,7 +407,7 @@
         }
 
         [Fact]
-        public void ConvertDoubleToBoolean()
+        public void DoubleToBoolean()
         {
             var converter = new TestObjectConverter();
             Assert.False((bool)converter.Convert(0d, typeof(bool)));
@@ -417,7 +417,7 @@
         }
 
         [Fact]
-        public void ConvertDoubleToNullableBoolean()
+        public void DoubleToNullableBoolean()
         {
             var converter = new TestObjectConverter();
             Assert.False((bool)converter.Convert(0d, typeof(bool?)));
@@ -427,7 +427,7 @@
         }
 
         [Fact]
-        public void ConvertFloatToBoolean()
+        public void FloatToBoolean()
         {
             var converter = new TestObjectConverter();
             Assert.False((bool)converter.Convert(0f, typeof(bool)));
@@ -437,7 +437,7 @@
         }
 
         [Fact]
-        public void ConvertFloatToNullableBoolean()
+        public void FloatToNullableBoolean()
         {
             var converter = new TestObjectConverter();
             Assert.False((bool)converter.Convert(0f, typeof(bool?)));
@@ -447,7 +447,7 @@
         }
 
         [Fact]
-        public void ConvertDecimalToBoolean()
+        public void DecimalToBoolean()
         {
             var converter = new TestObjectConverter();
             Assert.False((bool)converter.Convert(0m, typeof(bool)));
@@ -457,7 +457,7 @@
         }
 
         [Fact]
-        public void ConvertDecimalToNullableBoolean()
+        public void DecimalToNullableBoolean()
         {
             var converter = new TestObjectConverter();
             Assert.False((bool)converter.Convert(0m, typeof(bool?)));
