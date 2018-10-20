@@ -18,6 +18,11 @@
             objectConverter = new ObjectConverter(converterFactories);
         }
 
+        public bool NotUsed()
+        {
+            return !converterFactories.Any(x => x.Used);
+        }
+
         public bool UsedOnly<T>()
             where T : IConverterFactory
         {

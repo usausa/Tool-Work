@@ -87,7 +87,7 @@
 
             // Specialized same type for performance (Nullable is excluded because operation is slow)
             var sourceType = value.GetType();
-            if (sourceType == targetType)
+            if (sourceType == (targetType.IsNullableType() ? Nullable.GetUnderlyingType(targetType) : targetType))
             {
                 return value;
             }
@@ -99,7 +99,7 @@
         public Func<object, object> CreateConverter(Type sourceType, Type targetType)
         {
             return CreateConverter(
-                targetType,
+                targetType.IsNullableType() ? Nullable.GetUnderlyingType(targetType) : targetType,
                 targetType.GetDefaultValue(),
                 GetConverter(sourceType.IsNullableType() ? Nullable.GetUnderlyingType(sourceType) : sourceType, targetType));
         }
