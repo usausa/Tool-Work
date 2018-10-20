@@ -16,29 +16,43 @@
 
         private readonly TypePairHashArray converterCache = new TypePairHashArray();
 
-        private IList<IConverterFactory> factories;
+        private IConverterFactory[] factories;
 
         public ObjectConverter()
         {
-            ResetFactories();
+            factories = DefaultObjectFactories.Create().ToArray();
         }
 
-        public void SetFactories(IList<IConverterFactory> list)
+        public ObjectConverter(IEnumerable<IConverterFactory> converterFactories)
         {
-            factories = list;
+            factories = converterFactories.ToArray();
+        }
+
+        public void SetFactories(IEnumerable<IConverterFactory> converterFactories)
+        {
+            factories = converterFactories.ToArray();
             converterCache.Clear();
         }
 
-        public void ResetFactories()
+        public void Reset()
         {
-            factories = DefaultObjectFactories.Create();
+            factories = DefaultObjectFactories.Create().ToArray();
             converterCache.Clear();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private Func<object, object> FindConverter(Type sourceType, Type targetType)
         {
-            return factories.Select(f => f.GetConverter(sourceType, targetType)).FirstOrDefault(c => c != null);
+            for (var i = 0; i < factories.Length; i++)
+            {
+                var converter = factories[i].GetConverter(sourceType, targetType);
+                if (converter != null)
+                {
+                    return converter;
+                }
+            }
+
+            return null;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

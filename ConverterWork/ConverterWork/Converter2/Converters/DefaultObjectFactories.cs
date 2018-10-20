@@ -11,9 +11,9 @@
         ///
         /// </summary>
         /// <returns></returns>
-        public static IList<IConverterFactory> Create()
+        public static IConverterFactory[] Create()
         {
-            return new List<IConverterFactory>
+            return new IConverterFactory[]
             {
                 new AssignableConverterFactory(),           // IsAssignableFrom
                 new BooleanConverterFactory(),
