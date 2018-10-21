@@ -46,8 +46,14 @@
             { typeof(long), x => new Decimal((long)x) },
             { typeof(ulong), x => new Decimal((ulong)x) },
             { typeof(char), x => new Decimal((char)x) },
-            { typeof(double), x => new Decimal((double)x) },
-            { typeof(float), x => new Decimal((float)x) }
+            { typeof(double), x => { try { return new Decimal((double)x); } catch (OverflowException) { return default(decimal); } } },
+            { typeof(float), x => { try { return new Decimal((float)x); } catch (OverflowException) { return default(decimal); } } }
+        };
+
+        private static readonly Dictionary<Type, Func<object, object>> ToNullableDecimalConverters = new Dictionary<Type, Func<object, object>>
+        {
+            { typeof(double), x => { try { return new Decimal((double)x); } catch (OverflowException) { return default(decimal?); } } },
+            { typeof(float), x => { try { return new Decimal((float)x); } catch (OverflowException) { return default(decimal?); } } }
         };
 
         public Func<object, object> GetConverter(IObjectConverter context, Type sourceType, Type targetType)
@@ -67,7 +73,13 @@
                 if (sourceType.IsValueType)
                 {
                     var type = sourceType.IsNullableType() ? Nullable.GetUnderlyingType(sourceType) : sourceType;
-                    if (ToDecimalConverters.TryGetValue(type, out var converter))
+                    if ((targetType == NullableDecimalType) &&
+                        ToNullableDecimalConverters.TryGetValue(type, out var converter))
+                    {
+                        return converter;
+                    }
+
+                    if (ToDecimalConverters.TryGetValue(type, out converter))
                     {
                         return converter;
                     }

@@ -227,5 +227,207 @@
             Assert.Equal(1f, converter.Convert(Decimal.One, typeof(float?)));
             Assert.True(converter.UsedOnly<DecimalConverterFactory>());
         }
+
+        //--------------------------------------------------------------------------------
+        // ToDecimal
+        //--------------------------------------------------------------------------------
+
+        [Fact]
+        public void ByteToDecimal()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(0m, converter.Convert(Byte.MinValue, typeof(decimal)));
+            Assert.Equal(255m, converter.Convert(Byte.MaxValue, typeof(decimal)));
+            Assert.True(converter.UsedOnly<DecimalConverterFactory>());
+        }
+
+        [Fact]
+        public void ByteToNullableDecimal()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(0m, converter.Convert(Byte.MinValue, typeof(decimal?)));
+            Assert.Equal(255m, converter.Convert(Byte.MaxValue, typeof(decimal?)));
+            Assert.True(converter.UsedOnly<DecimalConverterFactory>());
+        }
+
+        [Fact]
+        public void SByteToDecimal()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(-128m, converter.Convert(SByte.MinValue, typeof(decimal)));
+            Assert.Equal(127m, converter.Convert(SByte.MaxValue, typeof(decimal)));
+            Assert.True(converter.UsedOnly<DecimalConverterFactory>());
+        }
+
+        [Fact]
+        public void SByteToNullableDecimal()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(-128m, converter.Convert(SByte.MinValue, typeof(decimal?)));
+            Assert.Equal(127m, converter.Convert(SByte.MaxValue, typeof(decimal?)));
+            Assert.True(converter.UsedOnly<DecimalConverterFactory>());
+        }
+
+        [Fact]
+        public void ShortToDecimal()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(-32768m, converter.Convert(Int16.MinValue, typeof(decimal)));
+            Assert.Equal(32767m, converter.Convert(Int16.MaxValue, typeof(decimal)));
+            Assert.True(converter.UsedOnly<DecimalConverterFactory>());
+        }
+
+        [Fact]
+        public void ShortToNullableDecimal()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(-32768m, converter.Convert(Int16.MinValue, typeof(decimal?)));
+            Assert.Equal(32767m, converter.Convert(Int16.MaxValue, typeof(decimal?)));
+            Assert.True(converter.UsedOnly<DecimalConverterFactory>());
+        }
+
+        [Fact]
+        public void UShortToDecimal()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(0m, converter.Convert(UInt16.MinValue, typeof(decimal)));
+            Assert.Equal(65535m, converter.Convert(UInt16.MaxValue, typeof(decimal)));
+            Assert.True(converter.UsedOnly<DecimalConverterFactory>());
+        }
+
+        [Fact]
+        public void UShortToNullableDecimal()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(0m, converter.Convert(UInt16.MinValue, typeof(decimal?)));
+            Assert.Equal(65535m, converter.Convert(UInt16.MaxValue, typeof(decimal?)));
+            Assert.True(converter.UsedOnly<DecimalConverterFactory>());
+        }
+
+        [Fact]
+        public void IntToDecimal()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(-2147483648m, converter.Convert(Int32.MinValue, typeof(decimal)));
+            Assert.Equal(2147483647m, converter.Convert(Int32.MaxValue, typeof(decimal)));
+            Assert.True(converter.UsedOnly<DecimalConverterFactory>());
+        }
+
+        [Fact]
+        public void IntToNullableDecimal()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(-2147483648m, converter.Convert(Int32.MinValue, typeof(decimal?)));
+            Assert.Equal(2147483647m, converter.Convert(Int32.MaxValue, typeof(decimal?)));
+            Assert.True(converter.UsedOnly<DecimalConverterFactory>());
+        }
+
+        [Fact]
+        public void UIntToDecimal()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(0m, converter.Convert(UInt32.MinValue, typeof(decimal)));
+            Assert.Equal(4294967295m, converter.Convert(UInt32.MaxValue, typeof(decimal)));
+            Assert.True(converter.UsedOnly<DecimalConverterFactory>());
+        }
+
+        [Fact]
+        public void UIntToNullableDecimal()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(0m, converter.Convert(UInt32.MinValue, typeof(decimal?)));
+            Assert.Equal(4294967295m, converter.Convert(UInt32.MaxValue, typeof(decimal?)));
+            Assert.True(converter.UsedOnly<DecimalConverterFactory>());
+        }
+
+        [Fact]
+        public void LongToDecimal()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(-9223372036854775808m, converter.Convert(Int64.MinValue, typeof(decimal)));
+            Assert.Equal(9223372036854775807m, converter.Convert(Int64.MaxValue, typeof(decimal)));
+            Assert.True(converter.UsedOnly<DecimalConverterFactory>());
+        }
+
+        [Fact]
+        public void LongToNullableDecimal()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(-9223372036854775808m, converter.Convert(Int64.MinValue, typeof(decimal?)));
+            Assert.Equal(9223372036854775807m, converter.Convert(Int64.MaxValue, typeof(decimal?)));
+            Assert.True(converter.UsedOnly<DecimalConverterFactory>());
+        }
+
+        [Fact]
+        public void ULongToDecimal()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(0m, converter.Convert(UInt64.MinValue, typeof(decimal)));
+            Assert.Equal(18446744073709551615m, converter.Convert(UInt64.MaxValue, typeof(decimal)));
+            Assert.True(converter.UsedOnly<DecimalConverterFactory>());
+        }
+
+        [Fact]
+        public void ULongToNullableDecimal()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(0m, converter.Convert(UInt64.MinValue, typeof(decimal?)));
+            Assert.Equal(18446744073709551615m, converter.Convert(UInt64.MaxValue, typeof(decimal?)));
+            Assert.True(converter.UsedOnly<DecimalConverterFactory>());
+        }
+
+        [Fact]
+        public void CharToDecimal()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(0m, converter.Convert(Char.MinValue, typeof(decimal)));
+            Assert.Equal(65535m, converter.Convert(Char.MaxValue, typeof(decimal)));
+            Assert.True(converter.UsedOnly<DecimalConverterFactory>());
+        }
+
+        [Fact]
+        public void CharToNullableDecimal()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(0m, converter.Convert(Char.MinValue, typeof(decimal?)));
+            Assert.Equal(65535m, converter.Convert(Char.MaxValue, typeof(decimal?)));
+            Assert.True(converter.UsedOnly<DecimalConverterFactory>());
+        }
+
+        [Fact]
+        public void DoubleToDecimal()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(default(decimal), converter.Convert(Double.MinValue, typeof(decimal)));
+            Assert.Equal(default(decimal), converter.Convert(Double.MaxValue, typeof(decimal)));
+            Assert.True(converter.UsedOnly<DecimalConverterFactory>());
+        }
+
+        [Fact]
+        public void DoubleToNullableDecimal()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(default(decimal?), converter.Convert(Double.MinValue, typeof(decimal?)));
+            Assert.Equal(default(decimal?), converter.Convert(Double.MaxValue, typeof(decimal?)));
+            Assert.True(converter.UsedOnly<DecimalConverterFactory>());
+        }
+
+        [Fact]
+        public void FloatToDecimal()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(default(decimal), converter.Convert(Single.MinValue, typeof(decimal)));
+            Assert.Equal(default(decimal), converter.Convert(Single.MaxValue, typeof(decimal)));
+            Assert.True(converter.UsedOnly<DecimalConverterFactory>());
+        }
+
+        [Fact]
+        public void FloatToNullableDecimal()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(default(decimal?), converter.Convert(Single.MinValue, typeof(decimal?)));
+            Assert.Equal(default(decimal?), converter.Convert(Single.MaxValue, typeof(decimal?)));
+            Assert.True(converter.UsedOnly<DecimalConverterFactory>());
+        }
     }
 }
