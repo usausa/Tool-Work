@@ -192,22 +192,22 @@
             Assert.True(converter.UsedOnly<NumericConverterFactory>());
         }
 
-        [Fact]
-        public void SByteToDecimal()
-        {
-            var converter = new TestObjectConverter();
-            Assert.Equal(-128m, converter.Convert(SByte.MinValue, typeof(decimal)));
-            Assert.Equal(127m, converter.Convert(SByte.MaxValue, typeof(decimal)));
-            Assert.True(converter.UsedOnly<NumericConverterFactory>());
-        }
+        //[Fact]
+        //public void SByteToDecimal()
+        //{
+        //    var converter = new TestObjectConverter();
+        //    Assert.Equal(-128m, converter.Convert(SByte.MinValue, typeof(decimal)));
+        //    Assert.Equal(127m, converter.Convert(SByte.MaxValue, typeof(decimal)));
+        //    Assert.True(converter.UsedOnly<NumericConverterFactory>());
+        //}
 
-        [Fact]
-        public void SByteToNullableDecimal()
-        {
-            var converter = new TestObjectConverter();
-            Assert.Equal(-128m, converter.Convert(SByte.MinValue, typeof(decimal?)));
-            Assert.Equal(127m, converter.Convert(SByte.MaxValue, typeof(decimal?)));
-            Assert.True(converter.UsedOnly<NumericConverterFactory>());
-        }
+        //[Fact]
+        //public void SByteToNullableDecimal()
+        //{
+        //    var converter = new TestObjectConverter();
+        //    Assert.Equal(-128m, converter.Convert(SByte.MinValue, typeof(decimal?)));
+        //    Assert.Equal(127m, converter.Convert(SByte.MaxValue, typeof(decimal?)));
+        //    Assert.True(converter.UsedOnly<NumericConverterFactory>());
+        //}
     }
 }

@@ -8,10 +8,6 @@
 
     public class NumericShortToConvertTest
     {
-        //--------------------------------------------------------------------------------
-        // SByteTo
-        //--------------------------------------------------------------------------------
-
         [Fact]
         public void ShortToByte()
         {
@@ -192,22 +188,22 @@
             Assert.True(converter.UsedOnly<NumericConverterFactory>());
         }
 
-        [Fact]
-        public void ShortToDecimal()
-        {
-            var converter = new TestObjectConverter();
-            Assert.Equal(-32768m, converter.Convert(Int16.MinValue, typeof(decimal)));
-            Assert.Equal(32767m, converter.Convert(Int16.MaxValue, typeof(decimal)));
-            Assert.True(converter.UsedOnly<NumericConverterFactory>());
-        }
+        //[Fact]
+        //public void ShortToDecimal()
+        //{
+        //    var converter = new TestObjectConverter();
+        //    Assert.Equal(-32768m, converter.Convert(Int16.MinValue, typeof(decimal)));
+        //    Assert.Equal(32767m, converter.Convert(Int16.MaxValue, typeof(decimal)));
+        //    Assert.True(converter.UsedOnly<NumericConverterFactory>());
+        //}
 
-        [Fact]
-        public void ShortToNullableDecimal()
-        {
-            var converter = new TestObjectConverter();
-            Assert.Equal(-32768m, converter.Convert(Int16.MinValue, typeof(decimal?)));
-            Assert.Equal(32767m, converter.Convert(Int16.MaxValue, typeof(decimal?)));
-            Assert.True(converter.UsedOnly<NumericConverterFactory>());
-        }
+        //[Fact]
+        //public void ShortToNullableDecimal()
+        //{
+        //    var converter = new TestObjectConverter();
+        //    Assert.Equal(-32768m, converter.Convert(Int16.MinValue, typeof(decimal?)));
+        //    Assert.Equal(32767m, converter.Convert(Int16.MaxValue, typeof(decimal?)));
+        //    Assert.True(converter.UsedOnly<NumericConverterFactory>());
+        //}
     }
 }

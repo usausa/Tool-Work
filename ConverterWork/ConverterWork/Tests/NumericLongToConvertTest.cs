@@ -8,10 +8,6 @@
 
     public class NumericLongToConvertTest
     {
-        //--------------------------------------------------------------------------------
-        // SByteTo
-        //--------------------------------------------------------------------------------
-
         [Fact]
         public void LongToByte()
         {
@@ -192,22 +188,22 @@
             Assert.True(converter.UsedOnly<NumericConverterFactory>());
         }
 
-        [Fact]
-        public void LongToDecimal()
-        {
-            var converter = new TestObjectConverter();
-            Assert.Equal(-9223372036854775808m, converter.Convert(Int64.MinValue, typeof(decimal)));
-            Assert.Equal(9223372036854775807m, converter.Convert(Int64.MaxValue, typeof(decimal)));
-            Assert.True(converter.UsedOnly<NumericConverterFactory>());
-        }
+        //[Fact]
+        //public void LongToDecimal()
+        //{
+        //    var converter = new TestObjectConverter();
+        //    Assert.Equal(-9223372036854775808m, converter.Convert(Int64.MinValue, typeof(decimal)));
+        //    Assert.Equal(9223372036854775807m, converter.Convert(Int64.MaxValue, typeof(decimal)));
+        //    Assert.True(converter.UsedOnly<NumericConverterFactory>());
+        //}
 
-        [Fact]
-        public void LongToNullableDecimal()
-        {
-            var converter = new TestObjectConverter();
-            Assert.Equal(-9223372036854775808m, converter.Convert(Int64.MinValue, typeof(decimal?)));
-            Assert.Equal(9223372036854775807m, converter.Convert(Int64.MaxValue, typeof(decimal?)));
-            Assert.True(converter.UsedOnly<NumericConverterFactory>());
-        }
+        //[Fact]
+        //public void LongToNullableDecimal()
+        //{
+        //    var converter = new TestObjectConverter();
+        //    Assert.Equal(-9223372036854775808m, converter.Convert(Int64.MinValue, typeof(decimal?)));
+        //    Assert.Equal(9223372036854775807m, converter.Convert(Int64.MaxValue, typeof(decimal?)));
+        //    Assert.True(converter.UsedOnly<NumericConverterFactory>());
+        //}
     }
 }

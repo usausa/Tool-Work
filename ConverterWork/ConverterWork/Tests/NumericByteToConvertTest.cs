@@ -8,10 +8,6 @@
 
     public class NumericByteToConvertTest
     {
-        //--------------------------------------------------------------------------------
-        // ByteTo
-        //--------------------------------------------------------------------------------
-
         [Fact]
         public void ByteToSByte()
         {
@@ -192,22 +188,22 @@
             Assert.True(converter.UsedOnly<NumericConverterFactory>());
         }
 
-        [Fact]
-        public void ByteToDecimal()
-        {
-            var converter = new TestObjectConverter();
-            Assert.Equal(0m, converter.Convert(Byte.MinValue, typeof(decimal)));
-            Assert.Equal(255m, converter.Convert(Byte.MaxValue, typeof(decimal)));
-            Assert.True(converter.UsedOnly<NumericConverterFactory>());
-        }
+        //[Fact]
+        //public void ByteToDecimal()
+        //{
+        //    var converter = new TestObjectConverter();
+        //    Assert.Equal(0m, converter.Convert(Byte.MinValue, typeof(decimal)));
+        //    Assert.Equal(255m, converter.Convert(Byte.MaxValue, typeof(decimal)));
+        //    Assert.True(converter.UsedOnly<NumericConverterFactory>());
+        //}
 
-        [Fact]
-        public void ByteToNullableDecimal()
-        {
-            var converter = new TestObjectConverter();
-            Assert.Equal(0m, converter.Convert(Byte.MinValue, typeof(decimal?)));
-            Assert.Equal(255m, converter.Convert(Byte.MaxValue, typeof(decimal?)));
-            Assert.True(converter.UsedOnly<NumericConverterFactory>());
-        }
+        //[Fact]
+        //public void ByteToNullableDecimal()
+        //{
+        //    var converter = new TestObjectConverter();
+        //    Assert.Equal(0m, converter.Convert(Byte.MinValue, typeof(decimal?)));
+        //    Assert.Equal(255m, converter.Convert(Byte.MaxValue, typeof(decimal?)));
+        //    Assert.True(converter.UsedOnly<NumericConverterFactory>());
+        //}
     }
 }

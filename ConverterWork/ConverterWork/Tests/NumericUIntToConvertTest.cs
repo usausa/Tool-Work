@@ -8,10 +8,6 @@
 
     public class NumericUIntToConvertTest
     {
-        //--------------------------------------------------------------------------------
-        // SByteTo
-        //--------------------------------------------------------------------------------
-
         [Fact]
         public void UIntToByte()
         {
@@ -192,22 +188,22 @@
             Assert.True(converter.UsedOnly<NumericConverterFactory>());
         }
 
-        [Fact]
-        public void UIntToDecimal()
-        {
-            var converter = new TestObjectConverter();
-            Assert.Equal(0m, converter.Convert(UInt32.MinValue, typeof(decimal)));
-            Assert.Equal(4294967295m, converter.Convert(UInt32.MaxValue, typeof(decimal)));
-            Assert.True(converter.UsedOnly<NumericConverterFactory>());
-        }
+        //[Fact]
+        //public void UIntToDecimal()
+        //{
+        //    var converter = new TestObjectConverter();
+        //    Assert.Equal(0m, converter.Convert(UInt32.MinValue, typeof(decimal)));
+        //    Assert.Equal(4294967295m, converter.Convert(UInt32.MaxValue, typeof(decimal)));
+        //    Assert.True(converter.UsedOnly<NumericConverterFactory>());
+        //}
 
-        [Fact]
-        public void UIntToNullableDecimal()
-        {
-            var converter = new TestObjectConverter();
-            Assert.Equal(0m, converter.Convert(UInt32.MinValue, typeof(decimal?)));
-            Assert.Equal(4294967295m, converter.Convert(UInt32.MaxValue, typeof(decimal?)));
-            Assert.True(converter.UsedOnly<NumericConverterFactory>());
-        }
+        //[Fact]
+        //public void UIntToNullableDecimal()
+        //{
+        //    var converter = new TestObjectConverter();
+        //    Assert.Equal(0m, converter.Convert(UInt32.MinValue, typeof(decimal?)));
+        //    Assert.Equal(4294967295m, converter.Convert(UInt32.MaxValue, typeof(decimal?)));
+        //    Assert.True(converter.UsedOnly<NumericConverterFactory>());
+        //}
     }
 }
