@@ -14,7 +14,7 @@
             var converter = new TestObjectConverter();
             Assert.Equal((byte)0, converter.Convert(Single.MinValue, typeof(byte)));
             Assert.Equal((byte)0, converter.Convert(Single.MaxValue, typeof(byte)));
-            Assert.True(converter.UsedOnly<NumericConverterFactory>());
+            Assert.True(converter.UsedOnly<NumericCastConverterFactory>());
         }
 
         [Fact]
@@ -23,7 +23,7 @@
             var converter = new TestObjectConverter();
             Assert.Equal((byte)0, converter.Convert(Single.MinValue, typeof(byte?)));
             Assert.Equal((byte)0, converter.Convert(Single.MaxValue, typeof(byte?)));
-            Assert.True(converter.UsedOnly<NumericConverterFactory>());
+            Assert.True(converter.UsedOnly<NumericCastConverterFactory>());
         }
 
         [Fact]
@@ -32,7 +32,7 @@
             var converter = new TestObjectConverter();
             Assert.Equal((sbyte)0, converter.Convert(Single.MinValue, typeof(sbyte)));
             Assert.Equal((sbyte)0, converter.Convert(Single.MaxValue, typeof(sbyte)));
-            Assert.True(converter.UsedOnly<NumericConverterFactory>());
+            Assert.True(converter.UsedOnly<NumericCastConverterFactory>());
         }
 
         [Fact]
@@ -41,7 +41,7 @@
             var converter = new TestObjectConverter();
             Assert.Equal((sbyte)0, converter.Convert(Single.MinValue, typeof(sbyte?)));
             Assert.Equal((sbyte)0, converter.Convert(Single.MaxValue, typeof(sbyte?)));
-            Assert.True(converter.UsedOnly<NumericConverterFactory>());
+            Assert.True(converter.UsedOnly<NumericCastConverterFactory>());
         }
 
         [Fact]
@@ -50,7 +50,7 @@
             var converter = new TestObjectConverter();
             Assert.Equal((short)0, converter.Convert(Single.MinValue, typeof(short)));
             Assert.Equal((short)0, converter.Convert(Single.MaxValue, typeof(short)));
-            Assert.True(converter.UsedOnly<NumericConverterFactory>());
+            Assert.True(converter.UsedOnly<NumericCastConverterFactory>());
         }
 
         [Fact]
@@ -59,7 +59,7 @@
             var converter = new TestObjectConverter();
             Assert.Equal((short)0, converter.Convert(Single.MinValue, typeof(short?)));
             Assert.Equal((short)0, converter.Convert(Single.MaxValue, typeof(short?)));
-            Assert.True(converter.UsedOnly<NumericConverterFactory>());
+            Assert.True(converter.UsedOnly<NumericCastConverterFactory>());
         }
 
         [Fact]
@@ -68,7 +68,7 @@
             var converter = new TestObjectConverter();
             Assert.Equal((ushort)0, converter.Convert(Single.MinValue, typeof(ushort)));
             Assert.Equal((ushort)0, converter.Convert(Single.MaxValue, typeof(ushort)));
-            Assert.True(converter.UsedOnly<NumericConverterFactory>());
+            Assert.True(converter.UsedOnly<NumericCastConverterFactory>());
         }
 
         [Fact]
@@ -77,7 +77,7 @@
             var converter = new TestObjectConverter();
             Assert.Equal((ushort)0, converter.Convert(Single.MinValue, typeof(ushort?)));
             Assert.Equal((ushort)0, converter.Convert(Single.MaxValue, typeof(ushort?)));
-            Assert.True(converter.UsedOnly<NumericConverterFactory>());
+            Assert.True(converter.UsedOnly<NumericCastConverterFactory>());
         }
 
         [Fact]
@@ -86,7 +86,7 @@
             var converter = new TestObjectConverter();
             Assert.Equal(-2147483648, converter.Convert(Single.MinValue, typeof(int)));
             Assert.Equal(-2147483648, converter.Convert(Single.MaxValue, typeof(int)));
-            Assert.True(converter.UsedOnly<NumericConverterFactory>());
+            Assert.True(converter.UsedOnly<NumericCastConverterFactory>());
         }
 
         [Fact]
@@ -95,7 +95,7 @@
             var converter = new TestObjectConverter();
             Assert.Equal(-2147483648, converter.Convert(Single.MinValue, typeof(int?)));
             Assert.Equal(-2147483648, converter.Convert(Single.MaxValue, typeof(int?)));
-            Assert.True(converter.UsedOnly<NumericConverterFactory>());
+            Assert.True(converter.UsedOnly<NumericCastConverterFactory>());
         }
 
         [Fact]
@@ -104,7 +104,7 @@
             var converter = new TestObjectConverter();
             Assert.Equal(0U, converter.Convert(Single.MinValue, typeof(uint)));
             Assert.Equal(0U, converter.Convert(Single.MaxValue, typeof(uint)));
-            Assert.True(converter.UsedOnly<NumericConverterFactory>());
+            Assert.True(converter.UsedOnly<NumericCastConverterFactory>());
         }
 
         [Fact]
@@ -113,7 +113,7 @@
             var converter = new TestObjectConverter();
             Assert.Equal(0U, converter.Convert(Single.MinValue, typeof(uint?)));
             Assert.Equal(0U, converter.Convert(Single.MaxValue, typeof(uint?)));
-            Assert.True(converter.UsedOnly<NumericConverterFactory>());
+            Assert.True(converter.UsedOnly<NumericCastConverterFactory>());
         }
 
         [Fact]
@@ -122,7 +122,7 @@
             var converter = new TestObjectConverter();
             Assert.Equal(-9223372036854775808L, converter.Convert(Single.MinValue, typeof(long)));
             Assert.Equal(-9223372036854775808L, converter.Convert(Single.MaxValue, typeof(long)));
-            Assert.True(converter.UsedOnly<NumericConverterFactory>());
+            Assert.True(converter.UsedOnly<NumericCastConverterFactory>());
         }
 
         [Fact]
@@ -131,7 +131,7 @@
             var converter = new TestObjectConverter();
             Assert.Equal(-9223372036854775808L, converter.Convert(Single.MinValue, typeof(long?)));
             Assert.Equal(-9223372036854775808L, converter.Convert(Single.MaxValue, typeof(long?)));
-            Assert.True(converter.UsedOnly<NumericConverterFactory>());
+            Assert.True(converter.UsedOnly<NumericCastConverterFactory>());
         }
 
         [Fact]
@@ -140,7 +140,7 @@
             var converter = new TestObjectConverter();
             Assert.Equal(9223372036854775808UL, converter.Convert(Single.MinValue, typeof(ulong)));
             Assert.Equal(0UL, converter.Convert(Single.MaxValue, typeof(ulong)));
-            Assert.True(converter.UsedOnly<NumericConverterFactory>());
+            Assert.True(converter.UsedOnly<NumericCastConverterFactory>());
         }
 
         [Fact]
@@ -149,7 +149,7 @@
             var converter = new TestObjectConverter();
             Assert.Equal(9223372036854775808UL, converter.Convert(Single.MinValue, typeof(ulong?)));
             Assert.Equal(0UL, converter.Convert(Single.MaxValue, typeof(ulong?)));
-            Assert.True(converter.UsedOnly<NumericConverterFactory>());
+            Assert.True(converter.UsedOnly<NumericCastConverterFactory>());
         }
 
         [Fact]
@@ -158,7 +158,7 @@
             var converter = new TestObjectConverter();
             Assert.Equal((char)0, converter.Convert(Single.MinValue, typeof(char)));
             Assert.Equal((char)0, converter.Convert(Single.MaxValue, typeof(char)));
-            Assert.True(converter.UsedOnly<NumericConverterFactory>());
+            Assert.True(converter.UsedOnly<NumericCastConverterFactory>());
         }
 
         [Fact]
@@ -167,7 +167,7 @@
             var converter = new TestObjectConverter();
             Assert.Equal((char)0, converter.Convert(Single.MinValue, typeof(char?)));
             Assert.Equal((char)0, converter.Convert(Single.MaxValue, typeof(char?)));
-            Assert.True(converter.UsedOnly<NumericConverterFactory>());
+            Assert.True(converter.UsedOnly<NumericCastConverterFactory>());
         }
 
         [Fact]
@@ -176,7 +176,7 @@
             var converter = new TestObjectConverter();
             Assert.Equal((double)Single.MinValue, converter.Convert(Single.MinValue, typeof(double)));
             Assert.Equal((double)Single.MaxValue, converter.Convert(Single.MaxValue, typeof(double)));
-            Assert.True(converter.UsedOnly<NumericConverterFactory>());
+            Assert.True(converter.UsedOnly<NumericCastConverterFactory>());
         }
 
         [Fact]
@@ -185,7 +185,7 @@
             var converter = new TestObjectConverter();
             Assert.Equal((double)Single.MinValue, converter.Convert(Single.MinValue, typeof(double?)));
             Assert.Equal((double)Single.MaxValue, converter.Convert(Single.MaxValue, typeof(double?)));
-            Assert.True(converter.UsedOnly<NumericConverterFactory>());
+            Assert.True(converter.UsedOnly<NumericCastConverterFactory>());
         }
 
         //[Fact]

@@ -15,9 +15,9 @@
             Factory = factory;
         }
 
-        public Func<object, object> GetConverter(Type sourceType, Type targetType)
+        public Func<object, object> GetConverter(IObjectConverter context, Type sourceType, Type targetType)
         {
-            var converter = Factory.GetConverter(sourceType, targetType);
+            var converter = Factory.GetConverter(context, sourceType, targetType);
             if (converter != null)
             {
                 Used = true;

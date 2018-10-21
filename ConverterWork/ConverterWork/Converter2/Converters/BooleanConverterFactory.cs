@@ -45,7 +45,7 @@
         // ReSharper restore RedundantTypeSpecificationInDefaultExpression
         // ReSharper restore CompareOfFloatsByEqualityOperator
 
-        public Func<object, object> GetConverter(Type sourceType, Type targetType)
+        public Func<object, object> GetConverter(IObjectConverter context, Type sourceType, Type targetType)
         {
             if (sourceType == BooleanType)
             {

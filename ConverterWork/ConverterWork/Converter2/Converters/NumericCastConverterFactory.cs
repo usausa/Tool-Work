@@ -3,9 +3,8 @@
     using System;
     using System.Collections.Generic;
 
-    public sealed class NumericConverterFactory : IConverterFactory
+    public sealed class NumericCastConverterFactory : IConverterFactory
     {
-        // TODO checked
         private static readonly Dictionary<Tuple<Type, Type>, Func<object, object>> Converters = new Dictionary<Tuple<Type, Type>, Func<object, object>>
         {
             // byte
@@ -142,7 +141,7 @@
             { Tuple.Create(typeof(float), typeof(float)), x => x }
         };
 
-        public Func<object, object> GetConverter(Type sourceType, Type targetType)
+        public Func<object, object> GetConverter(IObjectConverter context, Type sourceType, Type targetType)
         {
             if (sourceType.IsValueType && targetType.IsValueType)
             {

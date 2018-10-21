@@ -7,7 +7,7 @@
     {
         private static readonly Type StringType = typeof(string);
 
-        public Func<object, object> GetConverter(Type sourceType, Type targetType)
+        public Func<object, object> GetConverter(IObjectConverter context, Type sourceType, Type targetType)
         {
             var sourceEnumType = sourceType.GetEnumType();
             var targetEnumType = targetType.GetEnumType();

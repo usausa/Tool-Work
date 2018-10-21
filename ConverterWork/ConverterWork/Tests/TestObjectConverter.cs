@@ -47,6 +47,21 @@
             return true;
         }
 
+        public bool CanConvert<T>(object value)
+        {
+            return objectConverter.CanConvert<T>(value);
+        }
+
+        public bool CanConvert(object value, Type targetType)
+        {
+            return objectConverter.CanConvert(value, targetType);
+        }
+
+        public bool CanConvert(Type sourceType, Type targetType)
+        {
+            return objectConverter.CanConvert(sourceType, targetType);
+        }
+
         public T Convert<T>(object value)
         {
             return objectConverter.Convert<T>(value);

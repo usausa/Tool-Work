@@ -5,175 +5,72 @@
 
     public sealed class DecimalConverterFactory : IConverterFactory
     {
-        // TODO
-        private static readonly Dictionary<Tuple<Type, Type>, Func<object, object>> Converters = new Dictionary<Tuple<Type, Type>, Func<object, object>>
+        private static readonly Type DecimalType = typeof(decimal);
+
+        private static readonly Type NullableDecimalType = typeof(decimal?);
+
+        private static readonly Dictionary<Type, Func<object, object>> FromDecimalConverters = new Dictionary<Type, Func<object, object>>
         {
-            // byte
-            { Tuple.Create(typeof(byte), typeof(byte)), x => x },
-            { Tuple.Create(typeof(byte), typeof(sbyte)), x => (sbyte)(byte)x },
-            { Tuple.Create(typeof(byte), typeof(short)), x => (short)(byte)x },
-            { Tuple.Create(typeof(byte), typeof(ushort)), x => (ushort)(byte)x },
-            { Tuple.Create(typeof(byte), typeof(int)), x => (int)(byte)x },
-            { Tuple.Create(typeof(byte), typeof(uint)), x => (uint)(byte)x },
-            { Tuple.Create(typeof(byte), typeof(long)), x => (long)(byte)x },
-            { Tuple.Create(typeof(byte), typeof(ulong)), x => (ulong)(byte)x },
-            { Tuple.Create(typeof(byte), typeof(char)), x => (char)(byte)x },
-            { Tuple.Create(typeof(byte), typeof(double)), x => (double)(byte)x },
-            { Tuple.Create(typeof(byte), typeof(float)), x => (float)(byte)x },
-            { Tuple.Create(typeof(byte), typeof(decimal)), x => (decimal)(byte)x },
-            // sbyte
-            { Tuple.Create(typeof(sbyte), typeof(byte)), x => (byte)(sbyte)x },
-            { Tuple.Create(typeof(sbyte), typeof(sbyte)), x => x },
-            { Tuple.Create(typeof(sbyte), typeof(short)), x => (short)(sbyte)x },
-            { Tuple.Create(typeof(sbyte), typeof(ushort)), x => (ushort)(sbyte)x },
-            { Tuple.Create(typeof(sbyte), typeof(int)), x => (int)(sbyte)x },
-            { Tuple.Create(typeof(sbyte), typeof(uint)), x => (uint)(sbyte)x },
-            { Tuple.Create(typeof(sbyte), typeof(long)), x => (long)(sbyte)x },
-            { Tuple.Create(typeof(sbyte), typeof(ulong)), x => (ulong)(sbyte)x },
-            { Tuple.Create(typeof(sbyte), typeof(char)), x => (char)(sbyte)x },
-            { Tuple.Create(typeof(sbyte), typeof(double)), x => (double)(sbyte)x },
-            { Tuple.Create(typeof(sbyte), typeof(float)), x => (float)(sbyte)x },
-            { Tuple.Create(typeof(sbyte), typeof(decimal)), x => (decimal)(sbyte)x },
-            // short
-            { Tuple.Create(typeof(short), typeof(byte)), x => (byte)(short)x },
-            { Tuple.Create(typeof(short), typeof(sbyte)), x => (sbyte)(short)x },
-            { Tuple.Create(typeof(short), typeof(short)), x => x },
-            { Tuple.Create(typeof(short), typeof(ushort)), x => (ushort)(short)x },
-            { Tuple.Create(typeof(short), typeof(int)), x => (int)(short)x },
-            { Tuple.Create(typeof(short), typeof(uint)), x => (uint)(short)x },
-            { Tuple.Create(typeof(short), typeof(long)), x => (long)(short)x },
-            { Tuple.Create(typeof(short), typeof(ulong)), x => (ulong)(short)x },
-            { Tuple.Create(typeof(short), typeof(char)), x => (char)(short)x },
-            { Tuple.Create(typeof(short), typeof(double)), x => (double)(short)x },
-            { Tuple.Create(typeof(short), typeof(float)), x => (float)(short)x },
-            { Tuple.Create(typeof(short), typeof(decimal)), x => (decimal)(short)x },
-            // ushort
-            { Tuple.Create(typeof(ushort), typeof(byte)), x => (byte)(ushort)x },
-            { Tuple.Create(typeof(ushort), typeof(sbyte)), x => (sbyte)(ushort)x },
-            { Tuple.Create(typeof(ushort), typeof(short)), x => (short)(ushort)x },
-            { Tuple.Create(typeof(ushort), typeof(ushort)), x => x },
-            { Tuple.Create(typeof(ushort), typeof(int)), x => (int)(ushort)x },
-            { Tuple.Create(typeof(ushort), typeof(uint)), x => (uint)(ushort)x },
-            { Tuple.Create(typeof(ushort), typeof(long)), x => (long)(ushort)x },
-            { Tuple.Create(typeof(ushort), typeof(ulong)), x => (ulong)(ushort)x },
-            { Tuple.Create(typeof(ushort), typeof(char)), x => (char)(ushort)x },
-            { Tuple.Create(typeof(ushort), typeof(double)), x => (double)(ushort)x },
-            { Tuple.Create(typeof(ushort), typeof(float)), x => (float)(ushort)x },
-            { Tuple.Create(typeof(ushort), typeof(decimal)), x => (decimal)(ushort)x },
-            // int
-            { Tuple.Create(typeof(int), typeof(byte)), x => (byte)(int)x },
-            { Tuple.Create(typeof(int), typeof(sbyte)), x => (sbyte)(int)x },
-            { Tuple.Create(typeof(int), typeof(short)), x => (short)(int)x },
-            { Tuple.Create(typeof(int), typeof(ushort)), x => (ushort)(int)x },
-            { Tuple.Create(typeof(int), typeof(int)), x => x },
-            { Tuple.Create(typeof(int), typeof(uint)), x => (uint)(int)x },
-            { Tuple.Create(typeof(int), typeof(long)), x => (long)(int)x },
-            { Tuple.Create(typeof(int), typeof(ulong)), x => (ulong)(int)x },
-            { Tuple.Create(typeof(int), typeof(char)), x => (char)(int)x },
-            { Tuple.Create(typeof(int), typeof(double)), x => (double)(int)x },
-            { Tuple.Create(typeof(int), typeof(float)), x => (float)(int)x },
-            { Tuple.Create(typeof(int), typeof(decimal)), x => (decimal)(int)x },
-            // uint
-            { Tuple.Create(typeof(uint), typeof(byte)), x => (byte)(uint)x },
-            { Tuple.Create(typeof(uint), typeof(sbyte)), x => (sbyte)(uint)x },
-            { Tuple.Create(typeof(uint), typeof(short)), x => (short)(uint)x },
-            { Tuple.Create(typeof(uint), typeof(ushort)), x => (ushort)(uint)x },
-            { Tuple.Create(typeof(uint), typeof(int)), x => (int)(uint)x },
-            { Tuple.Create(typeof(uint), typeof(uint)), x => x },
-            { Tuple.Create(typeof(uint), typeof(long)), x => (long)(uint)x },
-            { Tuple.Create(typeof(uint), typeof(ulong)), x => (ulong)(uint)x },
-            { Tuple.Create(typeof(uint), typeof(char)), x => (char)(uint)x },
-            { Tuple.Create(typeof(uint), typeof(double)), x => (double)(uint)x },
-            { Tuple.Create(typeof(uint), typeof(float)), x => (float)(uint)x },
-            { Tuple.Create(typeof(uint), typeof(decimal)), x => (decimal)(uint)x },
-            // long
-            { Tuple.Create(typeof(long), typeof(byte)), x => (byte)(long)x },
-            { Tuple.Create(typeof(long), typeof(sbyte)), x => (sbyte)(long)x },
-            { Tuple.Create(typeof(long), typeof(short)), x => (short)(long)x },
-            { Tuple.Create(typeof(long), typeof(ushort)), x => (ushort)(long)x },
-            { Tuple.Create(typeof(long), typeof(int)), x => (int)(long)x },
-            { Tuple.Create(typeof(long), typeof(uint)), x => (uint)(long)x },
-            { Tuple.Create(typeof(long), typeof(long)), x => x },
-            { Tuple.Create(typeof(long), typeof(ulong)), x => (ulong)(long)x },
-            { Tuple.Create(typeof(long), typeof(char)), x => (char)(long)x },
-            { Tuple.Create(typeof(long), typeof(double)), x => (double)(long)x },
-            { Tuple.Create(typeof(long), typeof(float)), x => (float)(long)x },
-            { Tuple.Create(typeof(long), typeof(decimal)), x => (decimal)(long)x },
-            // ulong
-            { Tuple.Create(typeof(ulong), typeof(byte)), x => (byte)(ulong)x },
-            { Tuple.Create(typeof(ulong), typeof(sbyte)), x => (sbyte)(ulong)x },
-            { Tuple.Create(typeof(ulong), typeof(short)), x => (short)(ulong)x },
-            { Tuple.Create(typeof(ulong), typeof(ushort)), x => (ushort)(ulong)x },
-            { Tuple.Create(typeof(ulong), typeof(int)), x => (int)(ulong)x },
-            { Tuple.Create(typeof(ulong), typeof(uint)), x => (uint)(ulong)x },
-            { Tuple.Create(typeof(ulong), typeof(long)), x => (long)(ulong)x },
-            { Tuple.Create(typeof(ulong), typeof(ulong)), x => x },
-            { Tuple.Create(typeof(ulong), typeof(char)), x => (char)(ulong)x },
-            { Tuple.Create(typeof(ulong), typeof(double)), x => (double)(ulong)x },
-            { Tuple.Create(typeof(ulong), typeof(float)), x => (float)(ulong)x },
-            { Tuple.Create(typeof(ulong), typeof(decimal)), x => (decimal)(ulong)x },
-            // char
-            { Tuple.Create(typeof(char), typeof(byte)), x => (byte)(char)x },
-            { Tuple.Create(typeof(char), typeof(sbyte)), x => (sbyte)(char)x },
-            { Tuple.Create(typeof(char), typeof(short)), x => (short)(char)x },
-            { Tuple.Create(typeof(char), typeof(ushort)), x => (ushort)(char)x },
-            { Tuple.Create(typeof(char), typeof(int)), x => (int)(char)x },
-            { Tuple.Create(typeof(char), typeof(uint)), x => (uint)(char)x },
-            { Tuple.Create(typeof(char), typeof(long)), x => (long)(char)x },
-            { Tuple.Create(typeof(char), typeof(ulong)), x => (ulong)(char)x },
-            { Tuple.Create(typeof(char), typeof(char)), x => x },
-            { Tuple.Create(typeof(char), typeof(double)), x => (double)(char)x },
-            { Tuple.Create(typeof(char), typeof(float)), x => (float)(char)x },
-            { Tuple.Create(typeof(char), typeof(decimal)), x => (decimal)(char)x },
-            // double
-            { Tuple.Create(typeof(double), typeof(byte)), x => (byte)(double)x },
-            { Tuple.Create(typeof(double), typeof(sbyte)), x => (sbyte)(double)x },
-            { Tuple.Create(typeof(double), typeof(short)), x => (short)(double)x },
-            { Tuple.Create(typeof(double), typeof(ushort)), x => (ushort)(double)x },
-            { Tuple.Create(typeof(double), typeof(int)), x => (int)(double)x },
-            { Tuple.Create(typeof(double), typeof(uint)), x => (uint)(double)x },
-            { Tuple.Create(typeof(double), typeof(long)), x => (long)(double)x },
-            { Tuple.Create(typeof(double), typeof(ulong)), x => (ulong)(double)x },
-            { Tuple.Create(typeof(double), typeof(char)), x => (char)(double)x },
-            { Tuple.Create(typeof(double), typeof(double)), x => x },
-            { Tuple.Create(typeof(double), typeof(float)), x => (float)(double)x },
-            { Tuple.Create(typeof(double), typeof(decimal)), x => (decimal)(double)x },
-            // float
-            { Tuple.Create(typeof(float), typeof(byte)), x => (byte)(float)x },
-            { Tuple.Create(typeof(float), typeof(sbyte)), x => (sbyte)(float)x },
-            { Tuple.Create(typeof(float), typeof(short)), x => (short)(float)x },
-            { Tuple.Create(typeof(float), typeof(ushort)), x => (ushort)(float)x },
-            { Tuple.Create(typeof(float), typeof(int)), x => (int)(float)x },
-            { Tuple.Create(typeof(float), typeof(uint)), x => (uint)(float)x },
-            { Tuple.Create(typeof(float), typeof(long)), x => (long)(float)x },
-            { Tuple.Create(typeof(float), typeof(ulong)), x => (ulong)(float)x },
-            { Tuple.Create(typeof(float), typeof(char)), x => (char)(float)x },
-            { Tuple.Create(typeof(float), typeof(double)), x => (double)(float)x },
-            { Tuple.Create(typeof(float), typeof(float)), x => x },
-            { Tuple.Create(typeof(float), typeof(decimal)), x => (decimal)(float)x },
-            // decimal
-            { Tuple.Create(typeof(decimal), typeof(byte)), x => Decimal.ToByte((decimal)x) },
-            { Tuple.Create(typeof(decimal), typeof(sbyte)), x => Decimal.ToSByte((decimal)x) },
-            { Tuple.Create(typeof(decimal), typeof(short)), x => Decimal.ToInt16((decimal)x) },
-            { Tuple.Create(typeof(decimal), typeof(ushort)), x => Decimal.ToUInt16((decimal)x) },
-            { Tuple.Create(typeof(decimal), typeof(int)), x => Decimal.ToInt32((decimal)x) },
-            { Tuple.Create(typeof(decimal), typeof(uint)), x => Decimal.ToUInt32((decimal)x) },
-            { Tuple.Create(typeof(decimal), typeof(long)), x => Decimal.ToInt64((decimal)x) },
-            { Tuple.Create(typeof(decimal), typeof(ulong)), x => Decimal.ToUInt64((decimal)x) },
-            { Tuple.Create(typeof(decimal), typeof(char)), x => (char)Decimal.ToUInt16((decimal)x) },
-            { Tuple.Create(typeof(decimal), typeof(double)), x => Decimal.ToDouble((decimal)x) },
-            { Tuple.Create(typeof(decimal), typeof(float)), x => Decimal.ToSingle((decimal)x) },
-            { Tuple.Create(typeof(decimal), typeof(decimal)), x => x }
+            { typeof(byte), x => { try { return Decimal.ToByte((decimal)x); } catch (OverflowException) { return default(byte); } } },
+            { typeof(byte?), x => { try { return Decimal.ToByte((decimal)x); } catch (OverflowException) { return default(byte?); } } },
+            { typeof(sbyte), x => { try { return Decimal.ToSByte((decimal)x); } catch (OverflowException) { return default(sbyte); } } },
+            { typeof(sbyte?), x => { try { return Decimal.ToSByte((decimal)x); } catch (OverflowException) { return default(sbyte?); } } },
+            { typeof(short), x => { try { return Decimal.ToInt16((decimal)x); } catch (OverflowException) { return default(short); } } },
+            { typeof(short?), x => { try { return Decimal.ToInt16((decimal)x); } catch (OverflowException) { return default(short?); } } },
+            { typeof(ushort), x => { try { return Decimal.ToUInt16((decimal)x); } catch (OverflowException) { return default(ushort); } } },
+            { typeof(ushort?), x => { try { return Decimal.ToUInt16((decimal)x); } catch (OverflowException) { return default(ushort?); } } },
+            { typeof(int), x => { try { return Decimal.ToInt32((decimal)x); } catch (OverflowException) { return default(int); } } },
+            { typeof(int?), x => { try { return Decimal.ToInt32((decimal)x); } catch (OverflowException) { return default(int?); } } },
+            { typeof(uint), x => { try { return Decimal.ToUInt32((decimal)x); } catch (OverflowException) { return default(uint); } } },
+            { typeof(uint?), x => { try { return Decimal.ToUInt32((decimal)x); } catch (OverflowException) { return default(uint?); } } },
+            { typeof(long), x => { try { return Decimal.ToInt64((decimal)x); } catch (OverflowException) { return default(long); } } },
+            { typeof(long?), x => { try { return Decimal.ToInt64((decimal)x); } catch (OverflowException) { return default(long?); } } },
+            { typeof(ulong), x => { try { return Decimal.ToUInt64((decimal)x); } catch (OverflowException) { return default(ulong); } } },
+            { typeof(ulong?), x => { try { return Decimal.ToUInt64((decimal)x); } catch (OverflowException) { return default(ulong?); } } },
+            { typeof(char), x => { try { return (char)Decimal.ToUInt16((decimal)x); } catch (OverflowException) { return default(char); } } },
+            { typeof(char?), x => { try { return (char)Decimal.ToUInt16((decimal)x); } catch (OverflowException) { return default(char?); } } },
+            { typeof(double), x => { try { return Decimal.ToDouble((decimal)x); } catch (OverflowException) { return default(double); } } },
+            { typeof(double?), x => { try { return Decimal.ToDouble((decimal)x); } catch (OverflowException) { return default(double?); } } },
+            { typeof(float), x => { try { return Decimal.ToSingle((decimal)x); } catch (OverflowException) { return default(float); } } },
+            { typeof(float?), x => { try { return Decimal.ToSingle((decimal)x); } catch (OverflowException) { return default(float?); } } }
         };
 
-        public Func<object, object> GetConverter(Type sourceType, Type targetType)
+        private static readonly Dictionary<Type, Func<object, object>> ToDecimalConverters = new Dictionary<Type, Func<object, object>>
         {
-            if (sourceType.IsValueType && targetType.IsValueType)
+            { typeof(byte), x => new Decimal((byte)x) },
+            { typeof(sbyte), x => new Decimal((sbyte)x) },
+            { typeof(short), x => new Decimal((short)x) },
+            { typeof(ushort), x => new Decimal((ushort)x) },
+            { typeof(int), x => new Decimal((int)x) },
+            { typeof(uint), x => new Decimal((uint)x) },
+            { typeof(long), x => new Decimal((long)x) },
+            { typeof(ulong), x => new Decimal((ulong)x) },
+            { typeof(char), x => new Decimal((char)x) },
+            { typeof(double), x => new Decimal((double)x) },
+            { typeof(float), x => new Decimal((float)x) }
+        };
+
+        public Func<object, object> GetConverter(IObjectConverter context, Type sourceType, Type targetType)
+        {
+            if (sourceType == DecimalType)
             {
-                var key = Tuple.Create(sourceType, targetType.IsNullableType() ? Nullable.GetUnderlyingType(targetType) : targetType);
-                if (Converters.TryGetValue(key, out var converter))
+                if (targetType.IsValueType)
                 {
-                    return converter;
+                    if (FromDecimalConverters.TryGetValue(targetType, out var converter))
+                    {
+                        return converter;
+                    }
+                }
+            }
+            else if ((targetType == DecimalType) || (targetType == NullableDecimalType))
+            {
+                if (sourceType.IsValueType)
+                {
+                    var type = sourceType.IsNullableType() ? Nullable.GetUnderlyingType(sourceType) : sourceType;
+                    if (ToDecimalConverters.TryGetValue(type, out var converter))
+                    {
+                        return converter;
+                    }
                 }
             }
 

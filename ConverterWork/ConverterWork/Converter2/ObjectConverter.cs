@@ -45,7 +45,7 @@
         {
             for (var i = 0; i < factories.Length; i++)
             {
-                var converter = factories[i].GetConverter(sourceType, targetType);
+                var converter = factories[i].GetConverter(this, sourceType, targetType);
                 if (converter != null)
                 {
                     return converter;
@@ -63,12 +63,33 @@
                 converter = converterCache.AddIfNotExist(sourceType, targetType, FindConverter);
             }
 
-            if (converter == null)
+            return converter;
+        }
+
+        public bool CanConvert<T>(object value)
+        {
+            return CanConvert(value, typeof(T));
+        }
+
+        public bool CanConvert(object value, Type targetType)
+        {
+            if (value == null)
             {
-                throw new ObjectConverterException($"Type {sourceType} can't convert to {targetType}");
+                return true;
             }
 
-            return converter;
+            var sourceType = value.GetType();
+            if (sourceType == (targetType.IsNullableType() ? Nullable.GetUnderlyingType(targetType) : targetType))
+            {
+                return true;
+            }
+
+            return GetConverter(sourceType, targetType) != null;
+        }
+
+        public bool CanConvert(Type sourceType, Type targetType)
+        {
+            return GetConverter(sourceType.IsNullableType() ? Nullable.GetUnderlyingType(sourceType) : sourceType, targetType) != null;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -92,19 +113,30 @@
                 return value;
             }
 
-            var converter = GetConverter(value.GetType(), targetType);
+            var converter = GetConverter(sourceType, targetType);
+            if (converter == null)
+            {
+                throw new ObjectConverterException($"Type {sourceType} can't convert to {targetType}");
+            }
+
             return converter(value);
         }
 
         public Func<object, object> CreateConverter(Type sourceType, Type targetType)
         {
+            var converter = GetConverter(sourceType.IsNullableType() ? Nullable.GetUnderlyingType(sourceType) : sourceType, targetType);
+            if (converter == null)
+            {
+                throw new ObjectConverterException($"Type {sourceType} can't convert to {targetType}");
+            }
+
             return CreateConverter(
-                targetType.IsNullableType() ? Nullable.GetUnderlyingType(targetType) : targetType,
                 targetType.GetDefaultValue(),
-                GetConverter(sourceType.IsNullableType() ? Nullable.GetUnderlyingType(sourceType) : sourceType, targetType));
+                targetType.IsNullableType() ? Nullable.GetUnderlyingType(targetType) : targetType,
+                converter);
         }
 
-        private static Func<object, object> CreateConverter(Type targetType, object defaultValue, Func<object, object> converter)
+        private static Func<object, object> CreateConverter(object defaultValue, Type targetType, Func<object, object> converter)
         {
             return value => value == null
                 ? defaultValue

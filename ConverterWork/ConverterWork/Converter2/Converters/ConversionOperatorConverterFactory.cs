@@ -6,7 +6,7 @@
 
     public sealed class ConversionOperatorConverterFactory : IConverterFactory
     {
-        public Func<object, object> GetConverter(Type sourceType, Type targetType)
+        public Func<object, object> GetConverter(IObjectConverter context, Type sourceType, Type targetType)
         {
             var methodInfo = GetImplicitConversionOperator(sourceType, targetType);
             if (methodInfo != null)
