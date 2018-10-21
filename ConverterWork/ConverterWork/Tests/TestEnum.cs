@@ -6,4 +6,11 @@
         One,
         Two
     }
+
+    public enum TestEnum2
+    {
+        Zero,
+        One,
+        Two
+    }
 }
