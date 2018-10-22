@@ -47,6 +47,29 @@
             return true;
         }
 
+        public bool UsedIn(params Type[] types)
+        {
+            foreach (var factory in converterFactories)
+            {
+                if (factory.Used)
+                {
+                    if (!types.Contains(factory.Factory.GetType()))
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    if (types.Contains(factory.Factory.GetType()))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
         public bool CanConvert<T>(object value)
         {
             return objectConverter.CanConvert<T>(value);
