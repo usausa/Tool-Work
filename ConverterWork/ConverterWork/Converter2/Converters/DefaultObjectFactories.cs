@@ -18,6 +18,7 @@
                 new BooleanConverterFactory(),              // Boolean
                 new NumericCastConverterFactory(),          // Numeric cast
                 new DecimalConverterFactory(),              // Decimal
+                new DateTimeConverterFactory(),             // DateTime/DateTimeOffset
                 new EnumConverterFactory(),                 // Enum to Enum, String to Enum, Assignable to Enum, Enum to Assignable
                 new ConversionOperatorConverterFactory(),   // Implicit/Explicit operator
                 new ToStringConverterFactory(),             // ToString finally
