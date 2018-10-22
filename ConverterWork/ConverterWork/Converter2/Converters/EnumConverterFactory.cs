@@ -49,6 +49,12 @@
             {
                 // Enum to !Enum
 
+                // Enum to String
+                if (targetType == StringType)
+                {
+                    return source => ((Enum)source).ToString();
+                }
+
                 // Assignable
                 var sourceUnderlyingType = Enum.GetUnderlyingType(sourceEnumType);
                 if (targetType.IsAssignableFrom(sourceUnderlyingType))
