@@ -13,6 +13,7 @@
         {
             return new IConverterFactory[]
             {
+                new DBNullConverterFactory(),               // DBNull
                 new AssignableConverterFactory(),           // IsAssignableFrom
                 new BooleanConverterFactory(),              // Boolean
                 new NumericCastConverterFactory(),          // Numeric cast
