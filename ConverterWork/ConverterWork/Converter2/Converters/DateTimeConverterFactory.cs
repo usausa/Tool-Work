@@ -1,65 +1,78 @@
 ﻿namespace Smart.Converter2.Converters
 {
     using System;
+    using System.Collections.Generic;
 
     public sealed class DateTimeConverterFactory : IConverterFactory
     {
-        // TODO Dic * 4
+        // TODO Tuple
+        private static readonly Dictionary<Type, Func<object, object>> FromDateTimeConverters = new Dictionary<Type, Func<object, object>>
+        {
+            { typeof(long), x => ((DateTime)x).Ticks },
+            { typeof(long?), x => ((DateTime)x).Ticks },
+            { typeof(string), x => ((DateTime)x).ToString() },
+            { typeof(DateTimeOffset), x => new DateTimeOffset((DateTime)x) },
+            { typeof(DateTimeOffset?), x => new DateTimeOffset((DateTime)x) }
+        };
+
+        private static readonly Dictionary<Type, Func<object, object>> FromDateTimeOffsetConverters = new Dictionary<Type, Func<object, object>>
+        {
+            { typeof(long), x => ((DateTimeOffset)x).Ticks },
+            { typeof(long?), x => ((DateTimeOffset)x).Ticks },
+            { typeof(string), x => ((DateTimeOffset)x).ToString() },
+            { typeof(DateTimeOffset), x => ((DateTimeOffset)x).DateTime },
+            { typeof(DateTimeOffset?), x => ((DateTimeOffset)x).DateTime }
+        };
+
+        private static readonly Dictionary<Type, Func<object, object>> ToDateTimeConverters = new Dictionary<Type, Func<object, object>>
+        {
+            { typeof(long), x => { try { return new DateTime((long)x); } catch (ArgumentOutOfRangeException) { return default(DateTime); } } },
+            { typeof(string), x => DateTime.TryParse((string)x, out var result) ? result : default }
+        };
+
+        private static readonly Dictionary<Type, Func<object, object>> ToNullableDateTimeConverters = new Dictionary<Type, Func<object, object>>
+        {
+            { typeof(long), x => { try { return new DateTime((long)x); } catch (ArgumentOutOfRangeException) { return default(DateTime?); } } },
+            { typeof(string), x => DateTime.TryParse((string)x, out var result) ? result : default }
+        };
+
+        // TODO Dic * 2 ToNullable
 
         private static readonly Type DateTimeType = typeof(DateTime);
 
-        //private static readonly Type NullableDateTimeType = typeof(DateTime?);
+        private static readonly Type NullableDateTimeType = typeof(DateTime?);
 
         private static readonly Type DateTimeOffsetType = typeof(DateTimeOffset);
 
-        //private static readonly Type NullableDateTimeOffsetType = typeof(DateTimeOffset?);
-
-        private static readonly Type StringType = typeof(string);
-
-        private static readonly Type LongType = typeof(long);
-
-        //private static readonly Type ULongType = typeof(ulong);
+        private static readonly Type NullableDateTimeOffsetType = typeof(DateTimeOffset?);
 
         public Func<object, object> GetConverter(IObjectConverter context, Type sourceType, Type targetType)
         {
             if (sourceType == DateTimeType)
             {
-                // To String
-                if (targetType == StringType)
+                if (FromDateTimeConverters.TryGetValue(targetType, out var converter))
                 {
-                    return source => ((DateTime)source).ToString();
+                    return converter;
                 }
 
-                // To Long
-                targetType = targetType.IsNullableType() ? Nullable.GetUnderlyingType(targetType) : targetType;
-                if (targetType == LongType)
-                {
-                    return source => ((DateTime)source).Ticks;
-                }
-
-                // TODO long convert able?
-
-                return null;
+                // TODO able?
             }
-
-            if (sourceType == DateTimeOffsetType)
+            else if (sourceType == DateTimeOffsetType)
             {
-                // To String
-                if (targetType == StringType)
+                if (FromDateTimeOffsetConverters.TryGetValue(targetType, out var converter))
                 {
-                    return source => ((DateTimeOffset)source).ToString();
+                    return converter;
                 }
 
-                // To Long
-                targetType = targetType.IsNullableType() ? Nullable.GetUnderlyingType(targetType) : targetType;
-                if (targetType == LongType)
-                {
-                    return source => ((DateTimeOffset)source).Ticks;
-                }
+                // TODO able?
+            }
+            else if ((targetType == DateTimeType) || (targetType == NullableDateTimeType))
+            {
 
-                // TODO long convert able?
+            }
+            else if ((targetType == DateTimeOffsetType) || (targetType == NullableDateTimeOffsetType))
+            {
 
-                return null;
             }
 
             //targetType = targetType.IsNullableType() ? Nullable.GetUnderlyingType(targetType) : targetType;
