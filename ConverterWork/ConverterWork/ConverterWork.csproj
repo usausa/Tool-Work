@@ -20,6 +20,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Converter\**" />
+    <EmbeddedResource Remove="Converter\**" />
+    <None Remove="Converter\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.11.1" />
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="2.6.2">
       <PrivateAssets>all</PrivateAssets>

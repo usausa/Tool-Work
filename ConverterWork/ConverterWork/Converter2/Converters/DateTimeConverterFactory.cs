@@ -5,92 +5,43 @@
 
     public sealed class DateTimeConverterFactory : IConverterFactory
     {
-        // TODO Tuple
-        private static readonly Dictionary<Type, Func<object, object>> FromDateTimeConverters = new Dictionary<Type, Func<object, object>>
+        private static readonly Dictionary<Tuple<Type, Type>, Func<object, object>> Converters = new Dictionary<Tuple<Type, Type>, Func<object, object>>
         {
-            { typeof(long), x => ((DateTime)x).Ticks },
-            { typeof(long?), x => ((DateTime)x).Ticks },
-            { typeof(string), x => ((DateTime)x).ToString() },
-            { typeof(DateTimeOffset), x => new DateTimeOffset((DateTime)x) },
-            { typeof(DateTimeOffset?), x => new DateTimeOffset((DateTime)x) }
+            // To DateTimeOffset
+            { Tuple.Create(typeof(DateTime), typeof(long)), x => ((DateTime)x).Ticks },
+            { Tuple.Create(typeof(DateTime), typeof(long?)), x => ((DateTime)x).Ticks },
+            // TODO num
+            { Tuple.Create(typeof(DateTime), typeof(string)), x => ((DateTime)x).ToString() },
+            { Tuple.Create(typeof(DateTime), typeof(DateTimeOffset)), x => new DateTimeOffset((DateTime)x) },
+            { Tuple.Create(typeof(DateTime), typeof(DateTimeOffset?)), x => new DateTimeOffset((DateTime)x) },
+            // From DateTimeOffset
+            { Tuple.Create(typeof(DateTimeOffset), typeof(long)), x => ((DateTimeOffset)x).Ticks },
+            { Tuple.Create(typeof(DateTimeOffset), typeof(long?)), x => ((DateTimeOffset)x).Ticks },
+            // TODO num
+            { Tuple.Create(typeof(DateTimeOffset), typeof(string)), x => ((DateTimeOffset)x).ToString() },
+            { Tuple.Create(typeof(DateTimeOffset), typeof(DateTime)), x => ((DateTimeOffset)x).DateTime },
+            { Tuple.Create(typeof(DateTimeOffset), typeof(DateTime?)), x => ((DateTimeOffset)x).DateTime },
+            // To DateTime
+            { Tuple.Create(typeof(long), typeof(DateTime)), x => { try { return new DateTime((long)x); } catch (ArgumentOutOfRangeException) { return default(DateTime); } } },
+            { Tuple.Create(typeof(long), typeof(DateTime?)), x => { try { return new DateTime((long)x); } catch (ArgumentOutOfRangeException) { return default(DateTime?); } } },
+            // TODO num uのint以下は安全
+            { Tuple.Create(typeof(string), typeof(DateTime)), x => DateTime.TryParse((string)x, out var result) ? result : default },
+            { Tuple.Create(typeof(string), typeof(DateTime?)), x => DateTime.TryParse((string)x, out var result) ? result : default(DateTime?) },
+            // To DateTimeOffset
+            { Tuple.Create(typeof(long), typeof(DateTimeOffset)), x => { try { return new DateTimeOffset(new DateTime((long)x)); } catch (ArgumentOutOfRangeException) { return default(DateTimeOffset); } } },
+            { Tuple.Create(typeof(long), typeof(DateTimeOffset?)), x => { try { return new DateTimeOffset(new DateTime((long)x)); } catch (ArgumentOutOfRangeException) { return default(DateTimeOffset?); } } },
+            // TODO num TZがあるので常に例外は必要
+            { Tuple.Create(typeof(string), typeof(DateTimeOffset)), x => DateTimeOffset.TryParse((string)x, out var result) ? result : default(DateTimeOffset) },
+            { Tuple.Create(typeof(string), typeof(DateTimeOffset?)), x => DateTimeOffset.TryParse((string)x, out var result) ? result : default(DateTimeOffset?) },
         };
-
-        private static readonly Dictionary<Type, Func<object, object>> FromDateTimeOffsetConverters = new Dictionary<Type, Func<object, object>>
-        {
-            { typeof(long), x => ((DateTimeOffset)x).Ticks },
-            { typeof(long?), x => ((DateTimeOffset)x).Ticks },
-            { typeof(string), x => ((DateTimeOffset)x).ToString() },
-            { typeof(DateTimeOffset), x => ((DateTimeOffset)x).DateTime },
-            { typeof(DateTimeOffset?), x => ((DateTimeOffset)x).DateTime }
-        };
-
-        private static readonly Dictionary<Type, Func<object, object>> ToDateTimeConverters = new Dictionary<Type, Func<object, object>>
-        {
-            { typeof(long), x => { try { return new DateTime((long)x); } catch (ArgumentOutOfRangeException) { return default(DateTime); } } },
-            { typeof(string), x => DateTime.TryParse((string)x, out var result) ? result : default }
-        };
-
-        private static readonly Dictionary<Type, Func<object, object>> ToNullableDateTimeConverters = new Dictionary<Type, Func<object, object>>
-        {
-            { typeof(long), x => { try { return new DateTime((long)x); } catch (ArgumentOutOfRangeException) { return default(DateTime?); } } },
-            { typeof(string), x => DateTime.TryParse((string)x, out var result) ? result : default }
-        };
-
-        // TODO Dic * 2 ToNullable
-
-        private static readonly Type DateTimeType = typeof(DateTime);
-
-        private static readonly Type NullableDateTimeType = typeof(DateTime?);
-
-        private static readonly Type DateTimeOffsetType = typeof(DateTimeOffset);
-
-        private static readonly Type NullableDateTimeOffsetType = typeof(DateTimeOffset?);
 
         public Func<object, object> GetConverter(IObjectConverter context, Type sourceType, Type targetType)
         {
-            if (sourceType == DateTimeType)
+            var key = Tuple.Create(sourceType, targetType);
+            if (Converters.TryGetValue(key, out var converter))
             {
-                if (FromDateTimeConverters.TryGetValue(targetType, out var converter))
-                {
-                    return converter;
-                }
-
-                // TODO able?
+                return converter;
             }
-            else if (sourceType == DateTimeOffsetType)
-            {
-                if (FromDateTimeOffsetConverters.TryGetValue(targetType, out var converter))
-                {
-                    return converter;
-                }
-
-                // TODO able?
-            }
-            else if ((targetType == DateTimeType) || (targetType == NullableDateTimeType))
-            {
-
-            }
-            else if ((targetType == DateTimeOffsetType) || (targetType == NullableDateTimeOffsetType))
-            {
-
-            }
-
-            //targetType = targetType.IsNullableType() ? Nullable.GetUnderlyingType(targetType) : targetType;
-            //if (targetType == DateTimeType)
-            //{
-            //    // From String
-            //    if (sourceType == StringType)
-            //    {
-            //        var defaultValue = targetType
-            //        return source => DateTime.TryParse((string)source, out var result) ? result : ;
-            //    }
-
-            //}
-
-            // TODO DateTime <-> DateTimeOffset
-            // TODO long
-            // TODO ulong
-            // TODO long, ulong Convert able
 
             return null;
         }
