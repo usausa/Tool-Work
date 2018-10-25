@@ -18,6 +18,7 @@
         private static readonly Type StringType = typeof(string);
 
         // TODO toNumはNullable込みで1つ、FromNumはデフォルトの違いがある！
+        // TODO Dicは無くしてConverterまかせにするか？
         private static readonly Dictionary<Tuple<Type, Type>, Func<object, object>> Converters = new Dictionary<Tuple<Type, Type>, Func<object, object>>
         {
             // To DateTimeOffset
@@ -49,7 +50,6 @@
                 // DateTime to DateTimeOffset(Nullable)
                 if (Nullable.GetUnderlyingType(targetType) == DateTimeOffsetType)
                 {
-                    // TODO 分割？
                     var defaultValue = targetType.GetDefaultValue();
                     return source =>
                     {
@@ -64,7 +64,10 @@
                     };
                 }
 
-                // TODO num
+                // TODO long
+
+                // TODO longに変換可能
+
                 return null;
             }
 
@@ -82,7 +85,10 @@
                     return source => ((DateTimeOffset)source).DateTime;
                 }
 
-                // TODO num
+                // TODO long
+
+                // TODO longに変換可能
+
                 return null;
             }
 
@@ -90,23 +96,18 @@
             {
                 if (Nullable.GetUnderlyingType(targetType) == DateTimeType)
                 {
-                    // TODO 分割？
                     var defaultValue = targetType.GetDefaultValue();
                     return source => DateTime.TryParse((string)source, out var result) ? result : defaultValue;
                 }
 
                 if (Nullable.GetUnderlyingType(targetType) == DateTimeOffsetType)
                 {
-                    // TODO 分割？
                     var defaultValue = targetType.GetDefaultValue();
                     return source => DateTimeOffset.TryParse((string)source, out var result) ? result : defaultValue;
                 }
             }
 
-            // TODO long特殊化？
-
-            // TODO longに変換できる？
-
+            // TODO numからDT,DTO(DT?,DTO?) default value & convert able?
             // TODO map with target Nullable.GetUnderlyingType
             if (sourceType.IsValueType && targetType.IsValueType)
             {
