@@ -1,40 +1,13 @@
 ﻿namespace Smart.Converter2.Converters
 {
     using System;
-    using System.Collections.Generic;
 
     public sealed class DateTimeConverterFactory : IConverterFactory
     {
-        // TODO DateTime to num(nullable)
-        // TODO DateTime to string
-        // TODO DateTime to DateTimeOffset
-        // TODO num to DateTime
-        // TODO string to DateTime
-        // TODO DateTimeOffset to DateTime
-        // TODO * 2
-
         private static readonly Type DateTimeType = typeof(DateTime);
         private static readonly Type DateTimeOffsetType = typeof(DateTimeOffset);
         private static readonly Type StringType = typeof(string);
-
-        // TODO toNumはNullable込みで1つ、FromNumはデフォルトの違いがある！
-        // TODO Dicは無くしてConverterまかせにするか？
-        private static readonly Dictionary<Tuple<Type, Type>, Func<object, object>> Converters = new Dictionary<Tuple<Type, Type>, Func<object, object>>
-        {
-            // To DateTimeOffset
-            { Tuple.Create(typeof(DateTime), typeof(long)), x => ((DateTime)x).Ticks },
-            // From DateTimeOffset
-            { Tuple.Create(typeof(DateTimeOffset), typeof(long)), x => ((DateTimeOffset)x).Ticks },
-
-            // TODO defaultの扱い converterをかますか！
-            // To DateTime
-            { Tuple.Create(typeof(long), typeof(DateTime)), x => { try { return new DateTime((long)x); } catch (ArgumentOutOfRangeException) { return default(DateTime); } } },
-            { Tuple.Create(typeof(long), typeof(DateTime?)), x => { try { return new DateTime((long)x); } catch (ArgumentOutOfRangeException) { return default(DateTime?); } } },
-            // To DateTimeOffset
-            { Tuple.Create(typeof(long), typeof(DateTimeOffset)), x => { try { return new DateTimeOffset(new DateTime((long)x)); } catch (ArgumentOutOfRangeException) { return default(DateTimeOffset); } } },
-            { Tuple.Create(typeof(long), typeof(DateTimeOffset?)), x => { try { return new DateTimeOffset(new DateTime((long)x)); } catch (ArgumentOutOfRangeException) { return default(DateTimeOffset?); } } },
-            // TODO num TZがあるので常に例外は必要
-        };
+        private static readonly Type LongType = typeof(long);
 
         public Func<object, object> GetConverter(IObjectConverter context, Type sourceType, Type targetType)
         {
@@ -47,8 +20,10 @@
                     return source => ((DateTime)source).ToString();
                 }
 
+                var underlyingTargetType = Nullable.GetUnderlyingType(targetType);
+
                 // DateTime to DateTimeOffset(Nullable)
-                if (Nullable.GetUnderlyingType(targetType) == DateTimeOffsetType)
+                if (underlyingTargetType == DateTimeOffsetType)
                 {
                     var defaultValue = targetType.GetDefaultValue();
                     return source =>
@@ -64,9 +39,18 @@
                     };
                 }
 
-                // TODO long
+                // DateTime to long
+                if (underlyingTargetType == LongType)
+                {
+                    return source => ((DateTime)source).Ticks;
+                }
 
-                // TODO longに変換可能
+                // DateTime to can convert from long
+                var converter = context.CreateConverter(LongType, targetType);
+                if (converter != null)
+                {
+                    return source => converter(((DateTime)source).Ticks);
+                }
 
                 return null;
             }
@@ -80,41 +64,131 @@
                     return source => ((DateTimeOffset)source).ToString();
                 }
 
-                if (Nullable.GetUnderlyingType(targetType) == DateTimeType)
+                var underlyingTargetType = Nullable.GetUnderlyingType(targetType);
+
+                // DateTimeOffset to DateTime(Nullable)
+                if (underlyingTargetType == DateTimeType)
                 {
                     return source => ((DateTimeOffset)source).DateTime;
                 }
 
-                // TODO long
+                // DateTimeOffset to long
+                if (underlyingTargetType == LongType)
+                {
+                    return source => ((DateTimeOffset)source).Ticks;
+                }
 
-                // TODO longに変換可能
+                // DateTime to can convert from long
+                var converter = context.CreateConverter(LongType, targetType);
+                if (converter != null)
+                {
+                    return source => converter(((DateTime)source).Ticks);
+                }
 
                 return null;
             }
 
+            // From string
             if (sourceType == StringType)
             {
-                if (Nullable.GetUnderlyingType(targetType) == DateTimeType)
+                var underlyingTargetType = Nullable.GetUnderlyingType(targetType);
+
+                // String to DateTime(Nullable)
+                if (underlyingTargetType == DateTimeType)
                 {
                     var defaultValue = targetType.GetDefaultValue();
                     return source => DateTime.TryParse((string)source, out var result) ? result : defaultValue;
                 }
 
-                if (Nullable.GetUnderlyingType(targetType) == DateTimeOffsetType)
+                // String to DateTimeOffset(Nullable)
+                if (underlyingTargetType == DateTimeOffsetType)
                 {
                     var defaultValue = targetType.GetDefaultValue();
                     return source => DateTimeOffset.TryParse((string)source, out var result) ? result : defaultValue;
                 }
             }
 
-            // TODO numからDT,DTO(DT?,DTO?) default value & convert able?
-            // TODO map with target Nullable.GetUnderlyingType
-            if (sourceType.IsValueType && targetType.IsValueType)
+            // From long
+            if (sourceType == LongType)
             {
-                var key = Tuple.Create(sourceType, Nullable.GetUnderlyingType(targetType));
-                if (Converters.TryGetValue(key, out var converter))
+                var underlyingTargetType = Nullable.GetUnderlyingType(targetType);
+
+                // long to DateTime(Nullable)
+                if (underlyingTargetType == DateTimeType)
                 {
-                    return converter;
+                    var defaultValue = targetType.GetDefaultValue();
+                    return source =>
+                    {
+                        try
+                        {
+                            return new DateTime((long)source);
+                        }
+                        catch (ArgumentOutOfRangeException)
+                        {
+                            return defaultValue;
+                        }
+                    };
+                }
+
+                // long to DateTimeOffset(Nullable)
+                if (underlyingTargetType == DateTimeOffsetType)
+                {
+                    var defaultValue = targetType.GetDefaultValue();
+                    return source =>
+                    {
+                        try
+                        {
+                            return new DateTimeOffset(new DateTime((long)source));
+                        }
+                        catch (ArgumentOutOfRangeException)
+                        {
+                            return defaultValue;
+                        }
+                    };
+                }
+            }
+
+            // From can convert to long
+            var type = Nullable.GetUnderlyingType(targetType);
+            if (type == DateTimeType)
+            {
+                // Can convert long to DateTime
+                var converter = context.CreateConverter(LongType, sourceType);
+                if (converter != null)
+                {
+                    var defaultValue = targetType.GetDefaultValue();
+                    return source =>
+                    {
+                        try
+                        {
+                            return new DateTime((long)converter(source));
+                        }
+                        catch (ArgumentOutOfRangeException)
+                        {
+                            return defaultValue;
+                        }
+                    };
+                }
+            }
+
+            if (type == DateTimeOffsetType)
+            {
+                // Can convert long to DateTime
+                var converter = context.CreateConverter(LongType, sourceType);
+                if (converter != null)
+                {
+                    var defaultValue = targetType.GetDefaultValue();
+                    return source =>
+                    {
+                        try
+                        {
+                            return new DateTimeOffset(new DateTime((long)converter(source)));
+                        }
+                        catch (ArgumentOutOfRangeException)
+                        {
+                            return defaultValue;
+                        }
+                    };
                 }
             }
 
