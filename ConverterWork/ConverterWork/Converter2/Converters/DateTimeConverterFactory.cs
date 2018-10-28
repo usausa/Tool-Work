@@ -20,7 +20,7 @@
                     return source => ((DateTime)source).ToString();
                 }
 
-                var underlyingTargetType = Nullable.GetUnderlyingType(targetType);
+                var underlyingTargetType = targetType.IsNullableType() ? Nullable.GetUnderlyingType(targetType) : targetType;
 
                 // DateTime to DateTimeOffset(Nullable)
                 if (underlyingTargetType == DateTimeOffsetType)
@@ -64,7 +64,7 @@
                     return source => ((DateTimeOffset)source).ToString();
                 }
 
-                var underlyingTargetType = Nullable.GetUnderlyingType(targetType);
+                var underlyingTargetType = targetType.IsNullableType() ? Nullable.GetUnderlyingType(targetType) : targetType;
 
                 // DateTimeOffset to DateTime(Nullable)
                 if (underlyingTargetType == DateTimeType)
@@ -91,7 +91,7 @@
             // From string
             if (sourceType == StringType)
             {
-                var underlyingTargetType = Nullable.GetUnderlyingType(targetType);
+                var underlyingTargetType = targetType.IsNullableType() ? Nullable.GetUnderlyingType(targetType) : targetType;
 
                 // String to DateTime(Nullable)
                 if (underlyingTargetType == DateTimeType)
@@ -111,7 +111,7 @@
             // From long
             if (sourceType == LongType)
             {
-                var underlyingTargetType = Nullable.GetUnderlyingType(targetType);
+                var underlyingTargetType = targetType.IsNullableType() ? Nullable.GetUnderlyingType(targetType) : targetType;
 
                 // long to DateTime(Nullable)
                 if (underlyingTargetType == DateTimeType)
@@ -149,7 +149,7 @@
             }
 
             // From can convert to long
-            var type = Nullable.GetUnderlyingType(targetType);
+            var type = targetType.IsNullableType() ? Nullable.GetUnderlyingType(targetType) : targetType;
             if (type == DateTimeType)
             {
                 // Can convert long to DateTime
