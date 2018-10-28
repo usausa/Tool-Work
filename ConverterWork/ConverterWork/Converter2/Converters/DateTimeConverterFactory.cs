@@ -78,11 +78,11 @@
                     return source => ((DateTimeOffset)source).Ticks;
                 }
 
-                // DateTime to can convert from long
+                // DateTimeOffset to can convert from long
                 var converter = context.CreateConverter(LongType, targetType);
                 if (converter != null)
                 {
-                    return source => converter(((DateTime)source).Ticks);
+                    return source => converter(((DateTimeOffset)source).Ticks);
                 }
 
                 return null;
@@ -153,7 +153,7 @@
             if (type == DateTimeType)
             {
                 // Can convert long to DateTime
-                var converter = context.CreateConverter(LongType, sourceType);
+                var converter = context.CreateConverter(sourceType, LongType);
                 if (converter != null)
                 {
                     var defaultValue = targetType.GetDefaultValue();
@@ -174,7 +174,7 @@
             if (type == DateTimeOffsetType)
             {
                 // Can convert long to DateTime
-                var converter = context.CreateConverter(LongType, sourceType);
+                var converter = context.CreateConverter(sourceType, LongType);
                 if (converter != null)
                 {
                     var defaultValue = targetType.GetDefaultValue();
