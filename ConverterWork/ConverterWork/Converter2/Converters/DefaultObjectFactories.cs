@@ -15,6 +15,7 @@
             {
                 new DBNullConverterFactory(),               // DBNull
                 new AssignableConverterFactory(),           // IsAssignableFrom
+                new EnumerableConverterFactory(),           // Enumerable
                 new BooleanConverterFactory(),              // Boolean
                 new NumericCastConverterFactory(),          // Numeric cast
                 new DecimalConverterFactory(),              // Decimal
