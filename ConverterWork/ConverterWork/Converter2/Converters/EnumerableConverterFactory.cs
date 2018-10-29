@@ -13,6 +13,8 @@
 
         public Func<object, object> GetConverter(IObjectConverter context, Type sourceType, Type targetType)
         {
+            // TODO MakeGenericType vs MakeGenericMethod
+
             // TODO 他と統合して効率よく
             var sourceElementType = sourceType.GetCollectionElementType();
             var targetElementType = targetType.GetCollectionElementType();
