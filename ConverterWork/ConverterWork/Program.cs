@@ -1,4 +1,6 @@
-﻿namespace Smart
+﻿using Smart.Benchmarks;
+
+namespace Smart
 {
     using System.Reflection;
 
@@ -8,6 +10,7 @@
     {
         public static void Main(string[] args)
         {
+            new MakeGenericBenchmark().Setup();
             BenchmarkSwitcher.FromAssembly(typeof(Program).GetTypeInfo().Assembly).Run(args);
         }
     }
