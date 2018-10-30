@@ -11,9 +11,7 @@
         {
             object Build(object source);
 
-            Func<object, object> QueryBuildMethod2();
-
-            Func<object, object> QueryBuildMethod3();
+            Func<object, object> QueryBuildMethod();
         }
 
         private sealed class ConvertBuilder<T> : IConvertBuilder
@@ -30,24 +28,9 @@
                 return (T)converter(source);
             }
 
-            private object Build2(object source)
+            public Func<object, object> QueryBuildMethod()
             {
-                return (T)converter(source);
-            }
-
-            public object Build3(object source)
-            {
-                return (T)converter(source);
-            }
-
-            public Func<object, object> QueryBuildMethod2()
-            {
-                return Build2;
-            }
-
-            public Func<object, object> QueryBuildMethod3()
-            {
-                return Build3;
+                return Build;
             }
         }
 
@@ -60,9 +43,7 @@
 
         private Func<object, object> classBuilder2;
 
-        private Func<object, object> classBuilder3;
-
-        //private Func<object, object> methodBuilder;
+        private Func<object, object> methodBuilder;
 
         [GlobalSetup]
         public void Setup()
@@ -72,12 +53,11 @@
             var type = typeof(ConvertBuilder<>).MakeGenericType(typeof(string));
             var convertBuilder = (IConvertBuilder)Activator.CreateInstance(type, identify);
             classBuilder1 = convertBuilder.Build;
-            classBuilder2 = convertBuilder.QueryBuildMethod2();
-            classBuilder3 = convertBuilder.QueryBuildMethod3();
+            classBuilder2 = convertBuilder.QueryBuildMethod();
 
-            //var mi = typeof(MakeGenericBenchmark).GetMethod(nameof(ConvertBuild)).MakeGenericMethod(typeof(string));
-            //var func = (Func<Func<object, object>, object, object>)Delegate.CreateDelegate(typeof(Func<Func<object, object>, object, object>), this, mi);
-            //methodBuilder = source => func(identify, source);
+            var mi = typeof(MakeGenericBenchmark).GetMethod(nameof(ConvertBuild)).MakeGenericMethod(typeof(string));
+            var func = (Func<Func<object, object>, object, object>)Delegate.CreateDelegate(typeof(Func<Func<object, object>, object, object>), this, mi);
+            methodBuilder = source => func(identify, source);
         }
 
         [Benchmark]
@@ -93,15 +73,9 @@
         }
 
         [Benchmark]
-        public object ClassBuilder3()
+        public object MethodBuilder()
         {
-            return classBuilder3(string.Empty);
+            return methodBuilder(string.Empty);
         }
-
-        //[Benchmark]
-        //public object MethodBuilder()
-        //{
-        //    return methodBuilder(string.Empty);
-        //}
     }
 }
