@@ -121,6 +121,8 @@
 
         // TODO array copy?
 
+        // TODO array convert copy
+
         private sealed class ObjectEnumerableToArrayBuilder<T> : IEnumerableBuilder
         {
             private readonly Func<object, object> converter;
@@ -136,6 +138,8 @@
                 return ((IEnumerable<object>)source).Select(x => (T)converter(x)).ToArray();
             }
         }
+
+        // TODO IE non generic
 
         // ListBuilder
 

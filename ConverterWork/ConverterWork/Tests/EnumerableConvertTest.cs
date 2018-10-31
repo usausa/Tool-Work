@@ -1,14 +1,17 @@
-﻿namespace Smart.Tests
+﻿using System.Collections.Generic;
+using Smart.Converter2.Converters;
+
+namespace Smart.Tests
 {
     using Xunit;
 
     public class EnumerableConvertTest
     {
-        ////--------------------------------------------------------------------------------
-        //// To Array
-        ////--------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------
+        // To Array
+        //--------------------------------------------------------------------------------
 
-        //// TODO Assignable/Enumerable
+        // TODO Assignable/Enumerable
 
         //[Fact]
         //public void ArrayToSameElementArray()
@@ -19,7 +22,6 @@
         //[Fact]
         //public void ArrayToOtherElementArray()
         //{
-        //    // TODO
         //}
 
         //[Fact]
@@ -56,11 +58,19 @@
         //    // TODO
         //}
 
-        //[Fact]
-        //public void ListToOtherElementList()
-        //{
-        //    // TODO
-        //}
+        [Fact]
+        public void ListToOtherElementList()
+        {
+            var converter = new TestObjectConverter();
+            var source = new List<int> { 0, 1 };
+            var destination = (List<string>)converter.Convert(source, typeof(List<string>));
+            Assert.Equal(2, destination.Count);
+            Assert.Equal("0", destination[0]);
+            Assert.Equal("1", destination[1]);
+            Assert.True(converter.UsedIn(typeof(EnumerableConverterFactory), typeof(ToStringConverterFactory)));
+        }
+
+        // IList ?, ICol, IE<>...
 
         //[Fact]
         //public void ArrayToSameElementList()
