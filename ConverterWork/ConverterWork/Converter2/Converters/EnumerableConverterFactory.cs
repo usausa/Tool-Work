@@ -12,7 +12,6 @@
         private static readonly Type OpenEnumerableType = typeof(IEnumerable<>);
 
         private static readonly Type ObjectEnumerableType = typeof(IEnumerable<object>);
-        //private static readonly Type EnumerableType = typeof(IEnumerable);
 
         private static readonly Type OpenObjectEnumerableToArrayBuilderType = typeof(ObjectEnumerableToArrayBuilder<>);
         private static readonly Type OpenTypedEnumerableToListBuilderType = typeof(TypedEnumerableToListBuilder<>);
@@ -37,6 +36,7 @@
                 // T[] to T[]
                 if (sourceType.IsArray && targetElementType.IsAssignableFrom(sourceElementType))
                 {
+                    // TODO copy?
                     return source => source;
                 }
 
@@ -119,6 +119,8 @@
 
         // ArrayBuilder
 
+        // TODO array copy?
+
         private sealed class ObjectEnumerableToArrayBuilder<T> : IEnumerableBuilder
         {
             private readonly Func<object, object> converter;
@@ -130,6 +132,7 @@
 
             public object Create(object source)
             {
+                // TODO tune new T[]
                 return ((IEnumerable<object>)source).Select(x => (T)converter(x)).ToArray();
             }
         }
@@ -140,7 +143,7 @@
         {
             public object Create(object source)
             {
-                return new List<T>(((IEnumerable<T>)source));
+                return new List<T>((IEnumerable<T>)source);
             }
         }
 
@@ -155,6 +158,7 @@
 
             public object Create(object source)
             {
+                // TODO tune
                 return new List<T>(((IEnumerable<object>)source).Select(x => (T)converter(x)));
             }
         }
@@ -170,6 +174,7 @@
 
             public object Create(object source)
             {
+                // TODO tune
                 return new List<T>(((IEnumerable)source).Cast<object>().Select(x => (T)converter(x)));
             }
         }
@@ -180,7 +185,7 @@
         {
             public object Create(object source)
             {
-                return new HashSet<T>(((IEnumerable<T>)source));
+                return new HashSet<T>((IEnumerable<T>)source);
             }
         }
 
@@ -195,6 +200,7 @@
 
             public object Create(object source)
             {
+                // TODO tune
                 return new HashSet<T>(((IEnumerable<object>)source).Select(x => (T)converter(x)));
             }
         }
@@ -210,6 +216,7 @@
 
             public object Create(object source)
             {
+                // TODO tune
                 return new HashSet<T>(((IEnumerable)source).Cast<object>().Select(x => (T)converter(x)));
             }
         }
