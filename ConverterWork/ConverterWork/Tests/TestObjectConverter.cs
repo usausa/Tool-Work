@@ -1,4 +1,6 @@
-﻿namespace Smart.Tests
+﻿using System.Collections.Generic;
+
+namespace Smart.Tests
 {
     using System;
     using System.Linq;
@@ -13,8 +15,13 @@
         private readonly ObjectConverter objectConverter;
 
         public TestObjectConverter()
+            : this(x => x)
         {
-            converterFactories = DefaultObjectFactories.Create().Select(x => new TestConverterFactory(x)).ToArray();
+        }
+
+        public TestObjectConverter(Func<IConverterFactory[], IEnumerable<IConverterFactory>> func)
+        {
+            converterFactories = func(DefaultObjectFactories.Create()).Select(x => new TestConverterFactory(x)).ToArray();
             objectConverter = new ObjectConverter(converterFactories);
         }
 

@@ -13,8 +13,7 @@
 
         private static readonly Type ObjectEnumerableType = typeof(IEnumerable<object>);
 
-        private static readonly Type OpenArrayCopyBuilderType = typeof(ArrayCopyBuilder<>);
-        private static readonly Type OpenArrayConvertCopyBuilderType = typeof(ArrayConvertCopyBuilder<,>);
+        private static readonly Type OpenArrayToArrayBuilderType = typeof(ArrayToArrayBuilder<,>);
         private static readonly Type OpenObjectEnumerableToArrayBuilderType = typeof(ObjectEnumerableToArrayBuilder<>);
         private static readonly Type OpenEnumerableToArrayBuilderType = typeof(EnumerableToArrayBuilder<>);
 
@@ -38,22 +37,17 @@
             // To Array
             if (targetType.IsArray)
             {
-                // T[] to T[]
-                if (sourceType.IsArray && targetElementType.IsAssignableFrom(sourceElementType))
-                {
-                    return CreateBuilderConverter(OpenArrayCopyBuilderType, null, targetElementType);
-                }
-
-                var converter = context.CreateConverter(sourceElementType, targetElementType);
-                if (converter == null)
+                if (GetConverter(context, sourceElementType, targetElementType, out var converter))
                 {
                     return null;
                 }
 
+                // TODO sourceElementType targetElementType Nullableも考慮した上で同一ならconverter不要
+
                 // T1[] to T2[]
                 if (sourceType.IsArray)
                 {
-                    return CreateBuilderConverter(OpenArrayConvertCopyBuilderType, converter, sourceElementType, targetElementType);
+                    return CreateBuilderConverter(OpenArrayToArrayBuilderType, converter, sourceElementType, targetElementType);
                 }
 
                 // From IE<object>
@@ -70,6 +64,7 @@
             var listClosedTpe = OpenListType.MakeGenericType(targetElementType);
             if (listClosedTpe.IsAssignableFrom(targetType))
             {
+                // TODO 順番
                 // From IE<T>
                 var closedEnumerableType = OpenEnumerableType.MakeGenericType(targetElementType);
                 if (closedEnumerableType.IsAssignableFrom(sourceType))
@@ -77,11 +72,12 @@
                     return CreateBuilderConverter(OpenTypedEnumerableToListBuilderType, null, targetElementType);
                 }
 
-                var converter = context.CreateConverter(sourceElementType, targetElementType);
-                if (converter == null)
+                if (GetConverter(context, sourceElementType, targetElementType, out var converter))
                 {
                     return null;
                 }
+
+                // TODO sourceElementType targetElementType Nullableも考慮した上で同一ならconverter不要
 
                 // From IE<object>
                 if (ObjectEnumerableType.IsAssignableFrom(sourceType))
@@ -96,12 +92,15 @@
             var setClosedType = OpenHashSetType.MakeGenericType(targetElementType);
             if (setClosedType.IsAssignableFrom(targetType))
             {
+                // TODO 順番
                 // From IE<T>
                 var closedEnumerableType = OpenEnumerableType.MakeGenericType(targetElementType);
                 if (closedEnumerableType.IsAssignableFrom(sourceType))
                 {
                     return CreateBuilderConverter(OpenTypedEnumerableToSetBuilderType, null, targetElementType);
                 }
+
+                // TODO sourceElementType targetElementType Nullableも考慮した上で同一ならconverter不要
 
                 var converter = context.CreateConverter(sourceElementType, targetElementType);
                 if (converter == null)
@@ -120,6 +119,18 @@
             }
 
             return null;
+        }
+
+        private static bool GetConverter(IObjectConverter context, Type sourceType, Type targetType, out Func<object, object> converter)
+        {
+            if (sourceType == targetType)
+            {
+                converter = null;
+                return true;
+            }
+
+            converter = context.CreateConverter(sourceType, targetType);
+            return converter != null;
         }
 
         private static Func<object, object> CreateBuilderConverter(Type openBuilderType, Func<object, object> converter, params Type[] types)
@@ -157,22 +168,11 @@
 
         // ArrayBuilder
 
-        private sealed class ArrayCopyBuilder<T> : IEnumerableBuilder
-        {
-            public object Create(object source)
-            {
-                var sourceArray = (T[])source;
-                var array = new T[sourceArray.Length];
-                Array.Copy(sourceArray, array, sourceArray.Length);
-                return array;
-            }
-        }
-
-        private sealed class ArrayConvertCopyBuilder<TSource, TDestination> : IEnumerableBuilder
+        private sealed class ArrayToArrayBuilder<TSource, TDestination> : IEnumerableBuilder
         {
             private readonly Func<object, object> converter;
 
-            public ArrayConvertCopyBuilder(Func<object, object> converter)
+            public ArrayToArrayBuilder(Func<object, object> converter)
             {
                 this.converter = converter;
             }

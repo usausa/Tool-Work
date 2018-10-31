@@ -1,4 +1,6 @@
-﻿namespace Smart.Tests
+﻿using System.Linq;
+
+namespace Smart.Tests
 {
     using System.Collections.Generic;
 
@@ -14,13 +16,7 @@
         // To Array
         //--------------------------------------------------------------------------------
 
-        // TODO Assignable/Enumerable
-
-        //[Fact]
-        //public void ArrayToSameElementArray()
-        //{
-        //    // TODO copy?
-        //}
+        // MEMO same array type is not converted
 
         [Fact]
         public void ArrayToOtherElementArray()
