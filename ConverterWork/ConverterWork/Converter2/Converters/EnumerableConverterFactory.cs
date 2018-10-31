@@ -13,10 +13,15 @@
 
         private static readonly Type ObjectEnumerableType = typeof(IEnumerable<object>);
 
+        private static readonly Type OpenArrayCopyBuilderType = typeof(ArrayCopyBuilder<>);
+        private static readonly Type OpenArrayConvertCopyBuilderType = typeof(ArrayConvertCopyBuilder<,>);
         private static readonly Type OpenObjectEnumerableToArrayBuilderType = typeof(ObjectEnumerableToArrayBuilder<>);
+        private static readonly Type OpenEnumerableToArrayBuilderType = typeof(EnumerableToArrayBuilder<>);
+
         private static readonly Type OpenTypedEnumerableToListBuilderType = typeof(TypedEnumerableToListBuilder<>);
         private static readonly Type OpenObjectEnumerableToListBuilderType = typeof(ObjectEnumerableToListBuilder<>);
         private static readonly Type OpenEnumerableToListBuilderType = typeof(EnumerableToListBuilder<>);
+
         private static readonly Type OpenTypedEnumerableToSetBuilderType = typeof(TypedEnumerableToSetBuilder<>);
         private static readonly Type OpenObjectEnumerableToSetBuilderType = typeof(ObjectEnumerableToSetBuilder<>);
         private static readonly Type OpenEnumerableToSetBuilderType = typeof(EnumerableToSetBuilder<>);
@@ -36,8 +41,7 @@
                 // T[] to T[]
                 if (sourceType.IsArray && targetElementType.IsAssignableFrom(sourceElementType))
                 {
-                    // TODO copy?
-                    return source => source;
+                    return CreateBuilderConverter(OpenArrayCopyBuilderType, null, targetElementType);
                 }
 
                 var converter = context.CreateConverter(sourceElementType, targetElementType);
@@ -46,7 +50,20 @@
                     return null;
                 }
 
-                return CreateBuilderConverter(OpenObjectEnumerableToArrayBuilderType, targetElementType, converter);
+                // T1[] to T2[]
+                if (sourceType.IsArray)
+                {
+                    return CreateBuilderConverter(OpenArrayConvertCopyBuilderType, converter, sourceElementType, targetElementType);
+                }
+
+                // From IE<object>
+                if (ObjectEnumerableType.IsAssignableFrom(sourceType))
+                {
+                    return CreateBuilderConverter(OpenObjectEnumerableToArrayBuilderType, converter, targetElementType);
+                }
+
+                // From IE
+                return CreateBuilderConverter(OpenEnumerableToArrayBuilderType, converter, targetElementType);
             }
 
             // To List
@@ -57,7 +74,7 @@
                 var closedEnumerableType = OpenEnumerableType.MakeGenericType(targetElementType);
                 if (closedEnumerableType.IsAssignableFrom(sourceType))
                 {
-                    return CreateBuilderConverter(OpenTypedEnumerableToListBuilderType, targetElementType, null);
+                    return CreateBuilderConverter(OpenTypedEnumerableToListBuilderType, null, targetElementType);
                 }
 
                 var converter = context.CreateConverter(sourceElementType, targetElementType);
@@ -69,11 +86,11 @@
                 // From IE<object>
                 if (ObjectEnumerableType.IsAssignableFrom(sourceType))
                 {
-                    return CreateBuilderConverter(OpenObjectEnumerableToListBuilderType, targetElementType, converter);
+                    return CreateBuilderConverter(OpenObjectEnumerableToListBuilderType, converter, targetElementType);
                 }
 
                 // From IE
-                return CreateBuilderConverter(OpenEnumerableToListBuilderType, targetElementType, converter);
+                return CreateBuilderConverter(OpenEnumerableToListBuilderType, converter, targetElementType);
             }
 
             var setClosedType = OpenHashSetType.MakeGenericType(targetElementType);
@@ -83,7 +100,7 @@
                 var closedEnumerableType = OpenEnumerableType.MakeGenericType(targetElementType);
                 if (closedEnumerableType.IsAssignableFrom(sourceType))
                 {
-                    return CreateBuilderConverter(OpenTypedEnumerableToSetBuilderType, targetElementType, null);
+                    return CreateBuilderConverter(OpenTypedEnumerableToSetBuilderType, null, targetElementType);
                 }
 
                 var converter = context.CreateConverter(sourceElementType, targetElementType);
@@ -95,22 +112,43 @@
                 // From IE<object>
                 if (ObjectEnumerableType.IsAssignableFrom(sourceType))
                 {
-                    return CreateBuilderConverter(OpenObjectEnumerableToSetBuilderType, targetElementType, converter);
+                    return CreateBuilderConverter(OpenObjectEnumerableToSetBuilderType, converter, targetElementType);
                 }
 
                 // From IE
-                return CreateBuilderConverter(OpenEnumerableToSetBuilderType, targetElementType, converter);
+                return CreateBuilderConverter(OpenEnumerableToSetBuilderType, converter, targetElementType);
             }
 
             return null;
         }
 
-        private static Func<object, object> CreateBuilderConverter(Type openBuilderType, Type elementType, Func<object, object> converter)
+        private static Func<object, object> CreateBuilderConverter(Type openBuilderType, Func<object, object> converter, params Type[] types)
         {
-            var builderType = openBuilderType.MakeGenericType(elementType);
+            var builderType = openBuilderType.MakeGenericType(types);
             var builder = (IEnumerableBuilder)Activator.CreateInstance(builderType, converter);
             return builder.Create;
         }
+
+        // TODO ランタイムではなく、生成時に元の型も決まるな… Funcで渡すか！
+        //private static int? Count<T>(object source)
+        //{
+        //    if (source is IList l)
+        //    {
+        //        return l.Count;
+        //    }
+
+        //    if (source is ICollection<T> c)
+        //    {
+        //        return c.Count;
+        //    }
+
+        //    if (source is IReadOnlyCollection<T> roc)
+        //    {
+        //        return roc.Count;
+        //    }
+
+        //    return null;
+        //}
 
         private interface IEnumerableBuilder
         {
@@ -119,9 +157,38 @@
 
         // ArrayBuilder
 
-        // TODO array copy?
+        private sealed class ArrayCopyBuilder<T> : IEnumerableBuilder
+        {
+            public object Create(object source)
+            {
+                var sourceArray = (T[])source;
+                var array = new T[sourceArray.Length];
+                Array.Copy(sourceArray, array, sourceArray.Length);
+                return array;
+            }
+        }
 
-        // TODO array convert copy
+        private sealed class ArrayConvertCopyBuilder<TSource, TDestination> : IEnumerableBuilder
+        {
+            private readonly Func<object, object> converter;
+
+            public ArrayConvertCopyBuilder(Func<object, object> converter)
+            {
+                this.converter = converter;
+            }
+
+            public object Create(object source)
+            {
+                var sourceArray = (TSource[])source;
+                var array = new TDestination[sourceArray.Length];
+                for (var i = 0; i < sourceArray.Length; i++)
+                {
+                    array[i] = (TDestination)converter(sourceArray[i]);
+                }
+
+                return array;
+            }
+        }
 
         private sealed class ObjectEnumerableToArrayBuilder<T> : IEnumerableBuilder
         {
@@ -134,12 +201,26 @@
 
             public object Create(object source)
             {
-                // TODO tune new T[]
+                // TODO tune count
                 return ((IEnumerable<object>)source).Select(x => (T)converter(x)).ToArray();
             }
         }
 
-        // TODO IE non generic
+        private sealed class EnumerableToArrayBuilder<T> : IEnumerableBuilder
+        {
+            private readonly Func<object, object> converter;
+
+            public EnumerableToArrayBuilder(Func<object, object> converter)
+            {
+                this.converter = converter;
+            }
+
+            public object Create(object source)
+            {
+                // TODO tune count IList?
+                return ((IEnumerable)source).Cast<object>().Select(x => (T)converter(x)).ToArray();
+            }
+        }
 
         // ListBuilder
 
