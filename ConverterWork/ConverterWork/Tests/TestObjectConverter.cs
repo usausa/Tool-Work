@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace Smart.Tests
+﻿namespace Smart.Tests
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using Smart.Converter2;

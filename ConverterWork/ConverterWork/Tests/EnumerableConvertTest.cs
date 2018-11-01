@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace Smart.Tests
+﻿namespace Smart.Tests
 {
     using System.Collections.Generic;
 
@@ -64,31 +62,41 @@ namespace Smart.Tests
         //    // TODO
         //}
 
+        //[Fact]
+        //public void ListToOtherElementList()
+        //{
+        //    var converter = new TestObjectConverter();
+        //    var source = new List<int> { 0, 1 };
+        //    var destination = (List<string>)converter.Convert(source, typeof(List<string>));
+        //    Assert.Equal(2, destination.Count);
+        //    Assert.Equal("0", destination[0]);
+        //    Assert.Equal("1", destination[1]);
+        //    Assert.True(converter.UsedIn(typeof(EnumerableConverterFactory), typeof(ToStringConverterFactory)));
+        //}
+
         [Fact]
-        public void ListToOtherElementList()
+        public void ArrayToSameElementList()
         {
             var converter = new TestObjectConverter();
-            var source = new List<int> { 0, 1 };
+            var source = new[] { 0, 1 };
+            var destination = (List<int>)converter.Convert(source, typeof(List<int>));
+            Assert.Equal(2, destination.Count);
+            Assert.Equal(0, destination[0]);
+            Assert.Equal(1, destination[1]);
+            Assert.True(converter.UsedOnly<EnumerableConverterFactory>());
+        }
+
+        [Fact]
+        public void ArrayToOtherElementList()
+        {
+            var converter = new TestObjectConverter();
+            var source = new[] { 0, 1 };
             var destination = (List<string>)converter.Convert(source, typeof(List<string>));
             Assert.Equal(2, destination.Count);
             Assert.Equal("0", destination[0]);
             Assert.Equal("1", destination[1]);
             Assert.True(converter.UsedIn(typeof(EnumerableConverterFactory), typeof(ToStringConverterFactory)));
         }
-
-        // IList ?, ICol, IE<>...
-
-        //[Fact]
-        //public void ArrayToSameElementList()
-        //{
-        //    // TODO
-        //}
-
-        //[Fact]
-        //public void ArrayToOtherElementList()
-        //{
-        //    // TODO
-        //}
 
         //[Fact]
         //public void ArrayListToSameElementList()
@@ -102,56 +110,12 @@ namespace Smart.Tests
         //    // TODO
         //}
 
+        // IList ?, ICol, IE<>...
+
         ////--------------------------------------------------------------------------------
         //// To Set
         ////--------------------------------------------------------------------------------
 
-        //[Fact]
-        //public void SetToSameElementSet()
-        //{
-        //    // TODO
-        //}
-
-        //[Fact]
-        //public void SetToOtherElementSet()
-        //{
-        //    // TODO
-        //}
-
-        //[Fact]
-        //public void ArrayToSameElementSet()
-        //{
-        //    // TODO
-        //}
-
-        //[Fact]
-        //public void ArrayToOtherElementSet()
-        //{
-        //    // TODO
-        //}
-
-        //[Fact]
-        //public void ListToSameElementSet()
-        //{
-        //    // TODO
-        //}
-
-        //[Fact]
-        //public void ListToOtherElementSet()
-        //{
-        //    // TODO
-        //}
-
-        //[Fact]
-        //public void ArrayListToSameElementSet()
-        //{
-        //    // TODO
-        //}
-
-        //[Fact]
-        //public void ArrayListToOtherElementSet()
-        //{
-        //    // TODO
-        //}
+        // TODO
     }
 }
