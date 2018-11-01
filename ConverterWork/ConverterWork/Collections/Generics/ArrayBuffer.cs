@@ -18,7 +18,7 @@
         {
             if (size >= buffer.Length)
             {
-                Array.Resize(ref buffer, size * 2);
+                Array.Resize(ref buffer, size == 0 ? 4 : size * 2);
             }
 
             buffer[size] = value;

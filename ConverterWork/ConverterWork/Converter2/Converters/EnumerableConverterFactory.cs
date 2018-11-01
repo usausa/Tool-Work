@@ -85,6 +85,7 @@
                 // KnownSize other
                 return ((IConverterBuilder)Activator.CreateInstance(
                     typeof(KnownSizeEnumerableToOtherTypeArrayBuilder<>).MakeGenericType(targetElementType),
+                    getSize,
                     converter)).Create;
             }
 
@@ -123,9 +124,36 @@
                     converter)).Create;
             }
 
-            // TODO
+            var getSize = ResolveSizeFunction(sourceType, sourceElementType);
 
-            return null;
+            if ((converter == null) && (getSize != null))
+            {
+                // KnownSize same
+                return ((IConverterBuilder)Activator.CreateInstance(
+                    typeof(KnownSizeEnumerableToSameTypeListBuilder<>).MakeGenericType(targetElementType),
+                    getSize)).Create;
+            }
+
+            if (getSize != null)
+            {
+                // KnownSize other
+                return ((IConverterBuilder)Activator.CreateInstance(
+                    typeof(KnownSizeEnumerableToOtherTypeListBuilder<>).MakeGenericType(targetElementType),
+                    getSize,
+                    converter)).Create;
+            }
+
+            if (converter == null)
+            {
+                // UnknownSize same
+                return ((IConverterBuilder)Activator.CreateInstance(
+                    typeof(UnknownSizeEnumerableToSameTypeListBuilder<>).MakeGenericType(targetElementType))).Create;
+            }
+
+            // UnknownSize other
+            return ((IConverterBuilder)Activator.CreateInstance(
+                typeof(UnknownSizeEnumerableToOtherTypeListBuilder<>).MakeGenericType(targetElementType),
+                converter)).Create;
         }
 
         //--------------------------------------------------------------------------------
@@ -337,6 +365,88 @@
                 for (var i = 0; i < sourceArray.Length; i++)
                 {
                     list.Add((TDestination)converter(sourceArray[i]));
+                }
+
+                return list;
+            }
+        }
+
+        private sealed class KnownSizeEnumerableToSameTypeListBuilder<TDestination> : IConverterBuilder
+        {
+            private readonly Func<object, int> getSize;
+
+            public KnownSizeEnumerableToSameTypeListBuilder(Func<object, int> getSize)
+            {
+                this.getSize = getSize;
+            }
+
+            public object Create(object source)
+            {
+                var size = getSize(source);
+                var list = new List<TDestination>(size);
+                foreach (var value in (IEnumerable)source)
+                {
+                    list.Add((TDestination)value);
+                }
+
+                return list;
+            }
+        }
+
+        private sealed class KnownSizeEnumerableToOtherTypeListBuilder<TDestination> : IConverterBuilder
+        {
+            private readonly Func<object, int> getSize;
+
+            private readonly Func<object, object> converter;
+
+            public KnownSizeEnumerableToOtherTypeListBuilder(Func<object, int> getSize, Func<object, object> converter)
+            {
+                this.getSize = getSize;
+                this.converter = converter;
+            }
+
+            public object Create(object source)
+            {
+                var size = getSize(source);
+                var list = new List<TDestination>(size);
+                foreach (var value in (IEnumerable)source)
+                {
+                    list.Add((TDestination)converter(value));
+                }
+
+                return list;
+            }
+        }
+
+        private sealed class UnknownSizeEnumerableToSameTypeListBuilder<TDestination> : IConverterBuilder
+        {
+            public object Create(object source)
+            {
+                var list = new List<TDestination>();
+                foreach (var value in (IEnumerable)source)
+                {
+                    list.Add((TDestination)value);
+                }
+
+                return list;
+            }
+        }
+
+        private sealed class UnknownSizeEnumerableToOtherTypeListBuilder<TDestination> : IConverterBuilder
+        {
+            private readonly Func<object, object> converter;
+
+            public UnknownSizeEnumerableToOtherTypeListBuilder(Func<object, object> converter)
+            {
+                this.converter = converter;
+            }
+
+            public object Create(object source)
+            {
+                var list = new List<TDestination>();
+                foreach (var value in (IEnumerable)source)
+                {
+                    list.Add((TDestination)converter(value));
                 }
 
                 return list;

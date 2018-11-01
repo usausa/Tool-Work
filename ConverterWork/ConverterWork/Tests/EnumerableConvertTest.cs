@@ -1,6 +1,9 @@
 ﻿namespace Smart.Tests
 {
+    using System;
+    using System.Collections;
     using System.Collections.Generic;
+    using System.Linq;
 
     using Smart.Converter2.Converters;
 
@@ -8,8 +11,6 @@
 
     public class EnumerableConvertTest
     {
-        // TODO IEとしてはint[]を採用
-
         //--------------------------------------------------------------------------------
         // To Array
         //--------------------------------------------------------------------------------
@@ -28,51 +29,57 @@
             Assert.True(converter.UsedIn(typeof(EnumerableConverterFactory), typeof(ToStringConverterFactory)));
         }
 
-        //[Fact]
-        //public void ListToSameElementArray()
-        //{
-        //    // TODO
-        //}
+        [Fact]
+        public void KnownSizeToSameElementArray()
+        {
+            var converter = new TestObjectConverter();
+            var source = new KnownSizeCollection<string>(new[] { "0", "1" });
+            var destination = (string[])converter.Convert(source, typeof(string[]));
+            Assert.Equal(2, destination.Length);
+            Assert.Equal("0", destination[0]);
+            Assert.Equal("1", destination[1]);
+            Assert.True(converter.UsedOnly<EnumerableConverterFactory>());
+        }
 
-        //[Fact]
-        //public void ListToOtherElementArray()
-        //{
-        //    // TODO
-        //}
+        [Fact]
+        public void KnownSizeToOtherElementArray()
+        {
+            var converter = new TestObjectConverter();
+            var source = new KnownSizeCollection<int>(new[] { 0, 1 });
+            var destination = (string[])converter.Convert(source, typeof(string[]));
+            Assert.Equal(2, destination.Length);
+            Assert.Equal("0", destination[0]);
+            Assert.Equal("1", destination[1]);
+            Assert.True(converter.UsedIn(typeof(EnumerableConverterFactory), typeof(ToStringConverterFactory)));
+        }
 
-        //[Fact]
-        //public void ArrayListToSameElementArray()
-        //{
-        //    // TODO
-        //}
+        [Fact]
+        public void UnknownSizeToSameElementArray()
+        {
+            var converter = new TestObjectConverter();
+            var source = new UnknownSizeCollection<string>(new[] { "0", "1" });
+            var destination = (string[])converter.Convert(source, typeof(string[]));
+            Assert.Equal(2, destination.Length);
+            Assert.Equal("0", destination[0]);
+            Assert.Equal("1", destination[1]);
+            Assert.True(converter.UsedOnly<EnumerableConverterFactory>());
+        }
 
-        //[Fact]
-        //public void ArrayListToOtherElementArray()
-        //{
-        //    // TODO
-        //}
+        [Fact]
+        public void UnknownSizeToOtherElementArray()
+        {
+            var converter = new TestObjectConverter();
+            var source = new UnknownSizeCollection<int>(new[] { 0, 1 });
+            var destination = (string[])converter.Convert(source, typeof(string[]));
+            Assert.Equal(2, destination.Length);
+            Assert.Equal("0", destination[0]);
+            Assert.Equal("1", destination[1]);
+            Assert.True(converter.UsedIn(typeof(EnumerableConverterFactory), typeof(ToStringConverterFactory)));
+        }
 
-        ////--------------------------------------------------------------------------------
-        //// To List
-        ////--------------------------------------------------------------------------------
-
-        //[Fact]
-        //public void ListToSameElementList()
-        //{
-        //    // TODO
-        //}
-
-        //[Fact]
-        //public void ListToOtherElementList()
-        //{
-        //    var converter = new TestObjectConverter();
-        //    var source = new List<int> { 0, 1 };
-        //    var destination = (List<string>)converter.Convert(source, typeof(List<string>));
-        //    Assert.Equal(2, destination.Count);
-        //    Assert.Equal("0", destination[0]);
-        //    Assert.Equal("1", destination[1]);
-        //    Assert.True(converter.UsedIn(typeof(EnumerableConverterFactory), typeof(ToStringConverterFactory)));
-        //}
+        //--------------------------------------------------------------------------------
+        // To List
+        //--------------------------------------------------------------------------------
 
         [Fact]
         public void ArrayToSameElementList()
@@ -98,24 +105,137 @@
             Assert.True(converter.UsedIn(typeof(EnumerableConverterFactory), typeof(ToStringConverterFactory)));
         }
 
-        //[Fact]
-        //public void ArrayListToSameElementList()
-        //{
-        //    // TODO
-        //}
+        [Fact]
+        public void KnownSizeToSameElementList()
+        {
+            var converter = new TestObjectConverter();
+            var source = new KnownSizeCollection<string>(new[] { "0", "1" });
+            var destination = (List<string>)converter.Convert(source, typeof(List<string>));
+            Assert.Equal(2, destination.Count);
+            Assert.Equal("0", destination[0]);
+            Assert.Equal("1", destination[1]);
+            Assert.True(converter.UsedOnly<EnumerableConverterFactory>());
+        }
 
-        //[Fact]
-        //public void ArrayListToOtherElementList()
-        //{
-        //    // TODO
-        //}
+        [Fact]
+        public void KnownSizeToOtherElementList()
+        {
+            var converter = new TestObjectConverter();
+            var source = new List<int> { 0, 1 };
+            var destination = (List<string>)converter.Convert(source, typeof(List<string>));
+            Assert.Equal(2, destination.Count);
+            Assert.Equal("0", destination[0]);
+            Assert.Equal("1", destination[1]);
+            Assert.True(converter.UsedIn(typeof(EnumerableConverterFactory), typeof(ToStringConverterFactory)));
+        }
 
-        // IList ?, ICol, IE<>...
+        [Fact]
+        public void UnknownSizeToSameElementList()
+        {
+            var converter = new TestObjectConverter();
+            var source = new UnknownSizeCollection<string>(new[] { "0", "1" });
+            var destination = (List<string>)converter.Convert(source, typeof(List<string>));
+            Assert.Equal(2, destination.Count);
+            Assert.Equal("0", destination[0]);
+            Assert.Equal("1", destination[1]);
+            Assert.True(converter.UsedOnly<EnumerableConverterFactory>());
+        }
 
-        ////--------------------------------------------------------------------------------
-        //// To Set
-        ////--------------------------------------------------------------------------------
+        [Fact]
+        public void UnknownSizeToOtherElementList()
+        {
+            var converter = new TestObjectConverter();
+            var source = new UnknownSizeCollection<int>(new[] { 0, 1 });
+            var destination = (List<string>)converter.Convert(source, typeof(List<string>));
+            Assert.Equal(2, destination.Count);
+            Assert.Equal("0", destination[0]);
+            Assert.Equal("1", destination[1]);
+            Assert.True(converter.UsedIn(typeof(EnumerableConverterFactory), typeof(ToStringConverterFactory)));
+        }
+
+        // TODO IList ?, ICol, IE<>(LINQ)...
+
+        //--------------------------------------------------------------------------------
+        // To Set
+        //--------------------------------------------------------------------------------
 
         // TODO
+
+        //--------------------------------------------------------------------------------
+        // Helper
+        //--------------------------------------------------------------------------------
+
+        public class KnownSizeCollection<T> : ICollection<T>
+        {
+            private readonly List<T> list;
+
+            public KnownSizeCollection(IEnumerable<T> source)
+            {
+                list = source.ToList();
+            }
+
+            public IEnumerator<T> GetEnumerator()
+            {
+                return list.GetEnumerator();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
+
+            public void Add(T item)
+            {
+                list.Add(item);
+            }
+
+            public void Clear()
+            {
+                list.Clear();
+            }
+
+            public bool Contains(T item)
+            {
+                throw new NotSupportedException();
+            }
+
+            public void CopyTo(T[] array, int arrayIndex)
+            {
+                throw new NotSupportedException();
+            }
+
+            public bool Remove(T item)
+            {
+                throw new NotSupportedException();
+            }
+
+            public int Count => list.Count;
+
+            public bool IsReadOnly => false;
+        }
+
+        //--------------------------------------------------------------------------------
+        // Helper
+        //--------------------------------------------------------------------------------
+
+        public class UnknownSizeCollection<T> : IEnumerable<T>
+        {
+            private readonly List<T> list;
+
+            public UnknownSizeCollection(IEnumerable<T> source)
+            {
+                list = source.ToList();
+            }
+
+            public IEnumerator<T> GetEnumerator()
+            {
+                return list.GetEnumerator();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
+        }
     }
 }
