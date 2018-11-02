@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConverterWork", "ConverterWork\ConverterWork.csproj", "{695E65EE-3CFF-4A92-B46C-03613A6BE1AE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smart", "Smart\Smart.csproj", "{9EB653BB-A92A-4F4D-B1F9-C0F8C87CD4FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{695E65EE-3CFF-4A92-B46C-03613A6BE1AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{695E65EE-3CFF-4A92-B46C-03613A6BE1AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{695E65EE-3CFF-4A92-B46C-03613A6BE1AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EB653BB-A92A-4F4D-B1F9-C0F8C87CD4FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EB653BB-A92A-4F4D-B1F9-C0F8C87CD4FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EB653BB-A92A-4F4D-B1F9-C0F8C87CD4FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EB653BB-A92A-4F4D-B1F9-C0F8C87CD4FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
