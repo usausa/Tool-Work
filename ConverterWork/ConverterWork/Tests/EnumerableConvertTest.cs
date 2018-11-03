@@ -30,10 +30,10 @@
         }
 
         [Fact]
-        public void KnownSizeToSameElementArray()
+        public void CollectionToSameElementArray()
         {
             var converter = new TestObjectConverter();
-            var source = new KnownSizeCollection<string>(new[] { "0", "1" });
+            var source = new CollectionCollection<string>(new[] { "0", "1" });
             var destination = (string[])converter.Convert(source, typeof(string[]));
             Assert.Equal(2, destination.Length);
             Assert.Equal("0", destination[0]);
@@ -42,10 +42,10 @@
         }
 
         [Fact]
-        public void KnownSizeToOtherElementArray()
+        public void CollectionToOtherElementArray()
         {
             var converter = new TestObjectConverter();
-            var source = new KnownSizeCollection<int>(new[] { 0, 1 });
+            var source = new CollectionCollection<int>(new[] { 0, 1 });
             var destination = (string[])converter.Convert(source, typeof(string[]));
             Assert.Equal(2, destination.Length);
             Assert.Equal("0", destination[0]);
@@ -54,10 +54,10 @@
         }
 
         [Fact]
-        public void UnknownSizeToSameElementArray()
+        public void EnumerableToSameElementArray()
         {
             var converter = new TestObjectConverter();
-            var source = new UnknownSizeCollection<string>(new[] { "0", "1" });
+            var source = new[] { "0", "1" }.Select(x => x);
             var destination = (string[])converter.Convert(source, typeof(string[]));
             Assert.Equal(2, destination.Length);
             Assert.Equal("0", destination[0]);
@@ -66,10 +66,10 @@
         }
 
         [Fact]
-        public void UnknownSizeToOtherElementArray()
+        public void EnumerableToOtherElementArray()
         {
             var converter = new TestObjectConverter();
-            var source = new UnknownSizeCollection<int>(new[] { 0, 1 });
+            var source = new[] { 0, 1 }.Select(x => x);
             var destination = (string[])converter.Convert(source, typeof(string[]));
             Assert.Equal(2, destination.Length);
             Assert.Equal("0", destination[0]);
@@ -106,10 +106,10 @@
         }
 
         [Fact]
-        public void KnownSizeToSameElementList()
+        public void CollectionToSameElementList()
         {
             var converter = new TestObjectConverter();
-            var source = new KnownSizeCollection<string>(new[] { "0", "1" });
+            var source = new CollectionCollection<string>(new[] { "0", "1" });
             var destination = (List<string>)converter.Convert(source, typeof(List<string>));
             Assert.Equal(2, destination.Count);
             Assert.Equal("0", destination[0]);
@@ -118,7 +118,7 @@
         }
 
         [Fact]
-        public void KnownSizeToOtherElementList()
+        public void CollectionToOtherElementList()
         {
             var converter = new TestObjectConverter();
             var source = new List<int> { 0, 1 };
@@ -130,10 +130,10 @@
         }
 
         [Fact]
-        public void UnknownSizeToSameElementList()
+        public void EnumerableToSameElementList()
         {
             var converter = new TestObjectConverter();
-            var source = new UnknownSizeCollection<string>(new[] { "0", "1" });
+            var source = new[] { "0", "1" }.Select(x => x);
             var destination = (List<string>)converter.Convert(source, typeof(List<string>));
             Assert.Equal(2, destination.Count);
             Assert.Equal("0", destination[0]);
@@ -142,10 +142,10 @@
         }
 
         [Fact]
-        public void UnknownSizeToOtherElementList()
+        public void EnumerableToOtherElementList()
         {
             var converter = new TestObjectConverter();
-            var source = new UnknownSizeCollection<int>(new[] { 0, 1 });
+            var source = new[] { 0, 1 }.Select(x => x);
             var destination = (List<string>)converter.Convert(source, typeof(List<string>));
             Assert.Equal(2, destination.Count);
             Assert.Equal("0", destination[0]);
@@ -165,11 +165,11 @@
         // Helper
         //--------------------------------------------------------------------------------
 
-        public class KnownSizeCollection<T> : ICollection<T>
+        public class CollectionCollection<T> : ICollection<T>
         {
             private readonly List<T> list;
 
-            public KnownSizeCollection(IEnumerable<T> source)
+            public CollectionCollection(IEnumerable<T> source)
             {
                 list = source.ToList();
             }
@@ -214,28 +214,5 @@
             public bool IsReadOnly => false;
         }
 
-        //--------------------------------------------------------------------------------
-        // Helper
-        //--------------------------------------------------------------------------------
-
-        public class UnknownSizeCollection<T> : IEnumerable<T>
-        {
-            private readonly List<T> list;
-
-            public UnknownSizeCollection(IEnumerable<T> source)
-            {
-                list = source.ToList();
-            }
-
-            public IEnumerator<T> GetEnumerator()
-            {
-                return list.GetEnumerator();
-            }
-
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return GetEnumerator();
-            }
-        }
     }
 }

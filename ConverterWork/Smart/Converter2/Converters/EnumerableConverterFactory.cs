@@ -9,17 +9,63 @@
 
     public sealed class EnumerableConverterFactory : IConverterFactory
     {
+        private enum SourceType
+        {
+            Array,
+            Collection,
+            Enumerable
+        }
+
+        private enum FactoryType
+        {
+            Default,
+            Capacity,
+            Enumerable
+        }
+
+        private interface ICollectionProvider
+        {
+            FactoryType ResolveFactoryType(SourceType sourceType, bool withConvert, out object factory);
+        }
+
+        private class ListCollectionProvider<T> : ICollectionProvider
+        {
+            public FactoryType ResolveFactoryType(SourceType sourceType, bool withConvert, out object factory)
+            {
+                switch (sourceType)
+                {
+                    case SourceType.Array:
+                        factory = (Func<IEnumerable<T>, ICollection<T>>)(x => new List<T>(x));
+                        return FactoryType.Enumerable;
+                    case SourceType.Collection:
+                        factory = (Func<int, ICollection<T>>)(x => new List<T>(x));
+                        return FactoryType.Capacity;
+                    default:
+                        factory = (Func<ICollection<T>>)(() => new List<T>());
+                        return FactoryType.Default;
+                }
+            }
+        }
+
+        //private class HashSetCollectionProvider<T> : ICollectionProvider
+        //{
+        //    public object CreateDefaultFactory() => (Func<ICollection<T>>)(() => new HashSet<T>());
+
+        //    // .NET Standard is not support capacity argument constructor
+        //    public object CreateCapacityFactory() => null;  // (Func<int, ICollection<T>>)(x => new HashSet<T>(x));
+
+        //    public object CreateEnumerableFactory() => (Func<IEnumerable<T>, ICollection<T>>)(x => new HashSet<T>(x));
+        //}
+
         private static readonly Dictionary<Type, Type> OpenTypeProviderTypes = new Dictionary<Type, Type>
         {
             { typeof(List<>), typeof(ListCollectionProvider<>) },
-            { typeof(HashSet<>), typeof(HashSetCollectionProvider<>) },
+            //{ typeof(HashSet<>), typeof(HashSetCollectionProvider<>) },
             { typeof(IEnumerable<>), typeof(ListCollectionProvider<>) },
             { typeof(ICollection<>), typeof(ListCollectionProvider<>) },
             { typeof(IList<>), typeof(ListCollectionProvider<>) },
-            { typeof(ISet<>), typeof(HashSetCollectionProvider<>) },
+            //{ typeof(ISet<>), typeof(HashSetCollectionProvider<>) },
         };
-
-        // TODO ReadOnly用
 
         public Func<object, object> GetConverter(IObjectConverter context, Type sourceType, Type targetType)
         {
@@ -56,17 +102,16 @@
                     }
 
                     var getSize = ResolveSizeFunction(sourceType, sourceElementType);
-
-                    if ((converter == null) && (getSize != null))
-                    {
-                        // IC<T> to T[]
-                        return ((IConverterBuilder)Activator.CreateInstance(
-                            typeof(CollectionToSameTypeArrayBuilder<>).MakeGenericType(targetElementType),
-                            getSize)).Create;
-                    }
-
                     if (getSize != null)
                     {
+                        if (converter == null)
+                        {
+                            // IC<T> to T[]
+                            return ((IConverterBuilder)Activator.CreateInstance(
+                                typeof(CollectionToSameTypeArrayBuilder<>).MakeGenericType(targetElementType),
+                                getSize)).Create;
+                        }
+
                         // IC<T1> to T2[]
                         return ((IConverterBuilder)Activator.CreateInstance(
                             typeof(CollectionToOtherTypeArrayBuilder<>).MakeGenericType(targetElementType),
@@ -107,39 +152,48 @@
                         return null;
                     }
 
+                    var factoryType = collectionProvider.ResolveFactoryType(SourceType.Array, converter != null, out var factory);
+
                     if (converter == null)
                     {
-                        var factory = collectionProvider.CreateCapacityFactory();
-                        if (factory != null)
+                        // T[] to IE<T>
+                        switch (factoryType)
                         {
-                            // IE<T> to T[]
-                            return ((IConverterBuilder)Activator.CreateInstance(
-                                typeof(ArrayToSameTypeCollectionByCapacityBuilder<>).MakeGenericType(targetElementType),
-                                factory)).Create;
+                            case FactoryType.Enumerable:
+                                return ((IConverterBuilder)Activator.CreateInstance(
+                                    typeof(ArrayToSameTypeCollectionByEnumerableBuilder<>).MakeGenericType(targetElementType),
+                                    factory)).Create;
+                            case FactoryType.Capacity:
+                                return ((IConverterBuilder)Activator.CreateInstance(
+                                    typeof(ArrayToSameTypeCollectionByCapacityBuilder<>).MakeGenericType(targetElementType),
+                                    factory)).Create;
+                            default:
+                                return ((IConverterBuilder)Activator.CreateInstance(
+                                    typeof(ArrayToSameTypeCollectionByDefaultBuilder<>).MakeGenericType(targetElementType),
+                                    factory)).Create;
                         }
-
-                        // IE<T> to T[]
-                        return ((IConverterBuilder)Activator.CreateInstance(
-                            typeof(ArrayToSameTypeCollectionByEnumerableBuilder<>).MakeGenericType(targetElementType),
-                            collectionProvider.CreateEnumerableFactory())).Create;
                     }
                     else
                     {
-                        var factory = collectionProvider.CreateCapacityFactory();
-                        if (factory != null)
+                        // T1[] to IE<T2>
+                        switch (factoryType)
                         {
-                            // IE<T1> to T2[]
-                            return ((IConverterBuilder)Activator.CreateInstance(
-                                typeof(ArrayToOtherTypeCollectionByCapacityBuilder<,>).MakeGenericType(sourceElementType, targetElementType),
-                                collectionProvider.CreateCapacityFactory(),
-                                converter)).Create;
+                            case FactoryType.Enumerable:
+                                return ((IConverterBuilder)Activator.CreateInstance(
+                                    typeof(ArrayToOtherTypeCollectionByEnumerableBuilder<,>).MakeGenericType(sourceElementType, targetElementType),
+                                    factory,
+                                    converter)).Create;
+                            case FactoryType.Capacity:
+                                return ((IConverterBuilder)Activator.CreateInstance(
+                                    typeof(ArrayToOtherTypeCollectionByCapacityBuilder<,>).MakeGenericType(sourceElementType, targetElementType),
+                                    factory,
+                                    converter)).Create;
+                            default:
+                                return ((IConverterBuilder)Activator.CreateInstance(
+                                    typeof(ArrayToOtherTypeCollectionByDefaultBuilder<,>).MakeGenericType(sourceElementType, targetElementType),
+                                    factory,
+                                    converter)).Create;
                         }
-
-                        // IE<T1> to T2[]
-                        return ((IConverterBuilder)Activator.CreateInstance(
-                            typeof(ArrayToOtherTypeCollectionByDefaultBuilder<,>).MakeGenericType(sourceElementType, targetElementType),
-                            collectionProvider.CreateCapacityFactory(),
-                            collectionProvider.CreateDefaultFactory())).Create;
                     }
                 }
 
@@ -154,7 +208,7 @@
                         return null;
                     }
 
-                    //var getSize = ResolveSizeFunction(sourceType, sourceElementType);
+                    var getSize = ResolveSizeFunction(sourceType, sourceElementType);
 
                     // TODO collection factory
 
@@ -397,6 +451,21 @@
         // Builder to Collection from Array
         //--------------------------------------------------------------------------------
 
+        private sealed class ArrayToSameTypeCollectionByEnumerableBuilder<TDestination> : IConverterBuilder
+        {
+            private readonly Func<IEnumerable<TDestination>, ICollection<TDestination>> factory;
+
+            public ArrayToSameTypeCollectionByEnumerableBuilder(object factory)
+            {
+                this.factory = (Func<IEnumerable<TDestination>, ICollection<TDestination>>)factory;
+            }
+
+            public object Create(object source)
+            {
+                return factory((TDestination[])source);
+            }
+        }
+
         private sealed class ArrayToSameTypeCollectionByCapacityBuilder<TDestination> : IConverterBuilder
         {
             private readonly Func<int, ICollection<TDestination>> factory;
@@ -419,18 +488,122 @@
             }
         }
 
-        private sealed class ArrayToSameTypeCollectionByEnumerableBuilder<TDestination> : IConverterBuilder
+        private sealed class ArrayToSameTypeCollectionByDefaultBuilder<TDestination> : IConverterBuilder
         {
-            private readonly Func<IEnumerable<TDestination>, ICollection<TDestination>> factory;
+            private readonly Func<ICollection<TDestination>> factory;
 
-            public ArrayToSameTypeCollectionByEnumerableBuilder(object factory)
+            public ArrayToSameTypeCollectionByDefaultBuilder(object factory)
             {
-                this.factory = (Func<IEnumerable<TDestination>, ICollection<TDestination>>)factory;
+                this.factory = (Func<ICollection<TDestination>>)factory;
             }
 
             public object Create(object source)
             {
-                return factory((TDestination[])source);
+                var sourceArray = (TDestination[])source;
+                var collection = factory();
+                for (var i = 0; i < sourceArray.Length; i++)
+                {
+                    collection.Add(sourceArray[i]);
+                }
+
+                return collection;
+            }
+        }
+
+        private sealed class ArrayToOtherTypeCollectionByEnumerableBuilder<TSource, TDestination> : IConverterBuilder
+        {
+            private readonly Func<IEnumerable<TDestination>, ICollection<TDestination>> factory;
+
+            private readonly Func<object, object> converter;
+
+            public ArrayToOtherTypeCollectionByEnumerableBuilder(object factory, Func<object, object> converter)
+            {
+                this.factory = (Func<IEnumerable<TDestination>, ICollection<TDestination>>)factory;
+                this.converter = converter;
+            }
+
+            public object Create(object source)
+            {
+                var sourceArray = (TSource[])source;
+                return factory(new ArrayConvertCollection(sourceArray, converter));
+            }
+
+            private struct ArrayConvertEnumerator : IEnumerator<TDestination>
+            {
+                private readonly TSource[] source;
+
+                private readonly Func<object, object> converter;
+
+                private int index;
+
+                public ArrayConvertEnumerator(TSource[] source, Func<object, object> converter)
+                {
+                    this.source = source;
+                    this.converter = converter;
+                    index = -1;
+                }
+
+                public bool MoveNext()
+                {
+                    index++;
+                    return index < source.Length;
+                }
+
+                public void Reset()
+                {
+                    index = -1;
+                }
+
+                public TDestination Current => (TDestination)converter(source[index]);
+
+                object IEnumerator.Current => Current;
+
+                public void Dispose()
+                {
+                }
+            }
+
+            private readonly struct ArrayConvertCollection : ICollection<TDestination>
+            {
+                private readonly TSource[] source;
+
+                private readonly Func<object, object> converter;
+
+                public ArrayConvertCollection(TSource[] source, Func<object, object> converter)
+                {
+                    this.source = source;
+                    this.converter = converter;
+                }
+
+                public IEnumerator<TDestination> GetEnumerator()
+                {
+                    return new ArrayConvertEnumerator(source, converter);
+                }
+
+                IEnumerator IEnumerable.GetEnumerator()
+                {
+                    return GetEnumerator();
+                }
+
+                public void Add(TDestination item) => throw new NotSupportedException();
+
+                public void Clear() => throw new NotSupportedException();
+
+                public bool Contains(TDestination item) => throw new NotSupportedException();
+
+                public void CopyTo(TDestination[] array, int arrayIndex)
+                {
+                    for (var i = 0; i < source.Length; i++)
+                    {
+                        array[arrayIndex + i] = (TDestination)converter(source[i]);
+                    }
+                }
+
+                public bool Remove(TDestination item) => throw new NotSupportedException();
+
+                public int Count => source.Length;
+
+                public bool IsReadOnly => true;
             }
         }
 
@@ -584,33 +757,5 @@
         //--------------------------------------------------------------------------------
         // Collection provider
         //--------------------------------------------------------------------------------
-
-        private interface ICollectionProvider
-        {
-            object CreateDefaultFactory();
-
-            object CreateCapacityFactory();
-
-            object CreateEnumerableFactory();
-        }
-
-        private class ListCollectionProvider<T> : ICollectionProvider
-        {
-            public object CreateDefaultFactory() => (Func<ICollection<T>>)(() => new List<T>());
-
-            public object CreateCapacityFactory() => (Func<int, ICollection<T>>)(x => new List<T>(x));
-
-            public object CreateEnumerableFactory() => null;    // capacity factory used
-        }
-
-        private class HashSetCollectionProvider<T> : ICollectionProvider
-        {
-            public object CreateDefaultFactory() => (Func<ICollection<T>>)(() => new HashSet<T>());
-
-            // .NET Standard is not support capacity argument constructor
-            public object CreateCapacityFactory() => null;  // (Func<int, ICollection<T>>)(x => new HashSet<T>(x));
-
-            public object CreateEnumerableFactory() => (Func<IEnumerable<T>, ICollection<T>>)(x => new HashSet<T>(x));
-        }
     }
 }
