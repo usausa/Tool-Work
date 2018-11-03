@@ -872,24 +872,35 @@
 
         private interface ICollectionProvider
         {
-            ArrayBuilder ResolveArrayBuilderMethod(bool withConvert, out object factory);
+            ArrayBuilder ResolveArrayBuilderMethod(bool useConverter, out object factory);
 
-            EnumerableBuilder ResolveBuilderMethod(EnumerableType sourceType, bool withConvert, out object factory);
+            EnumerableBuilder ResolveBuilderMethod(EnumerableType sourceType, bool useConverter, out object factory);
         }
 
         private class ListCollectionProvider<T> : ICollectionProvider
         {
-            public ArrayBuilder ResolveArrayBuilderMethod(bool withConvert, out object factory)
+            public ArrayBuilder ResolveArrayBuilderMethod(bool useConverter, out object factory)
             {
+                if (useConverter)
+                {
+                    factory = (Func<IEnumerable<T>, ICollection<T>>)(x => new List<T>(x));
+                    return ArrayBuilder.Constructor;
+                }
+
                 factory = (Func<int, ICollection<T>>)(x => new List<T>(x));
                 return ArrayBuilder.InitializeAdd;
             }
 
-            public EnumerableBuilder ResolveBuilderMethod(EnumerableType sourceType, bool withConvert, out object factory)
+            public EnumerableBuilder ResolveBuilderMethod(EnumerableType sourceType, bool useConverter, out object factory)
             {
+                if (useConverter)
+                {
+                    factory = (Func<IEnumerable<T>, ICollection<T>>)(x => new List<T>(x));
+                    return EnumerableBuilder.Constructor;
+                }
+
                 switch (sourceType)
                 {
-                    // TODO withConvertの検討も
                     case EnumerableType.Collection:
                         factory = (Func<int, ICollection<T>>)(x => new List<T>(x));
                         return EnumerableBuilder.CollectionInitializeAdd;
