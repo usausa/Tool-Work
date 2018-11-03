@@ -33,7 +33,7 @@
         public void CollectionToSameElementArray()
         {
             var converter = new TestObjectConverter();
-            var source = new CollectionCollection<string>(new[] { "0", "1" });
+            var source = new WrapperCollection<string>(new[] { "0", "1" });
             var destination = (string[])converter.Convert(source, typeof(string[]));
             Assert.Equal(2, destination.Length);
             Assert.Equal("0", destination[0]);
@@ -45,7 +45,7 @@
         public void CollectionToOtherElementArray()
         {
             var converter = new TestObjectConverter();
-            var source = new CollectionCollection<int>(new[] { 0, 1 });
+            var source = new WrapperCollection<int>(new[] { 0, 1 });
             var destination = (string[])converter.Convert(source, typeof(string[]));
             Assert.Equal(2, destination.Length);
             Assert.Equal("0", destination[0]);
@@ -109,7 +109,7 @@
         public void CollectionToSameElementList()
         {
             var converter = new TestObjectConverter();
-            var source = new CollectionCollection<string>(new[] { "0", "1" });
+            var source = new WrapperCollection<string>(new[] { "0", "1" });
             var destination = (List<string>)converter.Convert(source, typeof(List<string>));
             Assert.Equal(2, destination.Count);
             Assert.Equal("0", destination[0]);
@@ -165,49 +165,28 @@
         // Helper
         //--------------------------------------------------------------------------------
 
-        public class CollectionCollection<T> : ICollection<T>
+        public class WrapperCollection<T> : ICollection<T>
         {
             private readonly List<T> list;
 
-            public CollectionCollection(IEnumerable<T> source)
+            public WrapperCollection(IEnumerable<T> source)
             {
                 list = source.ToList();
             }
 
-            public IEnumerator<T> GetEnumerator()
-            {
-                return list.GetEnumerator();
-            }
+            public IEnumerator<T> GetEnumerator() => list.GetEnumerator();
 
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return GetEnumerator();
-            }
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-            public void Add(T item)
-            {
-                list.Add(item);
-            }
+            public void Add(T item) => list.Add(item);
 
-            public void Clear()
-            {
-                list.Clear();
-            }
+            public void Clear() => list.Clear();
 
-            public bool Contains(T item)
-            {
-                throw new NotSupportedException();
-            }
+            public bool Contains(T item) => throw new NotSupportedException();
 
-            public void CopyTo(T[] array, int arrayIndex)
-            {
-                throw new NotSupportedException();
-            }
+            public void CopyTo(T[] array, int arrayIndex) => list.CopyTo(array, arrayIndex);
 
-            public bool Remove(T item)
-            {
-                throw new NotSupportedException();
-            }
+            public bool Remove(T item) => throw new NotSupportedException();
 
             public int Count => list.Count;
 

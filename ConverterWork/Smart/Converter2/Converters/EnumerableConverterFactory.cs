@@ -334,12 +334,7 @@
             {
                 var sourceCollection = (ICollection<TDestination>)source;
                 var array = new TDestination[sourceCollection.Count];
-                var index = 0;
-                foreach (var value in sourceCollection)
-                {
-                    array[index] = value;
-                    index++;
-                }
+                sourceCollection.CopyTo(array, 0);
 
                 return array;
             }
@@ -718,14 +713,59 @@
         {
             private readonly Func<IEnumerable<TDestination>, ICollection<TDestination>> factory;
 
-            public EnumerableToOtherTypeCollectionByConstructorBuilder(object factory)
+            private readonly Func<object, object> converter;
+
+            public EnumerableToOtherTypeCollectionByConstructorBuilder(object factory, Func<object, object> converter)
             {
                 this.factory = (Func<IEnumerable<TDestination>, ICollection<TDestination>>)factory;
+                this.converter = converter;
             }
 
             public object Create(object source)
             {
-                throw new NotImplementedException();
+                return factory(new EnumerableConvertEnumerable((IEnumerable<TSource>)source, converter));
+            }
+
+            private struct EnumerableConvertEnumerator : IEnumerator<TDestination>
+            {
+                private readonly IEnumerator<TSource> source;
+
+                private readonly Func<object, object> converter;
+
+                public EnumerableConvertEnumerator(IEnumerator<TSource> source, Func<object, object> converter)
+                {
+                    this.source = source;
+                    this.converter = converter;
+                }
+
+                public bool MoveNext() => source.MoveNext();
+
+                public void Reset() => source.Reset();
+
+                public TDestination Current => (TDestination)converter(source.Current);
+
+                object IEnumerator.Current => Current;
+
+                public void Dispose()
+                {
+                }
+            }
+
+            private struct EnumerableConvertEnumerable : IEnumerable<TDestination>
+            {
+                private readonly IEnumerable<TSource> source;
+
+                private readonly Func<object, object> converter;
+
+                public EnumerableConvertEnumerable(IEnumerable<TSource> source, Func<object, object> converter)
+                {
+                    this.source = source;
+                    this.converter = converter;
+                }
+
+                public IEnumerator<TDestination> GetEnumerator() => new EnumerableConvertEnumerator(source.GetEnumerator(), converter);
+
+                IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
             }
         }
 
@@ -849,6 +889,7 @@
             {
                 switch (sourceType)
                 {
+                    // TODO withConvertの検討も
                     case EnumerableType.Collection:
                         factory = (Func<int, ICollection<T>>)(x => new List<T>(x));
                         return EnumerableBuilder.CollectionInitializeAdd;
@@ -856,8 +897,8 @@
                         factory = (Func<int, ICollection<T>>)(x => new List<T>(x));
                         return EnumerableBuilder.ListInitializeAdd;
                     default:
-                        factory = (Func<IEnumerable<T>, ICollection<T>>)(x => new List<T>(x));
-                        return EnumerableBuilder.Constructor;
+                        factory = (Func<ICollection<T>>)(() => new List<T>());
+                        return EnumerableBuilder.Add;
                 }
             }
         }

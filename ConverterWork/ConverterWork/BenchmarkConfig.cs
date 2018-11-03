@@ -15,4 +15,14 @@
             Add(Job.MediumRun);
         }
     }
+
+    public class ShortBenchmarkConfig : ManualConfig
+    {
+        public ShortBenchmarkConfig()
+        {
+            Add(MarkdownExporter.Default, MarkdownExporter.GitHub);
+            Add(MemoryDiagnoser.Default);
+            Add(Job.ShortRun);
+        }
+    }
 }

@@ -8,7 +8,7 @@
     using BenchmarkDotNet.Attributes;
 
     [Config(typeof(BenchmarkConfig))]
-    public class ConvertEnumerableBenchmark
+    public class ConvertArrayToListBenchmark
     {
         private readonly Func<object, object> converter = x => x;
 
