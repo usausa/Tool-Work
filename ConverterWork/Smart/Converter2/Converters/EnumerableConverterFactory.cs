@@ -914,7 +914,6 @@
             }
         }
 
-        // MEMO HashSet(int capacity) is not supported in .NET Standard
         private class HashSetCollectionProvider<T> : ICollectionProvider
         {
             public ArrayBuilder ResolveArrayBuilderMethod(bool useConverter, out object factory)
@@ -925,6 +924,7 @@
                     return ArrayBuilder.Constructor;
                 }
 
+                // MEMO HashSet(int capacity) is not supported in .NET Standard
                 factory = (Func<ICollection<T>>)(() => new HashSet<T>());
                 return ArrayBuilder.Add;
             }
@@ -937,6 +937,7 @@
                     return EnumerableBuilder.Constructor;
                 }
 
+                // MEMO HashSet(int capacity) is not supported in .NET Standard
                 factory = (Func<ICollection<T>>)(() => new HashSet<T>());
                 return EnumerableBuilder.Add;
             }

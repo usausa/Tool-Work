@@ -30,6 +30,30 @@
         }
 
         [Fact]
+        public void ListToSameElementArray()
+        {
+            var converter = new TestObjectConverter();
+            var source = new List<string> { "0", "1" };
+            var destination = (string[])converter.Convert(source, typeof(string[]));
+            Assert.Equal(2, destination.Length);
+            Assert.Equal("0", destination[0]);
+            Assert.Equal("1", destination[1]);
+            Assert.True(converter.UsedOnly<EnumerableConverterFactory>());
+        }
+
+        [Fact]
+        public void ListToOtherElementArray()
+        {
+            var converter = new TestObjectConverter();
+            var source = new List<int> { 0, 1 };
+            var destination = (string[])converter.Convert(source, typeof(string[]));
+            Assert.Equal(2, destination.Length);
+            Assert.Equal("0", destination[0]);
+            Assert.Equal("1", destination[1]);
+            Assert.True(converter.UsedIn(typeof(EnumerableConverterFactory), typeof(ToStringConverterFactory)));
+        }
+
+        [Fact]
         public void CollectionToSameElementArray()
         {
             var converter = new TestObjectConverter();
@@ -106,6 +130,30 @@
         }
 
         [Fact]
+        public void ListToSameElementList()
+        {
+            var converter = new TestObjectConverter();
+            var source = new WrapperList<string>(new[] { "0", "1" });
+            var destination = (List<string>)converter.Convert(source, typeof(List<string>));
+            Assert.Equal(2, destination.Count);
+            Assert.Equal("0", destination[0]);
+            Assert.Equal("1", destination[1]);
+            Assert.True(converter.UsedOnly<EnumerableConverterFactory>());
+        }
+
+        [Fact]
+        public void ListToOtherElementList()
+        {
+            var converter = new TestObjectConverter();
+            var source = new WrapperList<int>(new[] { 0, 1 });
+            var destination = (List<string>)converter.Convert(source, typeof(List<string>));
+            Assert.Equal(2, destination.Count);
+            Assert.Equal("0", destination[0]);
+            Assert.Equal("1", destination[1]);
+            Assert.True(converter.UsedIn(typeof(EnumerableConverterFactory), typeof(ToStringConverterFactory)));
+        }
+
+        [Fact]
         public void CollectionToSameElementList()
         {
             var converter = new TestObjectConverter();
@@ -121,7 +169,7 @@
         public void CollectionToOtherElementList()
         {
             var converter = new TestObjectConverter();
-            var source = new List<int> { 0, 1 };
+            var source = new WrapperCollection<int>(new[] { 0, 1 });
             var destination = (List<string>)converter.Convert(source, typeof(List<string>));
             Assert.Equal(2, destination.Count);
             Assert.Equal("0", destination[0]);
@@ -182,6 +230,30 @@
         }
 
         [Fact]
+        public void ListToSameElementHashSet()
+        {
+            var converter = new TestObjectConverter();
+            var source = new WrapperList<string>(new[] { "0", "1" });
+            var destination = (HashSet<string>)converter.Convert(source, typeof(HashSet<string>));
+            Assert.Equal(2, destination.Count);
+            Assert.Contains("0", destination);
+            Assert.Contains("1", destination);
+            Assert.True(converter.UsedOnly<EnumerableConverterFactory>());
+        }
+
+        [Fact]
+        public void ListToOtherElementHashSet()
+        {
+            var converter = new TestObjectConverter();
+            var source = new WrapperList<int>(new[] { 0, 1 });
+            var destination = (HashSet<string>)converter.Convert(source, typeof(HashSet<string>));
+            Assert.Equal(2, destination.Count);
+            Assert.Contains("0", destination);
+            Assert.Contains("1", destination);
+            Assert.True(converter.UsedIn(typeof(EnumerableConverterFactory), typeof(ToStringConverterFactory)));
+        }
+
+        [Fact]
         public void CollectionToSameElementHashSet()
         {
             var converter = new TestObjectConverter();
@@ -197,7 +269,7 @@
         public void CollectionToOtherElementHashSet()
         {
             var converter = new TestObjectConverter();
-            var source = new HashSet<int> { 0, 1 };
+            var source = new WrapperCollection<int>(new[] { 0, 1 });
             var destination = (HashSet<string>)converter.Convert(source, typeof(HashSet<string>));
             Assert.Equal(2, destination.Count);
             Assert.Contains("0", destination);
@@ -235,30 +307,50 @@
 
         public class WrapperCollection<T> : ICollection<T>
         {
-            private readonly List<T> list;
+            protected List<T> List { get; }
 
             public WrapperCollection(IEnumerable<T> source)
             {
-                list = source.ToList();
+                List = source.ToList();
             }
 
-            public IEnumerator<T> GetEnumerator() => list.GetEnumerator();
+            public IEnumerator<T> GetEnumerator() => List.GetEnumerator();
 
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-            public void Add(T item) => list.Add(item);
+            public void Add(T item) => List.Add(item);
 
-            public void Clear() => list.Clear();
+            public void Clear() => List.Clear();
 
             public bool Contains(T item) => throw new NotSupportedException();
 
-            public void CopyTo(T[] array, int arrayIndex) => list.CopyTo(array, arrayIndex);
+            public void CopyTo(T[] array, int arrayIndex) => List.CopyTo(array, arrayIndex);
 
             public bool Remove(T item) => throw new NotSupportedException();
 
-            public int Count => list.Count;
+            public int Count => List.Count;
 
             public bool IsReadOnly => false;
+        }
+
+        public class WrapperList<T> : WrapperCollection<T>, IList<T>
+        {
+            public WrapperList(IEnumerable<T> source)
+                : base(source)
+            {
+            }
+
+            public int IndexOf(T item) => throw new NotSupportedException();
+
+            public void Insert(int index, T item) => throw new NotSupportedException();
+
+            public void RemoveAt(int index) => throw new NotSupportedException();
+
+            public T this[int index]
+            {
+                get => List[index];
+                set => List[index] = value;
+            }
         }
     }
 }
