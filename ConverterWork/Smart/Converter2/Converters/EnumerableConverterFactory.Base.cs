@@ -1,10 +1,7 @@
 ﻿namespace Smart.Converter2.Converters
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
-
-    using Smart.Collections.Generics;
 
     public sealed partial class EnumerableConverterFactory
     {
@@ -22,121 +19,120 @@
             }
         }
 
-        private abstract class SameTypeListFromArrayByInitializeAddBuilderBase<TDestination> : IConverterBuilder
-        {
-            protected abstract IList<TDestination> CreateCollection(int size);
+        //private abstract class SameTypeCollectionFromArrayByInitializeAddBuilderBase<TDestination> : IConverterBuilder
+        //{
+        //    protected abstract ICollection<TDestination> CreateCollection(int size);
 
-            public object Create(object source)
-            {
-                var arraySource = (TDestination[])source;
-                var list = CreateCollection(arraySource.Length);
-                for (var i = 0; i < arraySource.Length; i++)
-                {
-                    list.Add(arraySource[i]);
-                }
+        //    public object Create(object source)
+        //    {
+        //        var arraySource = (TDestination[])source;
+        //        var collection = CreateCollection(arraySource.Length);
+        //        for (var i = 0; i < arraySource.Length; i++)
+        //        {
+        //            collection.Add(arraySource[i]);
+        //        }
 
-                return list;
-            }
-        }
-
+        //        return collection;
+        //    }
+        //}
 
         //--------------------------------------------------------------------------------
         // Other type
         //--------------------------------------------------------------------------------
 
-        private abstract class OtherTypeListFromArrayByInitializeAddBuilderBase<TSource, TDestination> : IConverterBuilder
+        private abstract class OtherTypeCollectionFromArrayByInitializeAddBuilderBase<TSource, TDestination> : IConverterBuilder
         {
             private readonly Func<object, object> converter;
 
-            protected OtherTypeListFromArrayByInitializeAddBuilderBase(Func<object, object> converter)
+            protected OtherTypeCollectionFromArrayByInitializeAddBuilderBase(Func<object, object> converter)
             {
                 this.converter = converter;
             }
 
-            protected abstract IList<TDestination> CreateCollection(int size);
+            protected abstract ICollection<TDestination> CreateCollection(int size);
 
             public object Create(object source)
             {
                 var arraySource = (TSource[])source;
-                var list = CreateCollection(arraySource.Length);
+                var collection = CreateCollection(arraySource.Length);
                 for (var i = 0; i < arraySource.Length; i++)
                 {
-                    list.Add((TDestination)converter(arraySource[i]));
+                    collection.Add((TDestination)converter(arraySource[i]));
                 }
 
-                return list;
+                return collection;
             }
         }
 
-        private abstract class OtherTypeListFromListByInitializeAddBuilderBase<TSource, TDestination> : IConverterBuilder
+        private abstract class OtherTypeCollectionFromListByInitializeAddBuilderBase<TSource, TDestination> : IConverterBuilder
         {
             private readonly Func<object, object> converter;
 
-            protected OtherTypeListFromListByInitializeAddBuilderBase(Func<object, object> converter)
+            protected OtherTypeCollectionFromListByInitializeAddBuilderBase(Func<object, object> converter)
             {
                 this.converter = converter;
             }
 
-            protected abstract IList<TDestination> CreateCollection(int size);
+            protected abstract ICollection<TDestination> CreateCollection(int size);
 
             public object Create(object source)
             {
                 var listSource = (IList<TSource>)source;
-                var list = CreateCollection(listSource.Count);
+                var collection = CreateCollection(listSource.Count);
                 for (var i = 0; i < listSource.Count; i++)
                 {
-                    list.Add((TDestination)converter(listSource[i]));
+                    collection.Add((TDestination)converter(listSource[i]));
                 }
 
-                return list;
+                return collection;
             }
         }
 
-        private abstract class OtherTypeListFromCollectionByInitializeAddBuilderBase<TSource, TDestination> : IConverterBuilder
+        private abstract class OtherTypeCollectionFromCollectionByInitializeAddBuilderBase<TSource, TDestination> : IConverterBuilder
         {
             private readonly Func<object, object> converter;
 
-            protected OtherTypeListFromCollectionByInitializeAddBuilderBase(Func<object, object> converter)
+            protected OtherTypeCollectionFromCollectionByInitializeAddBuilderBase(Func<object, object> converter)
             {
                 this.converter = converter;
             }
 
-            protected abstract IList<TDestination> CreateCollection(int size);
+            protected abstract ICollection<TDestination> CreateCollection(int size);
 
             public object Create(object source)
             {
                 var collectionSource = (ICollection<TSource>)source;
-                var list = CreateCollection(collectionSource.Count);
+                var collection = CreateCollection(collectionSource.Count);
                 foreach (var value in collectionSource)
                 {
-                    list.Add((TDestination)converter(value));
+                    collection.Add((TDestination)converter(value));
                 }
 
-                return list;
+                return collection;
             }
         }
 
-        private abstract class OtherTypeListFromEnumerableByAddBuilderBase<TSource, TDestination> : IConverterBuilder
+        private abstract class OtherTypeCollectionFromEnumerableByAddBuilderBase<TSource, TDestination> : IConverterBuilder
         {
             private readonly Func<object, object> converter;
 
-            protected OtherTypeListFromEnumerableByAddBuilderBase(Func<object, object> converter)
+            protected OtherTypeCollectionFromEnumerableByAddBuilderBase(Func<object, object> converter)
             {
                 this.converter = converter;
             }
 
-            protected abstract IList<TDestination> CreateCollection();
+            protected abstract ICollection<TDestination> CreateCollection();
 
             public object Create(object source)
             {
                 var collectionSource = (IEnumerable<TSource>)source;
-                var list = CreateCollection();
+                var collection = CreateCollection();
                 foreach (var value in collectionSource)
                 {
-                    list.Add((TDestination)converter(value));
+                    collection.Add((TDestination)converter(value));
                 }
 
-                return list;
+                return collection;
             }
         }
     }

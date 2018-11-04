@@ -1,10 +1,7 @@
 ﻿namespace Smart.Converter2.Converters
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
-
-    using Smart.Collections.Generics;
 
     public sealed partial class EnumerableConverterFactory
     {
@@ -54,56 +51,44 @@
         // Other type
         //--------------------------------------------------------------------------------
 
-        private sealed class OtherTypeListFromArrayBuilder<TSource, TDestination> : OtherTypeListFromArrayByInitializeAddBuilderBase<TSource, TDestination>
+        private sealed class OtherTypeListFromArrayBuilder<TSource, TDestination> : OtherTypeCollectionFromArrayByInitializeAddBuilderBase<TSource, TDestination>
         {
             public OtherTypeListFromArrayBuilder(Func<object, object> converter)
                 : base(converter)
             {
             }
 
-            protected override IList<TDestination> CreateCollection(int size)
-            {
-                return new List<TDestination>(size);
-            }
+            protected override ICollection<TDestination> CreateCollection(int size) => new List<TDestination>(size);
         }
 
-        private sealed class OtherTypeListFromListBuilder<TSource, TDestination> : OtherTypeListFromListByInitializeAddBuilderBase<TSource, TDestination>
+        private sealed class OtherTypeListFromListBuilder<TSource, TDestination> : OtherTypeCollectionFromListByInitializeAddBuilderBase<TSource, TDestination>
         {
             public OtherTypeListFromListBuilder(Func<object, object> converter)
                 : base(converter)
             {
             }
 
-            protected override IList<TDestination> CreateCollection(int size)
-            {
-                return new List<TDestination>(size);
-            }
+            protected override ICollection<TDestination> CreateCollection(int size) => new List<TDestination>(size);
         }
 
-        private sealed class OtherTypeListFromCollectionBuilder<TSource, TDestination> : OtherTypeListFromCollectionByInitializeAddBuilderBase<TSource, TDestination>
+        private sealed class OtherTypeListFromCollectionBuilder<TSource, TDestination> : OtherTypeCollectionFromCollectionByInitializeAddBuilderBase<TSource, TDestination>
         {
             public OtherTypeListFromCollectionBuilder(Func<object, object> converter)
                 : base(converter)
             {
             }
 
-            protected override IList<TDestination> CreateCollection(int size)
-            {
-                return new List<TDestination>(size);
-            }
+            protected override ICollection<TDestination> CreateCollection(int size) => new List<TDestination>(size);
         }
 
-        private sealed class OtherTypeListFromEnumerableBuilder<TSource, TDestination> : OtherTypeListFromEnumerableByAddBuilderBase<TSource, TDestination>
+        private sealed class OtherTypeListFromEnumerableBuilder<TSource, TDestination> : OtherTypeCollectionFromEnumerableByAddBuilderBase<TSource, TDestination>
         {
             public OtherTypeListFromEnumerableBuilder(Func<object, object> converter)
                 : base(converter)
             {
             }
 
-            protected override IList<TDestination> CreateCollection()
-            {
-                return new List<TDestination>();
-            }
+            protected override ICollection<TDestination> CreateCollection() => new List<TDestination>();
         }
     }
 }

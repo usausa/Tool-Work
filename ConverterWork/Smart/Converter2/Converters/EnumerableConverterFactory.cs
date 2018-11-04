@@ -45,8 +45,8 @@
             { typeof(ICollection<>), new ProviderPair(SameTypeListBuilderProvider.Default, OtherTypeListBuilderProvider.Default) },
             { typeof(IList<>), new ProviderPair(SameTypeListBuilderProvider.Default, OtherTypeListBuilderProvider.Default) },
             { typeof(List<>), new ProviderPair(SameTypeListBuilderProvider.Default, OtherTypeListBuilderProvider.Default) },
-        //    { typeof(ISet<>), typeof(HashSetCollectionProvider<>) },
-        //    { typeof(HashSet<>), typeof(HashSetCollectionProvider<>) }
+            { typeof(ISet<>), new ProviderPair(SameTypeHashSetBuilderProvider.Default, OtherTypeHashSetBuilderProvider.Default) },
+            { typeof(HashSet<>), new ProviderPair(SameTypeHashSetBuilderProvider.Default, OtherTypeHashSetBuilderProvider.Default) }
         };
 
         public Func<object, object> GetConverter(IObjectConverter context, Type sourceType, Type targetType)
