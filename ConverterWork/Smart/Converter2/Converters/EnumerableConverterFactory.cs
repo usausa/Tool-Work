@@ -12,12 +12,12 @@
         // TODO
         private static readonly Dictionary<Type, Type> OpenTypeProviderTypes = new Dictionary<Type, Type>
         {
-            { typeof(List<>), typeof(ListCollectionProvider<>) },
-            //{ typeof(HashSet<>), typeof(HashSetCollectionProvider<>) },
             { typeof(IEnumerable<>), typeof(ListCollectionProvider<>) },
             { typeof(ICollection<>), typeof(ListCollectionProvider<>) },
             { typeof(IList<>), typeof(ListCollectionProvider<>) },
-            //{ typeof(ISet<>), typeof(HashSetCollectionProvider<>) },
+            { typeof(List<>), typeof(ListCollectionProvider<>) },
+            { typeof(ISet<>), typeof(HashSetCollectionProvider<>) },
+            { typeof(HashSet<>), typeof(HashSetCollectionProvider<>) }
         };
 
         public Func<object, object> GetConverter(IObjectConverter context, Type sourceType, Type targetType)
@@ -54,7 +54,25 @@
                         return null;
                     }
 
-                    if (converter != null)
+                    if (converter == null)
+                    {
+                        switch (enumerableType)
+                        {
+                            case EnumerableType.List:
+                                // IL<T> to T[]
+                                return ((IConverterBuilder)Activator.CreateInstance(
+                                    typeof(ListToSameTypeArrayBuilder<>).MakeGenericType(targetElementType))).Create;
+                            case EnumerableType.Collection:
+                                // IC<T> to T[]
+                                return ((IConverterBuilder)Activator.CreateInstance(
+                                    typeof(CollectionToSameTypeArrayBuilder<>).MakeGenericType(targetElementType))).Create;
+                            case EnumerableType.Enumerable:
+                                // IE<T> to T[]
+                                return ((IConverterBuilder)Activator.CreateInstance(
+                                    typeof(EnumerableToSameTypeArrayBuilder<>).MakeGenericType(targetElementType))).Create;
+                        }
+                    }
+                    else
                     {
                         switch (enumerableType)
                         {
@@ -73,24 +91,6 @@
                                 return ((IConverterBuilder)Activator.CreateInstance(
                                     typeof(EnumerableToOtherTypeArrayBuilder<,>).MakeGenericType(sourceElementType, targetElementType),
                                     converter)).Create;
-                        }
-                    }
-                    else
-                    {
-                        switch (enumerableType)
-                        {
-                            case EnumerableType.List:
-                                // IL<T> to T[]
-                                return ((IConverterBuilder)Activator.CreateInstance(
-                                    typeof(ListToSameTypeArrayBuilder<>).MakeGenericType(targetElementType))).Create;
-                            case EnumerableType.Collection:
-                                // IC<T> to T[]
-                                return ((IConverterBuilder)Activator.CreateInstance(
-                                    typeof(CollectionToSameTypeArrayBuilder<>).MakeGenericType(targetElementType))).Create;
-                            case EnumerableType.Enumerable:
-                                // IE<T> to T[]
-                                return ((IConverterBuilder)Activator.CreateInstance(
-                                    typeof(EnumerableToSameTypeArrayBuilder<>).MakeGenericType(targetElementType))).Create;
                         }
                     }
                 }
@@ -115,9 +115,28 @@
                         return null;
                     }
 
-                    var useConverter = converter != null;
-                    var builderMethod = collectionProvider.ResolveArrayBuilderMethod(useConverter, out object factory);
-                    if (useConverter)
+                    var isSameType = converter == null;
+                    var builderMethod = collectionProvider.ResolveArrayBuilderMethod(isSameType, out object factory);
+                    if (isSameType)
+                    {
+                        // T[] to IE<T>
+                        switch (builderMethod)
+                        {
+                            case ArrayBuilder.Constructor:
+                                return ((IConverterBuilder)Activator.CreateInstance(
+                                    typeof(ArrayToSameTypeCollectionByConstructorBuilder<>).MakeGenericType(targetElementType),
+                                    factory)).Create;
+                            case ArrayBuilder.InitializeAdd:
+                                return ((IConverterBuilder)Activator.CreateInstance(
+                                    typeof(ArrayToSameTypeCollectionByInitializeAddBuilder<>).MakeGenericType(targetElementType),
+                                    factory)).Create;
+                            case ArrayBuilder.Add:
+                                return ((IConverterBuilder)Activator.CreateInstance(
+                                    typeof(ArrayToSameTypeCollectionByAddBuilder<>).MakeGenericType(targetElementType),
+                                    factory)).Create;
+                        }
+                    }
+                    else
                     {
                         // T1[] to IE<T2>
                         switch (builderMethod)
@@ -139,25 +158,6 @@
                                     converter)).Create;
                         }
                     }
-                    else
-                    {
-                        // T[] to IE<T>
-                        switch (builderMethod)
-                        {
-                            case ArrayBuilder.Constructor:
-                                return ((IConverterBuilder)Activator.CreateInstance(
-                                    typeof(ArrayToSameTypeCollectionByConstructorBuilder<>).MakeGenericType(targetElementType),
-                                    factory)).Create;
-                            case ArrayBuilder.InitializeAdd:
-                                return ((IConverterBuilder)Activator.CreateInstance(
-                                    typeof(ArrayToSameTypeCollectionByInitializeAddBuilder<>).MakeGenericType(targetElementType),
-                                    factory)).Create;
-                            case ArrayBuilder.Add:
-                                return ((IConverterBuilder)Activator.CreateInstance(
-                                    typeof(ArrayToSameTypeCollectionByAddBuilder<>).MakeGenericType(targetElementType),
-                                    factory)).Create;
-                        }
-                    }
                 }
 
                 // From IE<>
@@ -171,9 +171,32 @@
                         return null;
                     }
 
-                    var useConverter = converter != null;
-                    var builderMethod = collectionProvider.ResolveBuilderMethod(enumerableType, useConverter, out object factory);
-                    if (useConverter)
+                    var isSameType = converter == null;
+                    var builderMethod = collectionProvider.ResolveBuilderMethod(enumerableType, isSameType, out object factory);
+                    if (isSameType)
+                    {
+                        // IE<T> to IE<T>
+                        switch (builderMethod)
+                        {
+                            case EnumerableBuilder.Constructor:
+                                return ((IConverterBuilder)Activator.CreateInstance(
+                                    typeof(EnumerableToSameTypeCollectionByConstructorBuilder<>).MakeGenericType(targetElementType),
+                                    factory)).Create;
+                            case EnumerableBuilder.ListInitializeAdd:
+                                return ((IConverterBuilder)Activator.CreateInstance(
+                                    typeof(ListToSameTypeCollectionByInitializeAddBuilder<>).MakeGenericType(targetElementType),
+                                    factory)).Create;
+                            case EnumerableBuilder.CollectionInitializeAdd:
+                                return ((IConverterBuilder)Activator.CreateInstance(
+                                    typeof(CollectionToSameTypeCollectionByInitializeAddBuilder<>).MakeGenericType(targetElementType),
+                                    factory)).Create;
+                            case EnumerableBuilder.Add:
+                                return ((IConverterBuilder)Activator.CreateInstance(
+                                    typeof(EnumerableToSameTypeCollectionByAddBuilder<>).MakeGenericType(targetElementType),
+                                    factory)).Create;
+                        }
+                    }
+                    else
                     {
                         // IE<T1> to IE<T2>
                         switch (builderMethod)
@@ -198,29 +221,6 @@
                                     typeof(EnumerableToOtherTypeCollectionByAddBuilder<,>).MakeGenericType(sourceElementType, targetElementType),
                                     factory,
                                     converter)).Create;
-                        }
-                    }
-                    else
-                    {
-                        // IE<T> to IE<T>
-                        switch (builderMethod)
-                        {
-                            case EnumerableBuilder.Constructor:
-                                return ((IConverterBuilder)Activator.CreateInstance(
-                                    typeof(EnumerableToSameTypeCollectionByConstructorBuilder<>).MakeGenericType(targetElementType),
-                                    factory)).Create;
-                            case EnumerableBuilder.ListInitializeAdd:
-                                return ((IConverterBuilder)Activator.CreateInstance(
-                                    typeof(ListToSameTypeCollectionByInitializeAddBuilder<>).MakeGenericType(targetElementType),
-                                    factory)).Create;
-                            case EnumerableBuilder.CollectionInitializeAdd:
-                                return ((IConverterBuilder)Activator.CreateInstance(
-                                    typeof(CollectionToSameTypeCollectionByInitializeAddBuilder<>).MakeGenericType(targetElementType),
-                                    factory)).Create;
-                            case EnumerableBuilder.Add:
-                                return ((IConverterBuilder)Activator.CreateInstance(
-                                    typeof(EnumerableToSameTypeCollectionByAddBuilder<>).MakeGenericType(targetElementType),
-                                    factory)).Create;
                         }
                     }
                 }
@@ -872,16 +872,16 @@
 
         private interface ICollectionProvider
         {
-            ArrayBuilder ResolveArrayBuilderMethod(bool useConverter, out object factory);
+            ArrayBuilder ResolveArrayBuilderMethod(bool isSameType, out object factory);
 
-            EnumerableBuilder ResolveBuilderMethod(EnumerableType sourceType, bool useConverter, out object factory);
+            EnumerableBuilder ResolveBuilderMethod(EnumerableType sourceType, bool isSameType, out object factory);
         }
 
         private class ListCollectionProvider<T> : ICollectionProvider
         {
-            public ArrayBuilder ResolveArrayBuilderMethod(bool useConverter, out object factory)
+            public ArrayBuilder ResolveArrayBuilderMethod(bool isSameType, out object factory)
             {
-                if (useConverter)
+                if (isSameType)
                 {
                     factory = (Func<IEnumerable<T>, ICollection<T>>)(x => new List<T>(x));
                     return ArrayBuilder.Constructor;
@@ -891,9 +891,9 @@
                 return ArrayBuilder.InitializeAdd;
             }
 
-            public EnumerableBuilder ResolveBuilderMethod(EnumerableType sourceType, bool useConverter, out object factory)
+            public EnumerableBuilder ResolveBuilderMethod(EnumerableType sourceType, bool isSameType, out object factory)
             {
-                if (useConverter)
+                if (isSameType)
                 {
                     factory = (Func<IEnumerable<T>, ICollection<T>>)(x => new List<T>(x));
                     return EnumerableBuilder.Constructor;
@@ -914,15 +914,32 @@
             }
         }
 
-        // TODO
-        //private class HashSetCollectionProvider<T> : ICollectionProvider
-        //{
-        //    public object CreateDefaultFactory() => (Func<ICollection<T>>)(() => new HashSet<T>());
+        // MEMO HashSet(int capacity) is not supported in .NET Standard
+        private class HashSetCollectionProvider<T> : ICollectionProvider
+        {
+            public ArrayBuilder ResolveArrayBuilderMethod(bool useConverter, out object factory)
+            {
+                if (useConverter)
+                {
+                    factory = (Func<IEnumerable<T>, ICollection<T>>)(x => new HashSet<T>(x));
+                    return ArrayBuilder.Constructor;
+                }
 
-        //    // .NET Standard is not support capacity argument constructor
-        //    public object CreateCapacityFactory() => null;  // (Func<int, ICollection<T>>)(x => new HashSet<T>(x));
+                factory = (Func<ICollection<T>>)(() => new HashSet<T>());
+                return ArrayBuilder.Add;
+            }
 
-        //    public object CreateEnumerableFactory() => (Func<IEnumerable<T>, ICollection<T>>)(x => new HashSet<T>(x));
-        //}
+            public EnumerableBuilder ResolveBuilderMethod(EnumerableType sourceType, bool useConverter, out object factory)
+            {
+                if (useConverter)
+                {
+                    factory = (Func<IEnumerable<T>, ICollection<T>>)(x => new HashSet<T>(x));
+                    return EnumerableBuilder.Constructor;
+                }
+
+                factory = (Func<ICollection<T>>)(() => new HashSet<T>());
+                return EnumerableBuilder.Add;
+            }
+        }
     }
 }
