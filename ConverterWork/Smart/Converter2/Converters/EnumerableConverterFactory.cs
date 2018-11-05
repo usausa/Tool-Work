@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
 
     public sealed partial class EnumerableConverterFactory : IConverterFactory
@@ -38,7 +39,6 @@
             }
         }
 
-        // TODO
         private static readonly Dictionary<Type, ProviderPair> Providers = new Dictionary<Type, ProviderPair>
         {
             { typeof(IEnumerable<>), new ProviderPair(SameTypeListBuilderProvider.Default, OtherTypeListBuilderProvider.Default) },
@@ -46,8 +46,18 @@
             { typeof(IList<>), new ProviderPair(SameTypeListBuilderProvider.Default, OtherTypeListBuilderProvider.Default) },
             { typeof(List<>), new ProviderPair(SameTypeListBuilderProvider.Default, OtherTypeListBuilderProvider.Default) },
             { typeof(ISet<>), new ProviderPair(SameTypeHashSetBuilderProvider.Default, OtherTypeHashSetBuilderProvider.Default) },
-            { typeof(HashSet<>), new ProviderPair(SameTypeHashSetBuilderProvider.Default, OtherTypeHashSetBuilderProvider.Default) }
+            { typeof(HashSet<>), new ProviderPair(SameTypeHashSetBuilderProvider.Default, OtherTypeHashSetBuilderProvider.Default) },
+            { typeof(IReadOnlyCollection<>), new ProviderPair(SameTypeReadOnlyCollectionBuilderProvider.Default, OtherTypeReadOnlyCollectionBuilderProvider.Default) },
+            { typeof(IReadOnlyList<>), new ProviderPair(SameTypeReadOnlyCollectionBuilderProvider.Default, OtherTypeReadOnlyCollectionBuilderProvider.Default) },
+            { typeof(ReadOnlyCollection<>), new ProviderPair(SameTypeReadOnlyCollectionBuilderProvider.Default, OtherTypeReadOnlyCollectionBuilderProvider.Default) }
         };
+
+        // TODO
+        // LinkedList,
+        // Queue,
+        // Stack,
+        // ObservableCollection, ReadOnlyObservableCollection,
+        // ConcurrentBag, ConcurrentQueue, ConcurrentStack, IProducerConsumerCollection
 
         public Func<object, object> GetConverter(IObjectConverter context, Type sourceType, Type targetType)
         {

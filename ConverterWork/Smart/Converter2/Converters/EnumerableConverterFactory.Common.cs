@@ -10,15 +10,15 @@
         // ArrayConvertStruct
         //--------------------------------------------------------------------------------
 
-        public struct ArrayConvertStructEnumerator<T> : IEnumerator<T>
+        public struct ArrayConvertStructEnumerator<TSource, TDestination> : IEnumerator<TDestination>
         {
-            private readonly T[] source;
+            private readonly TSource[] source;
 
             private readonly Func<object, object> converter;
 
             private int index;
 
-            public ArrayConvertStructEnumerator(T[] source, Func<object, object> converter)
+            public ArrayConvertStructEnumerator(TSource[] source, Func<object, object> converter)
             {
                 this.source = source;
                 this.converter = converter;
@@ -33,7 +33,7 @@
 
             public void Reset() => index = -1;
 
-            public T Current => (T)converter(source[index]);
+            public TDestination Current => (TDestination)converter(source[index]);
 
             object IEnumerator.Current => Current;
 
@@ -42,52 +42,52 @@
             }
         }
 
-        public readonly struct ArrayConvertStructList<T> : IList<T>
+        public readonly struct ArrayConvertStructList<TSource, TDestination> : IList<TDestination>
         {
-            private readonly T[] source;
+            private readonly TSource[] source;
 
             private readonly Func<object, object> converter;
 
-            public ArrayConvertStructList(T[] source, Func<object, object> converter)
+            public ArrayConvertStructList(TSource[] source, Func<object, object> converter)
             {
                 this.source = source;
                 this.converter = converter;
             }
 
-            public IEnumerator<T> GetEnumerator() => new ArrayConvertStructEnumerator<T>(source, converter);
+            public IEnumerator<TDestination> GetEnumerator() => new ArrayConvertStructEnumerator<TSource, TDestination>(source, converter);
 
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-            public void Add(T item) => throw new NotSupportedException();
+            public void Add(TDestination item) => throw new NotSupportedException();
 
             public void Clear() => throw new NotSupportedException();
 
-            public bool Contains(T item) => throw new NotSupportedException();
+            public bool Contains(TDestination item) => throw new NotSupportedException();
 
-            public void CopyTo(T[] array, int arrayIndex)
+            public void CopyTo(TDestination[] array, int arrayIndex)
             {
                 for (var i = 0; i < source.Length; i++)
                 {
-                    array[arrayIndex + i] = (T)converter(source[i]);
+                    array[arrayIndex + i] = (TDestination)converter(source[i]);
                 }
             }
 
-            public bool Remove(T item) => throw new NotSupportedException();
+            public bool Remove(TDestination item) => throw new NotSupportedException();
 
             public int Count => source.Length;
 
             public bool IsReadOnly => true;
 
-            public int IndexOf(T item) => throw new NotSupportedException();
+            public int IndexOf(TDestination item) => throw new NotSupportedException();
 
-            public void Insert(int index, T item) => throw new NotSupportedException();
+            public void Insert(int index, TDestination item) => throw new NotSupportedException();
 
             public void RemoveAt(int index) => throw new NotSupportedException();
 
-            public T this[int index]
+            public TDestination this[int index]
             {
-                get => source[index];
-                set => source[index] = value;
+                get => (TDestination)converter(source[index]);
+                set => throw new NotSupportedException();
             }
         }
 
@@ -95,15 +95,15 @@
         // ListConvertStruct
         //--------------------------------------------------------------------------------
 
-        public struct ListConvertStructEnumerator<T> : IEnumerator<T>
+        public struct ListConvertStructEnumerator<TSource, TDestination> : IEnumerator<TDestination>
         {
-            private readonly IList<T> source;
+            private readonly IList<TSource> source;
 
             private readonly Func<object, object> converter;
 
             private int index;
 
-            public ListConvertStructEnumerator(IList<T> source, Func<object, object> converter)
+            public ListConvertStructEnumerator(IList<TSource> source, Func<object, object> converter)
             {
                 this.source = source;
                 this.converter = converter;
@@ -118,7 +118,7 @@
 
             public void Reset() => index = -1;
 
-            public T Current => (T)converter(source[index]);
+            public TDestination Current => (TDestination)converter(source[index]);
 
             object IEnumerator.Current => Current;
 
@@ -127,66 +127,66 @@
             }
         }
 
-        public readonly struct ListConvertStructList<T> : IList<T>
+        public readonly struct ListConvertStructList<TSource, TDestination> : IList<TDestination>
         {
-            private readonly IList<T> source;
+            private readonly IList<TSource> source;
 
             private readonly Func<object, object> converter;
 
-            public ListConvertStructList(IList<T> source, Func<object, object> converter)
+            public ListConvertStructList(IList<TSource> source, Func<object, object> converter)
             {
                 this.source = source;
                 this.converter = converter;
             }
 
-            public IEnumerator<T> GetEnumerator() => new ListConvertStructEnumerator<T>(source, converter);
+            public IEnumerator<TDestination> GetEnumerator() => new ListConvertStructEnumerator<TSource, TDestination>(source, converter);
 
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-            public void Add(T item) => throw new NotSupportedException();
+            public void Add(TDestination item) => throw new NotSupportedException();
 
             public void Clear() => throw new NotSupportedException();
 
-            public bool Contains(T item) => throw new NotSupportedException();
+            public bool Contains(TDestination item) => throw new NotSupportedException();
 
-            public void CopyTo(T[] array, int arrayIndex)
+            public void CopyTo(TDestination[] array, int arrayIndex)
             {
                 for (var i = 0; i < source.Count; i++)
                 {
-                    array[arrayIndex + i] = (T)converter(source[i]);
+                    array[arrayIndex + i] = (TDestination)converter(source[i]);
                 }
             }
 
-            public bool Remove(T item) => throw new NotSupportedException();
+            public bool Remove(TDestination item) => throw new NotSupportedException();
 
             public int Count => source.Count;
 
             public bool IsReadOnly => true;
 
-            public int IndexOf(T item) => throw new NotSupportedException();
+            public int IndexOf(TDestination item) => throw new NotSupportedException();
 
-            public void Insert(int index, T item) => throw new NotSupportedException();
+            public void Insert(int index, TDestination item) => throw new NotSupportedException();
 
             public void RemoveAt(int index) => throw new NotSupportedException();
 
-            public T this[int index]
+            public TDestination this[int index]
             {
-                get => source[index];
-                set => source[index] = value;
-            }
+                get => (TDestination)converter(source[index]);
+                set => throw new NotSupportedException();
+        }
         }
 
         //--------------------------------------------------------------------------------
         // EnumerableConvertStruct
         //--------------------------------------------------------------------------------
 
-        public struct EnumerableConvertStructEnumerator<T> : IEnumerator<T>
+        public struct EnumerableConvertStructEnumerator<TSource, TDestination> : IEnumerator<TDestination>
         {
-            private readonly IEnumerator<T> source;
+            private readonly IEnumerator<TSource> source;
 
             private readonly Func<object, object> converter;
 
-            public EnumerableConvertStructEnumerator(IEnumerator<T> source, Func<object, object> converter)
+            public EnumerableConvertStructEnumerator(IEnumerator<TSource> source, Func<object, object> converter)
             {
                 this.source = source;
                 this.converter = converter;
@@ -196,30 +196,13 @@
 
             public void Reset() => source.Reset();
 
-            public T Current => (T)converter(source.Current);
+            public TDestination Current => (TDestination)converter(source.Current);
 
             object IEnumerator.Current => Current;
 
             public void Dispose()
             {
             }
-        }
-
-        public readonly struct EnumerableConvertStructList<T> : IEnumerable<T>
-        {
-            private readonly IEnumerable<T> source;
-
-            private readonly Func<object, object> converter;
-
-            public EnumerableConvertStructList(IEnumerable<T> source, Func<object, object> converter)
-            {
-                this.source = source;
-                this.converter = converter;
-            }
-
-            public IEnumerator<T> GetEnumerator() => new EnumerableConvertStructEnumerator<T>(source.GetEnumerator(), converter);
-
-            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         }
     }
 }
