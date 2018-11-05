@@ -4,18 +4,13 @@
 
     public sealed class DateTimeConverterFactory : IConverterFactory
     {
-        private static readonly Type DateTimeType = typeof(DateTime);
-        private static readonly Type DateTimeOffsetType = typeof(DateTimeOffset);
-        private static readonly Type StringType = typeof(string);
-        private static readonly Type LongType = typeof(long);
-
         public Func<object, object> GetConverter(IObjectConverter context, Type sourceType, Type targetType)
         {
             // From DateTime
-            if (sourceType == DateTimeType)
+            if (sourceType == typeof(DateTime))
             {
                 // DateTime to String
-                if (targetType == StringType)
+                if (targetType == typeof(string))
                 {
                     return source => ((DateTime)source).ToString();
                 }
@@ -23,7 +18,7 @@
                 var underlyingTargetType = targetType.IsNullableType() ? Nullable.GetUnderlyingType(targetType) : targetType;
 
                 // DateTime to DateTimeOffset(Nullable)
-                if (underlyingTargetType == DateTimeOffsetType)
+                if (underlyingTargetType == typeof(DateTimeOffset))
                 {
                     var defaultValue = targetType.GetDefaultValue();
                     return source =>
@@ -40,13 +35,13 @@
                 }
 
                 // DateTime to long
-                if (underlyingTargetType == LongType)
+                if (underlyingTargetType == typeof(long))
                 {
                     return source => ((DateTime)source).Ticks;
                 }
 
                 // DateTime to can convert from long
-                var converter = context.CreateConverter(LongType, targetType);
+                var converter = context.CreateConverter(typeof(long), targetType);
                 if (converter != null)
                 {
                     return source => converter(((DateTime)source).Ticks);
@@ -56,10 +51,10 @@
             }
 
             // From DateTimeOffset
-            if (sourceType == DateTimeOffsetType)
+            if (sourceType == typeof(DateTimeOffset))
             {
                 // DateTimeOffset to String
-                if (targetType == StringType)
+                if (targetType == typeof(string))
                 {
                     return source => ((DateTimeOffset)source).ToString();
                 }
@@ -67,19 +62,19 @@
                 var underlyingTargetType = targetType.IsNullableType() ? Nullable.GetUnderlyingType(targetType) : targetType;
 
                 // DateTimeOffset to DateTime(Nullable)
-                if (underlyingTargetType == DateTimeType)
+                if (underlyingTargetType == typeof(DateTime))
                 {
                     return source => ((DateTimeOffset)source).DateTime;
                 }
 
                 // DateTimeOffset to long
-                if (underlyingTargetType == LongType)
+                if (underlyingTargetType == typeof(long))
                 {
                     return source => ((DateTimeOffset)source).Ticks;
                 }
 
                 // DateTimeOffset to can convert from long
-                var converter = context.CreateConverter(LongType, targetType);
+                var converter = context.CreateConverter(typeof(long), targetType);
                 if (converter != null)
                 {
                     return source => converter(((DateTimeOffset)source).Ticks);
@@ -89,19 +84,19 @@
             }
 
             // From string
-            if (sourceType == StringType)
+            if (sourceType == typeof(string))
             {
                 var underlyingTargetType = targetType.IsNullableType() ? Nullable.GetUnderlyingType(targetType) : targetType;
 
                 // String to DateTime(Nullable)
-                if (underlyingTargetType == DateTimeType)
+                if (underlyingTargetType == typeof(DateTime))
                 {
                     var defaultValue = targetType.GetDefaultValue();
                     return source => DateTime.TryParse((string)source, out var result) ? result : defaultValue;
                 }
 
                 // String to DateTimeOffset(Nullable)
-                if (underlyingTargetType == DateTimeOffsetType)
+                if (underlyingTargetType == typeof(DateTimeOffset))
                 {
                     var defaultValue = targetType.GetDefaultValue();
                     return source => DateTimeOffset.TryParse((string)source, out var result) ? result : defaultValue;
@@ -109,12 +104,12 @@
             }
 
             // From long
-            if (sourceType == LongType)
+            if (sourceType == typeof(long))
             {
                 var underlyingTargetType = targetType.IsNullableType() ? Nullable.GetUnderlyingType(targetType) : targetType;
 
                 // long to DateTime(Nullable)
-                if (underlyingTargetType == DateTimeType)
+                if (underlyingTargetType == typeof(DateTime))
                 {
                     var defaultValue = targetType.GetDefaultValue();
                     return source =>
@@ -131,7 +126,7 @@
                 }
 
                 // long to DateTimeOffset(Nullable)
-                if (underlyingTargetType == DateTimeOffsetType)
+                if (underlyingTargetType == typeof(DateTimeOffset))
                 {
                     var defaultValue = targetType.GetDefaultValue();
                     return source =>
@@ -150,10 +145,10 @@
 
             // From can convert to long
             var type = targetType.IsNullableType() ? Nullable.GetUnderlyingType(targetType) : targetType;
-            if (type == DateTimeType)
+            if (type == typeof(DateTime))
             {
                 // Can convert long to DateTime
-                var converter = context.CreateConverter(sourceType, LongType);
+                var converter = context.CreateConverter(sourceType, typeof(long));
                 if (converter != null)
                 {
                     var defaultValue = targetType.GetDefaultValue();
@@ -171,10 +166,10 @@
                 }
             }
 
-            if (type == DateTimeOffsetType)
+            if (type == typeof(DateTimeOffset))
             {
                 // Can convert long to DateTime
-                var converter = context.CreateConverter(sourceType, LongType);
+                var converter = context.CreateConverter(sourceType, typeof(long));
                 if (converter != null)
                 {
                     var defaultValue = targetType.GetDefaultValue();

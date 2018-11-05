@@ -5,8 +5,6 @@
 
     public sealed class EnumConverterFactory : IConverterFactory
     {
-        private static readonly Type StringType = typeof(string);
-
         public Func<object, object> GetConverter(IObjectConverter context, Type sourceType, Type targetType)
         {
             var sourceEnumType = sourceType.GetEnumType();
@@ -23,7 +21,7 @@
                 // !Enum to Enum
 
                 // String to Enum
-                if (sourceType == StringType)
+                if (sourceType == typeof(string))
                 {
                     return source => Enum.Parse(targetEnumType, (string)source, true);
                 }
@@ -50,7 +48,7 @@
                 // Enum to !Enum
 
                 // Enum to String
-                if (targetType == StringType)
+                if (targetType == typeof(string))
                 {
                     return source => ((Enum)source).ToString();
                 }

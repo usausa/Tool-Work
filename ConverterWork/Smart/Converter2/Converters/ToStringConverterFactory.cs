@@ -4,13 +4,11 @@
 
     public sealed class ToStringConverterFactory : IConverterFactory
     {
-        private static readonly Type StringType = typeof(string);
-
         private static readonly Func<object, object> Converter = source => source.ToString();
 
         public Func<object, object> GetConverter(IObjectConverter context, Type sourceType, Type targetType)
         {
-            return targetType == StringType ? Converter : null;
+            return targetType == typeof(string) ? Converter : null;
         }
     }
 }

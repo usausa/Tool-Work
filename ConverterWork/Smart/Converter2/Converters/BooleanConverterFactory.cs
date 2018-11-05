@@ -5,10 +5,6 @@
 
     public sealed class BooleanConverterFactory : IConverterFactory
     {
-        private static readonly Type BooleanType = typeof(bool);
-
-        private static readonly Type NullableBooleanType = typeof(bool?);
-
         private static readonly Dictionary<Type, Func<object, object>> FromBooleanConverters = new Dictionary<Type, Func<object, object>>
         {
             { typeof(byte), x => (bool)x ? (byte)1 : (byte)0 },
@@ -47,7 +43,7 @@
 
         public Func<object, object> GetConverter(IObjectConverter context, Type sourceType, Type targetType)
         {
-            if (sourceType == BooleanType)
+            if (sourceType == typeof(bool))
             {
                 if (targetType.IsValueType)
                 {
@@ -58,7 +54,7 @@
                     }
                 }
             }
-            else if ((targetType == BooleanType) || (targetType == NullableBooleanType))
+            else if ((targetType == typeof(bool)) || (targetType == typeof(bool?)))
             {
                 if (sourceType.IsValueType)
                 {
