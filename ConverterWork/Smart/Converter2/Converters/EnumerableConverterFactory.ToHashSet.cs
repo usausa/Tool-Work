@@ -29,11 +29,11 @@
         // Same type
         //--------------------------------------------------------------------------------
 
-        private sealed class SameTypeHashSetFromEnumerableBuilder<TDestination> : SameTypeEnumerableFromEnumerableByFactoryBuilderBase<TDestination>
+        private sealed class SameTypeHashSetFromEnumerableBuilder<TDestination> : IConverterBuilder
         {
-            protected override IEnumerable<TDestination> CreateCollection(IEnumerable<TDestination> source)
+            public object Create(object source)
             {
-                return new HashSet<TDestination>(source);
+                return new HashSet<TDestination>((IEnumerable<TDestination>)source);
             }
         }
 

@@ -6,37 +6,6 @@
     public sealed partial class EnumerableConverterFactory
     {
         //--------------------------------------------------------------------------------
-        // Same type
-        //--------------------------------------------------------------------------------
-
-        private abstract class SameTypeEnumerableFromEnumerableByFactoryBuilderBase<TDestination> : IConverterBuilder
-        {
-            protected abstract IEnumerable<TDestination> CreateCollection(IEnumerable<TDestination> source);
-
-            public object Create(object source)
-            {
-                return CreateCollection((IEnumerable<TDestination>)source);
-            }
-        }
-
-        //private abstract class SameTypeCollectionFromArrayByInitializeAddBuilderBase<TDestination> : IConverterBuilder
-        //{
-        //    protected abstract ICollection<TDestination> CreateCollection(int size);
-
-        //    public object Create(object source)
-        //    {
-        //        var arraySource = (TDestination[])source;
-        //        var collection = CreateCollection(arraySource.Length);
-        //        for (var i = 0; i < arraySource.Length; i++)
-        //        {
-        //            collection.Add(arraySource[i]);
-        //        }
-
-        //        return collection;
-        //    }
-        //}
-
-        //--------------------------------------------------------------------------------
         // Other type
         //--------------------------------------------------------------------------------
 

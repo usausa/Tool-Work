@@ -39,11 +39,11 @@
         // Same type
         //--------------------------------------------------------------------------------
 
-        private sealed class SameTypeListFromEnumerableBuilder<TDestination> : SameTypeEnumerableFromEnumerableByFactoryBuilderBase<TDestination>
+        private sealed class SameTypeListFromEnumerableBuilder<TDestination> : IConverterBuilder
         {
-            protected override IEnumerable<TDestination> CreateCollection(IEnumerable<TDestination> source)
+            public object Create(object source)
             {
-                return new List<TDestination>(source);
+                return new List<TDestination>((IEnumerable<TDestination>)source);
             }
         }
 
