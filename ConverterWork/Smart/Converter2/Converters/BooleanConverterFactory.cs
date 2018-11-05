@@ -53,6 +53,11 @@
                         return converter;
                     }
                 }
+
+                if (targetType == typeof(string))
+                {
+                    return x => ((bool)x).ToString();
+                }
             }
             else if ((targetType == typeof(bool)) || (targetType == typeof(bool?)))
             {
@@ -62,6 +67,18 @@
                     if (ToBooleanConverters.TryGetValue(type, out var converter))
                     {
                         return converter;
+                    }
+                }
+
+                if (sourceType == typeof(string))
+                {
+                    if (targetType.IsNullableType())
+                    {
+                        return x => Boolean.TryParse((string)x, out var result) ? (object)result : null;
+                    }
+                    else
+                    {
+                        return x => Boolean.TryParse((string)x, out var result) ? result : default;
                     }
                 }
             }

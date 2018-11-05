@@ -42,6 +42,7 @@
             { Tuple.Create(typeof(char), typeof(Decimal)), x => new Decimal((char)x) },
             { Tuple.Create(typeof(double), typeof(Decimal)), x => { try { return new Decimal((double)x); } catch (OverflowException) { return default(decimal); } } },
             { Tuple.Create(typeof(float), typeof(Decimal)), x => { try { return new Decimal((float)x); } catch (OverflowException) { return default(decimal); } } },
+            { Tuple.Create(typeof(string), typeof(Decimal)), x => Decimal.TryParse((string)x, out var result) ? result : default },
             // To Decimal?
             { Tuple.Create(typeof(byte), typeof(Decimal?)), x => new Decimal((byte)x) },
             { Tuple.Create(typeof(sbyte), typeof(Decimal?)), x => new Decimal((sbyte)x) },
@@ -53,7 +54,8 @@
             { Tuple.Create(typeof(ulong), typeof(Decimal?)), x => new Decimal((ulong)x) },
             { Tuple.Create(typeof(char), typeof(Decimal?)), x => new Decimal((char)x) },
             { Tuple.Create(typeof(double), typeof(Decimal?)), x => { try { return new Decimal((double)x); } catch (OverflowException) { return default(decimal?); } } },
-            { Tuple.Create(typeof(float), typeof(Decimal?)), x => { try { return new Decimal((float)x); } catch (OverflowException) { return default(decimal?); } } }
+            { Tuple.Create(typeof(float), typeof(Decimal?)), x => { try { return new Decimal((float)x); } catch (OverflowException) { return default(decimal?); } } },
+            { Tuple.Create(typeof(string), typeof(Decimal?)), x => Decimal.TryParse((string)x, out var result) ? result : default(decimal?) }
         };
 
         public Func<object, object> GetConverter(IObjectConverter context, Type sourceType, Type targetType)
