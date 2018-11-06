@@ -76,10 +76,8 @@
                     {
                         return x => Boolean.TryParse((string)x, out var result) ? (object)result : null;
                     }
-                    else
-                    {
-                        return x => Boolean.TryParse((string)x, out var result) ? result : default;
-                    }
+
+                    return x => Boolean.TryParse((string)x, out var result) ? result : default;
                 }
             }
 

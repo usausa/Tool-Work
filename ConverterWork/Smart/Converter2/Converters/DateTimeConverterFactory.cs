@@ -20,7 +20,7 @@
                 // DateTime to DateTimeOffset(Nullable)
                 if (underlyingTargetType == typeof(DateTimeOffset))
                 {
-                    var defaultValue = targetType.GetDefaultValue();
+                    var defaultValue = targetType.IsNullableType() ? null : (object)default(DateTimeOffset);
                     return source =>
                     {
                         try
@@ -91,14 +91,14 @@
                 // String to DateTime(Nullable)
                 if (underlyingTargetType == typeof(DateTime))
                 {
-                    var defaultValue = targetType.GetDefaultValue();
+                    var defaultValue = targetType.IsNullableType() ? null : (object)default(DateTime);
                     return source => DateTime.TryParse((string)source, out var result) ? result : defaultValue;
                 }
 
                 // String to DateTimeOffset(Nullable)
                 if (underlyingTargetType == typeof(DateTimeOffset))
                 {
-                    var defaultValue = targetType.GetDefaultValue();
+                    var defaultValue = targetType.IsNullableType() ? null : (object)default(DateTimeOffset);
                     return source => DateTimeOffset.TryParse((string)source, out var result) ? result : defaultValue;
                 }
             }
@@ -111,7 +111,7 @@
                 // long to DateTime(Nullable)
                 if (underlyingTargetType == typeof(DateTime))
                 {
-                    var defaultValue = targetType.GetDefaultValue();
+                    var defaultValue = targetType.IsNullableType() ? null : (object)default(DateTime);
                     return source =>
                     {
                         try
@@ -128,7 +128,7 @@
                 // long to DateTimeOffset(Nullable)
                 if (underlyingTargetType == typeof(DateTimeOffset))
                 {
-                    var defaultValue = targetType.GetDefaultValue();
+                    var defaultValue = targetType.IsNullableType() ? null : (object)default(DateTimeOffset);
                     return source =>
                     {
                         try
@@ -151,7 +151,7 @@
                 var converter = context.CreateConverter(sourceType, typeof(long));
                 if (converter != null)
                 {
-                    var defaultValue = targetType.GetDefaultValue();
+                    var defaultValue = targetType.IsNullableType() ? null : (object)default(DateTime);
                     return source =>
                     {
                         try
@@ -168,11 +168,11 @@
 
             if (type == typeof(DateTimeOffset))
             {
-                // Can convert long to DateTime
+                // Can convert long to DateTimeOffset
                 var converter = context.CreateConverter(sourceType, typeof(long));
                 if (converter != null)
                 {
-                    var defaultValue = targetType.GetDefaultValue();
+                    var defaultValue = targetType.IsNullableType() ? null : (object)default(DateTimeOffset);
                     return source =>
                     {
                         try

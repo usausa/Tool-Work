@@ -226,6 +226,15 @@
             Assert.True(converter.UsedOnly<BooleanConverterFactory>());
         }
 
+        [Fact]
+        public void BoolToString()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal("False", converter.Convert(false, typeof(string)));
+            Assert.Equal("True", converter.Convert(true, typeof(string)));
+            Assert.True(converter.UsedOnly<BooleanConverterFactory>());
+        }
+
         //--------------------------------------------------------------------------------
         // ToBoolean
         //--------------------------------------------------------------------------------
@@ -463,6 +472,15 @@
             Assert.False((bool)converter.Convert(0m, typeof(bool?)));
             Assert.True((bool)converter.Convert(1m, typeof(bool?)));
             Assert.True((bool)converter.Convert(-1m, typeof(bool?)));
+            Assert.True(converter.UsedOnly<BooleanConverterFactory>());
+        }
+
+        [Fact]
+        public void StringToBool()
+        {
+            var converter = new TestObjectConverter();
+            Assert.False((bool)converter.Convert("False", typeof(bool?)));
+            Assert.True((bool)converter.Convert("True", typeof(bool?)));
             Assert.True(converter.UsedOnly<BooleanConverterFactory>());
         }
     }

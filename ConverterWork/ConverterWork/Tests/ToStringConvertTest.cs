@@ -9,15 +9,6 @@
     public class ToStringConvertTest
     {
         [Fact]
-        public void BoolToString()
-        {
-            var converter = new TestObjectConverter();
-            Assert.Equal("False", converter.Convert(false, typeof(string)));
-            Assert.Equal("True", converter.Convert(true, typeof(string)));
-            Assert.True(converter.UsedOnly<ToStringConverterFactory>());
-        }
-
-        [Fact]
         public void ByteToString()
         {
             var converter = new TestObjectConverter();
