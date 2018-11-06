@@ -6,7 +6,7 @@
 
     using Xunit;
 
-    public class NumericByteToConvertTest
+    public class NumericCastConvertFromByteTest
     {
         [Fact]
         public void ByteToSByte()

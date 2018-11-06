@@ -1,107 +1,107 @@
 ﻿namespace Smart.Tests
 {
-    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
 
     using Smart.Converter2.Converters;
 
     using Xunit;
 
-    public class EnumerableConvertHashSetTest
+    public class EnumerableConvertToReadOnlyCollectionTest
     {
         [Fact]
-        public void ArrayToSameElementHashSet()
+        public void ArrayToSameElementReadOnlyCollection()
         {
             var converter = new TestObjectConverter();
             var source = new[] { 0, 1 };
-            var destination = (HashSet<int>)converter.Convert(source, typeof(HashSet<int>));
+            var destination = (ReadOnlyCollection<int>)converter.Convert(source, typeof(ReadOnlyCollection<int>));
             Assert.Equal(2, destination.Count);
-            Assert.Contains(0, destination);
-            Assert.Contains(1, destination);
+            Assert.Equal(0, destination[0]);
+            Assert.Equal(1, destination[1]);
             Assert.True(converter.UsedOnly<EnumerableConverterFactory>());
         }
 
         [Fact]
-        public void ArrayToOtherElementHashSet()
+        public void ArrayToOtherElementReadOnlyCollection()
         {
             var converter = new TestObjectConverter();
             var source = new[] { 0, 1 };
-            var destination = (HashSet<string>)converter.Convert(source, typeof(HashSet<string>));
+            var destination = (ReadOnlyCollection<string>)converter.Convert(source, typeof(ReadOnlyCollection<string>));
             Assert.Equal(2, destination.Count);
-            Assert.Contains("0", destination);
-            Assert.Contains("1", destination);
+            Assert.Equal("0", destination[0]);
+            Assert.Equal("1", destination[1]);
             Assert.True(converter.UsedIn(typeof(EnumerableConverterFactory), typeof(ToStringConverterFactory)));
         }
 
         [Fact]
-        public void ListToSameElementHashSet()
+        public void ListToSameElementReadOnlyCollection()
         {
             var converter = new TestObjectConverter();
             var source = new WrapperList<string>(new[] { "0", "1" });
-            var destination = (HashSet<string>)converter.Convert(source, typeof(HashSet<string>));
+            var destination = (ReadOnlyCollection<string>)converter.Convert(source, typeof(ReadOnlyCollection<string>));
             Assert.Equal(2, destination.Count);
-            Assert.Contains("0", destination);
-            Assert.Contains("1", destination);
+            Assert.Equal("0", destination[0]);
+            Assert.Equal("1", destination[1]);
             Assert.True(converter.UsedOnly<EnumerableConverterFactory>());
         }
 
         [Fact]
-        public void ListToOtherElementHashSet()
+        public void ListToOtherElementReadOnlyCollection()
         {
             var converter = new TestObjectConverter();
             var source = new WrapperList<int>(new[] { 0, 1 });
-            var destination = (HashSet<string>)converter.Convert(source, typeof(HashSet<string>));
+            var destination = (ReadOnlyCollection<string>)converter.Convert(source, typeof(ReadOnlyCollection<string>));
             Assert.Equal(2, destination.Count);
-            Assert.Contains("0", destination);
-            Assert.Contains("1", destination);
+            Assert.Equal("0", destination[0]);
+            Assert.Equal("1", destination[1]);
             Assert.True(converter.UsedIn(typeof(EnumerableConverterFactory), typeof(ToStringConverterFactory)));
         }
 
         [Fact]
-        public void CollectionToSameElementHashSet()
+        public void CollectionToSameElementReadOnlyCollection()
         {
             var converter = new TestObjectConverter();
             var source = new WrapperCollection<string>(new[] { "0", "1" });
-            var destination = (HashSet<string>)converter.Convert(source, typeof(HashSet<string>));
+            var destination = (ReadOnlyCollection<string>)converter.Convert(source, typeof(ReadOnlyCollection<string>));
             Assert.Equal(2, destination.Count);
-            Assert.Contains("0", destination);
-            Assert.Contains("1", destination);
+            Assert.Equal("0", destination[0]);
+            Assert.Equal("1", destination[1]);
             Assert.True(converter.UsedOnly<EnumerableConverterFactory>());
         }
 
         [Fact]
-        public void CollectionToOtherElementHashSet()
+        public void CollectionToOtherElementReadOnlyCollection()
         {
             var converter = new TestObjectConverter();
             var source = new WrapperCollection<int>(new[] { 0, 1 });
-            var destination = (HashSet<string>)converter.Convert(source, typeof(HashSet<string>));
+            var destination = (ReadOnlyCollection<string>)converter.Convert(source, typeof(ReadOnlyCollection<string>));
             Assert.Equal(2, destination.Count);
-            Assert.Contains("0", destination);
-            Assert.Contains("1", destination);
+            Assert.Equal("0", destination[0]);
+            Assert.Equal("1", destination[1]);
             Assert.True(converter.UsedIn(typeof(EnumerableConverterFactory), typeof(ToStringConverterFactory)));
         }
 
         [Fact]
-        public void EnumerableToSameElementHashSet()
+        public void EnumerableToSameElementReadOnlyCollection()
         {
             var converter = new TestObjectConverter();
             var source = new[] { "0", "1" }.Select(x => x);
-            var destination = (HashSet<string>)converter.Convert(source, typeof(HashSet<string>));
+            var destination = (ReadOnlyCollection<string>)converter.Convert(source, typeof(ReadOnlyCollection<string>));
             Assert.Equal(2, destination.Count);
-            Assert.Contains("0", destination);
-            Assert.Contains("1", destination);
+            Assert.Equal("0", destination[0]);
+            Assert.Equal("1", destination[1]);
             Assert.True(converter.UsedOnly<EnumerableConverterFactory>());
         }
 
         [Fact]
-        public void EnumerableToOtherElementHashSet()
+        public void EnumerableToOtherElementReadOnlyCollection()
         {
             var converter = new TestObjectConverter();
             var source = new[] { 0, 1 }.Select(x => x);
-            var destination = (HashSet<string>)converter.Convert(source, typeof(HashSet<string>));
+            var destination = (ReadOnlyCollection<string>)converter.Convert(source, typeof(ReadOnlyCollection<string>));
             Assert.Equal(2, destination.Count);
-            Assert.Contains("0", destination);
-            Assert.Contains("1", destination);
+            Assert.Equal("0", destination[0]);
+            Assert.Equal("1", destination[1]);
             Assert.True(converter.UsedIn(typeof(EnumerableConverterFactory), typeof(ToStringConverterFactory)));
         }
     }

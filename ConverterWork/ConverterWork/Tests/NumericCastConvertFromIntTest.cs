@@ -6,7 +6,7 @@
 
     using Xunit;
 
-    public class NumericIntToConvertTest
+    public class NumericCastConvertFromIntTest
     {
         [Fact]
         public void IntToByte()
@@ -187,23 +187,5 @@
             Assert.Equal(2147483647f, converter.Convert(Int32.MaxValue, typeof(float?)));
             Assert.True(converter.UsedOnly<NumericCastConverterFactory>());
         }
-
-        //[Fact]
-        //public void IntToDecimal()
-        //{
-        //    var converter = new TestObjectConverter();
-        //    Assert.Equal(-2147483648m, converter.Convert(Int32.MinValue, typeof(decimal)));
-        //    Assert.Equal(2147483647m, converter.Convert(Int32.MaxValue, typeof(decimal)));
-        //    Assert.True(converter.UsedOnly<NumericConverterFactory>());
-        //}
-
-        //[Fact]
-        //public void IntToNullableDecimal()
-        //{
-        //    var converter = new TestObjectConverter();
-        //    Assert.Equal(-2147483648m, converter.Convert(Int32.MinValue, typeof(decimal?)));
-        //    Assert.Equal(2147483647m, converter.Convert(Int32.MaxValue, typeof(decimal?)));
-        //    Assert.True(converter.UsedOnly<NumericConverterFactory>());
-        //}
     }
 }

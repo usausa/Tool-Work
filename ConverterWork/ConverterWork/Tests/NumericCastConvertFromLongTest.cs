@@ -6,7 +6,7 @@
 
     using Xunit;
 
-    public class NumericLongToConvertTest
+    public class NumericCastConvertFromLongTest
     {
         [Fact]
         public void LongToByte()
@@ -187,23 +187,5 @@
             Assert.Equal(9223372036854775807f, converter.Convert(Int64.MaxValue, typeof(float?)));
             Assert.True(converter.UsedOnly<NumericCastConverterFactory>());
         }
-
-        //[Fact]
-        //public void LongToDecimal()
-        //{
-        //    var converter = new TestObjectConverter();
-        //    Assert.Equal(-9223372036854775808m, converter.Convert(Int64.MinValue, typeof(decimal)));
-        //    Assert.Equal(9223372036854775807m, converter.Convert(Int64.MaxValue, typeof(decimal)));
-        //    Assert.True(converter.UsedOnly<NumericConverterFactory>());
-        //}
-
-        //[Fact]
-        //public void LongToNullableDecimal()
-        //{
-        //    var converter = new TestObjectConverter();
-        //    Assert.Equal(-9223372036854775808m, converter.Convert(Int64.MinValue, typeof(decimal?)));
-        //    Assert.Equal(9223372036854775807m, converter.Convert(Int64.MaxValue, typeof(decimal?)));
-        //    Assert.True(converter.UsedOnly<NumericConverterFactory>());
-        //}
     }
 }

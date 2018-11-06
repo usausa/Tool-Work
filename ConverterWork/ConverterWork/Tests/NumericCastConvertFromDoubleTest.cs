@@ -6,7 +6,7 @@
 
     using Xunit;
 
-    public class NumericDoubleToConvertTest
+    public class NumericCastConvertFromDoubleTest
     {
         [Fact]
         public void DoubleToByte()
@@ -187,23 +187,5 @@
             Assert.Equal(Single.PositiveInfinity, converter.Convert(Double.MaxValue, typeof(float?)));
             Assert.True(converter.UsedOnly<NumericCastConverterFactory>());
         }
-
-        //[Fact]
-        //public void DoubleToDecimal()
-        //{
-        //    var converter = new TestObjectConverter();
-        //    Assert.Equal(-2147483648m, converter.Convert(Double.MinValue, typeof(decimal)));
-        //    Assert.Equal(2147483647m, converter.Convert(Double.MaxValue, typeof(decimal)));
-        //    Assert.True(converter.UsedOnly<NumericConverterFactory>());
-        //}
-
-        //[Fact]
-        //public void DoubleToNullableDecimal()
-        //{
-        //    var converter = new TestObjectConverter();
-        //    Assert.Equal(-2147483648m, converter.Convert(Double.MinValue, typeof(decimal?)));
-        //    Assert.Equal(2147483647m, converter.Convert(Double.MaxValue, typeof(decimal?)));
-        //    Assert.True(converter.UsedOnly<NumericConverterFactory>());
-        //}
     }
 }

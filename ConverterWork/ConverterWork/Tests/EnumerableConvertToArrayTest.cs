@@ -7,99 +7,89 @@
 
     using Xunit;
 
-    public class EnumerableConvertListTest
+    public class EnumerableConvertToArrayTest
     {
-        [Fact]
-        public void ArrayToSameElementList()
-        {
-            var converter = new TestObjectConverter();
-            var source = new[] { 0, 1 };
-            var destination = (List<int>)converter.Convert(source, typeof(List<int>));
-            Assert.Equal(2, destination.Count);
-            Assert.Equal(0, destination[0]);
-            Assert.Equal(1, destination[1]);
-            Assert.True(converter.UsedOnly<EnumerableConverterFactory>());
-        }
+        // MEMO same array type is not converted
 
         [Fact]
-        public void ArrayToOtherElementList()
+        public void ArrayToOtherElementArray()
         {
             var converter = new TestObjectConverter();
             var source = new[] { 0, 1 };
-            var destination = (List<string>)converter.Convert(source, typeof(List<string>));
-            Assert.Equal(2, destination.Count);
+            var destination = (string[])converter.Convert(source, typeof(string[]));
+            Assert.Equal(2, destination.Length);
             Assert.Equal("0", destination[0]);
             Assert.Equal("1", destination[1]);
             Assert.True(converter.UsedIn(typeof(EnumerableConverterFactory), typeof(ToStringConverterFactory)));
         }
 
         [Fact]
-        public void ListToSameElementList()
+        public void ListToSameElementArray()
         {
             var converter = new TestObjectConverter();
-            var source = new WrapperList<string>(new[] { "0", "1" });
-            var destination = (List<string>)converter.Convert(source, typeof(List<string>));
-            Assert.Equal(2, destination.Count);
+            var source = new List<string> { "0", "1" };
+            var destination = (string[])converter.Convert(source, typeof(string[]));
+            Assert.Equal(2, destination.Length);
             Assert.Equal("0", destination[0]);
             Assert.Equal("1", destination[1]);
             Assert.True(converter.UsedOnly<EnumerableConverterFactory>());
         }
 
         [Fact]
-        public void ListToOtherElementList()
+        public void ListToOtherElementArray()
         {
             var converter = new TestObjectConverter();
-            var source = new WrapperList<int>(new[] { 0, 1 });
-            var destination = (List<string>)converter.Convert(source, typeof(List<string>));
-            Assert.Equal(2, destination.Count);
+            var source = new List<int> { 0, 1 };
+            var destination = (string[])converter.Convert(source, typeof(string[]));
+            Assert.Equal(2, destination.Length);
             Assert.Equal("0", destination[0]);
             Assert.Equal("1", destination[1]);
             Assert.True(converter.UsedIn(typeof(EnumerableConverterFactory), typeof(ToStringConverterFactory)));
         }
 
         [Fact]
-        public void CollectionToSameElementList()
+        public void CollectionToSameElementArray()
         {
             var converter = new TestObjectConverter();
             var source = new WrapperCollection<string>(new[] { "0", "1" });
-            var destination = (List<string>)converter.Convert(source, typeof(List<string>));
-            Assert.Equal(2, destination.Count);
+            var destination = (string[])converter.Convert(source, typeof(string[]));
+            Assert.Equal(2, destination.Length);
             Assert.Equal("0", destination[0]);
             Assert.Equal("1", destination[1]);
             Assert.True(converter.UsedOnly<EnumerableConverterFactory>());
         }
 
         [Fact]
-        public void CollectionToOtherElementList()
+        public void CollectionToOtherElementArray()
         {
             var converter = new TestObjectConverter();
             var source = new WrapperCollection<int>(new[] { 0, 1 });
-            var destination = (List<string>)converter.Convert(source, typeof(List<string>));
-            Assert.Equal(2, destination.Count);
+            var destination = (string[])converter.Convert(source, typeof(string[]));
+            Assert.Equal(2, destination.Length);
             Assert.Equal("0", destination[0]);
             Assert.Equal("1", destination[1]);
             Assert.True(converter.UsedIn(typeof(EnumerableConverterFactory), typeof(ToStringConverterFactory)));
         }
 
         [Fact]
-        public void EnumerableToSameElementList()
+        public void EnumerableToSameElementArray()
         {
             var converter = new TestObjectConverter();
             var source = new[] { "0", "1" }.Select(x => x);
-            var destination = (List<string>)converter.Convert(source, typeof(List<string>));
-            Assert.Equal(2, destination.Count);
+            var destination = (string[])converter.Convert(source, typeof(string[]));
+            Assert.Equal(2, destination.Length);
             Assert.Equal("0", destination[0]);
             Assert.Equal("1", destination[1]);
             Assert.True(converter.UsedOnly<EnumerableConverterFactory>());
         }
 
         [Fact]
-        public void EnumerableToOtherElementList()
+        public void EnumerableToOtherElementArray()
         {
             var converter = new TestObjectConverter();
             var source = new[] { 0, 1 }.Select(x => x);
-            var destination = (List<string>)converter.Convert(source, typeof(List<string>));
-            Assert.Equal(2, destination.Count);
+            var destination = (string[])converter.Convert(source, typeof(string[]));
+            Assert.Equal(2, destination.Length);
             Assert.Equal("0", destination[0]);
             Assert.Equal("1", destination[1]);
             Assert.True(converter.UsedIn(typeof(EnumerableConverterFactory), typeof(ToStringConverterFactory)));

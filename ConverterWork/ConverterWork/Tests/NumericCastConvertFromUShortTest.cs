@@ -6,7 +6,7 @@
 
     using Xunit;
 
-    public class NumericUShortToConvertTest
+    public class NumericCastConvertFromUShortTest
     {
         [Fact]
         public void UShortToByte()
@@ -187,23 +187,5 @@
             Assert.Equal(65535f, converter.Convert(UInt16.MaxValue, typeof(float?)));
             Assert.True(converter.UsedOnly<NumericCastConverterFactory>());
         }
-
-        //[Fact]
-        //public void UShortToDecimal()
-        //{
-        //    var converter = new TestObjectConverter();
-        //    Assert.Equal(0m, converter.Convert(UInt16.MinValue, typeof(decimal)));
-        //    Assert.Equal(65535m, converter.Convert(UInt16.MaxValue, typeof(decimal)));
-        //    Assert.True(converter.UsedOnly<NumericConverterFactory>());
-        //}
-
-        //[Fact]
-        //public void UShortToNullableDecimal()
-        //{
-        //    var converter = new TestObjectConverter();
-        //    Assert.Equal(0m, converter.Convert(UInt16.MinValue, typeof(decimal?)));
-        //    Assert.Equal(65535m, converter.Convert(UInt16.MaxValue, typeof(decimal?)));
-        //    Assert.True(converter.UsedOnly<NumericConverterFactory>());
-        //}
     }
 }

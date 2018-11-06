@@ -1,20 +1,20 @@
 ﻿namespace Smart.Tests
 {
-    using System.Collections.ObjectModel;
+    using System.Collections.Generic;
     using System.Linq;
 
     using Smart.Converter2.Converters;
 
     using Xunit;
 
-    public class EnumerableConvertReadOnlyCollectionTest
+    public class EnumerableConvertToListTest
     {
         [Fact]
-        public void ArrayToSameElementReadOnlyCollection()
+        public void ArrayToSameElementList()
         {
             var converter = new TestObjectConverter();
             var source = new[] { 0, 1 };
-            var destination = (ReadOnlyCollection<int>)converter.Convert(source, typeof(ReadOnlyCollection<int>));
+            var destination = (List<int>)converter.Convert(source, typeof(List<int>));
             Assert.Equal(2, destination.Count);
             Assert.Equal(0, destination[0]);
             Assert.Equal(1, destination[1]);
@@ -22,11 +22,11 @@
         }
 
         [Fact]
-        public void ArrayToOtherElementReadOnlyCollection()
+        public void ArrayToOtherElementList()
         {
             var converter = new TestObjectConverter();
             var source = new[] { 0, 1 };
-            var destination = (ReadOnlyCollection<string>)converter.Convert(source, typeof(ReadOnlyCollection<string>));
+            var destination = (List<string>)converter.Convert(source, typeof(List<string>));
             Assert.Equal(2, destination.Count);
             Assert.Equal("0", destination[0]);
             Assert.Equal("1", destination[1]);
@@ -34,11 +34,11 @@
         }
 
         [Fact]
-        public void ListToSameElementReadOnlyCollection()
+        public void ListToSameElementList()
         {
             var converter = new TestObjectConverter();
             var source = new WrapperList<string>(new[] { "0", "1" });
-            var destination = (ReadOnlyCollection<string>)converter.Convert(source, typeof(ReadOnlyCollection<string>));
+            var destination = (List<string>)converter.Convert(source, typeof(List<string>));
             Assert.Equal(2, destination.Count);
             Assert.Equal("0", destination[0]);
             Assert.Equal("1", destination[1]);
@@ -46,11 +46,11 @@
         }
 
         [Fact]
-        public void ListToOtherElementReadOnlyCollection()
+        public void ListToOtherElementList()
         {
             var converter = new TestObjectConverter();
             var source = new WrapperList<int>(new[] { 0, 1 });
-            var destination = (ReadOnlyCollection<string>)converter.Convert(source, typeof(ReadOnlyCollection<string>));
+            var destination = (List<string>)converter.Convert(source, typeof(List<string>));
             Assert.Equal(2, destination.Count);
             Assert.Equal("0", destination[0]);
             Assert.Equal("1", destination[1]);
@@ -58,11 +58,11 @@
         }
 
         [Fact]
-        public void CollectionToSameElementReadOnlyCollection()
+        public void CollectionToSameElementList()
         {
             var converter = new TestObjectConverter();
             var source = new WrapperCollection<string>(new[] { "0", "1" });
-            var destination = (ReadOnlyCollection<string>)converter.Convert(source, typeof(ReadOnlyCollection<string>));
+            var destination = (List<string>)converter.Convert(source, typeof(List<string>));
             Assert.Equal(2, destination.Count);
             Assert.Equal("0", destination[0]);
             Assert.Equal("1", destination[1]);
@@ -70,11 +70,11 @@
         }
 
         [Fact]
-        public void CollectionToOtherElementReadOnlyCollection()
+        public void CollectionToOtherElementList()
         {
             var converter = new TestObjectConverter();
             var source = new WrapperCollection<int>(new[] { 0, 1 });
-            var destination = (ReadOnlyCollection<string>)converter.Convert(source, typeof(ReadOnlyCollection<string>));
+            var destination = (List<string>)converter.Convert(source, typeof(List<string>));
             Assert.Equal(2, destination.Count);
             Assert.Equal("0", destination[0]);
             Assert.Equal("1", destination[1]);
@@ -82,11 +82,11 @@
         }
 
         [Fact]
-        public void EnumerableToSameElementReadOnlyCollection()
+        public void EnumerableToSameElementList()
         {
             var converter = new TestObjectConverter();
             var source = new[] { "0", "1" }.Select(x => x);
-            var destination = (ReadOnlyCollection<string>)converter.Convert(source, typeof(ReadOnlyCollection<string>));
+            var destination = (List<string>)converter.Convert(source, typeof(List<string>));
             Assert.Equal(2, destination.Count);
             Assert.Equal("0", destination[0]);
             Assert.Equal("1", destination[1]);
@@ -94,11 +94,11 @@
         }
 
         [Fact]
-        public void EnumerableToOtherElementReadOnlyCollection()
+        public void EnumerableToOtherElementList()
         {
             var converter = new TestObjectConverter();
             var source = new[] { 0, 1 }.Select(x => x);
-            var destination = (ReadOnlyCollection<string>)converter.Convert(source, typeof(ReadOnlyCollection<string>));
+            var destination = (List<string>)converter.Convert(source, typeof(List<string>));
             Assert.Equal(2, destination.Count);
             Assert.Equal("0", destination[0]);
             Assert.Equal("1", destination[1]);
