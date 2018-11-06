@@ -120,7 +120,7 @@
             var converter = GetConverter(sourceType.IsNullableType() ? Nullable.GetUnderlyingType(sourceType) : sourceType, targetType);
             if (converter == null)
             {
-                throw new ObjectConverterException($"Type {sourceType} can't convert to {targetType}");
+                return null;
             }
 
             return CreateConverter(

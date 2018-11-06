@@ -70,6 +70,13 @@
             Assert.True(converter.UsedIn(typeof(DateTimeConverterFactory), typeof(NumericCastConverterFactory)));
         }
 
+        [Fact]
+        public void DateTimeCanNotCovert()
+        {
+            var converter = new TestObjectConverter();
+            Assert.False(converter.CanConvert(typeof(DateTime), typeof(TestStruct)));
+        }
+
         //--------------------------------------------------------------------------------
         // string to DateTime
         //--------------------------------------------------------------------------------
@@ -99,6 +106,7 @@
         {
             var converter = new TestObjectConverter();
             Assert.Equal(new DateTime(2000, 1, 1), converter.Convert(new DateTime(2000, 1, 1).Ticks, typeof(DateTime)));
+            Assert.Equal(default(DateTime), converter.Convert(-1L, typeof(DateTime)));
             Assert.True(converter.UsedOnly<DateTimeConverterFactory>());
         }
 
@@ -107,22 +115,25 @@
         {
             var converter = new TestObjectConverter();
             Assert.Equal(new DateTime(2000, 1, 1), converter.Convert(new DateTime(2000, 1, 1).Ticks, typeof(DateTime?)));
+            Assert.Null(converter.Convert(-1L, typeof(DateTime?)));
             Assert.True(converter.UsedOnly<DateTimeConverterFactory>());
         }
 
         [Fact]
-        public void ByteToDateTime()
+        public void ShortToDateTime()
         {
             var converter = new TestObjectConverter();
-            Assert.Equal(new DateTime(0L), converter.Convert((byte)0, typeof(DateTime)));
+            Assert.Equal(new DateTime(0L), converter.Convert((short)0, typeof(DateTime)));
+            Assert.Equal(default(DateTime), converter.Convert((short)-1, typeof(DateTime)));
             Assert.True(converter.UsedIn(typeof(DateTimeConverterFactory), typeof(NumericCastConverterFactory)));
         }
 
         [Fact]
-        public void ByteToNullableDateTime()
+        public void ShortToNullableDateTime()
         {
             var converter = new TestObjectConverter();
-            Assert.Equal(new DateTime(0L), converter.Convert((byte)0, typeof(DateTime?)));
+            Assert.Equal(new DateTime(0L), converter.Convert((short)0, typeof(DateTime?)));
+            Assert.Null(converter.Convert((short)-1, typeof(DateTime?)));
             Assert.True(converter.UsedIn(typeof(DateTimeConverterFactory), typeof(NumericCastConverterFactory)));
         }
 
@@ -186,6 +197,13 @@
             Assert.True(converter.UsedIn(typeof(DateTimeConverterFactory), typeof(NumericCastConverterFactory)));
         }
 
+        [Fact]
+        public void DateTimeOffsetCanNotCovert()
+        {
+            var converter = new TestObjectConverter();
+            Assert.False(converter.CanConvert(typeof(DateTimeOffset), typeof(TestStruct)));
+        }
+
         //--------------------------------------------------------------------------------
         // string to DateTimeOffset
         //--------------------------------------------------------------------------------
@@ -215,6 +233,7 @@
         {
             var converter = new TestObjectConverter();
             Assert.Equal(new DateTimeOffset(new DateTime(2000, 1, 1)), converter.Convert(new DateTimeOffset(new DateTime(2000, 1, 1)).Ticks, typeof(DateTimeOffset)));
+            Assert.Equal(default(DateTimeOffset), converter.Convert(-1L, typeof(DateTimeOffset)));
             Assert.True(converter.UsedOnly<DateTimeConverterFactory>());
         }
 
@@ -223,22 +242,24 @@
         {
             var converter = new TestObjectConverter();
             Assert.Equal(new DateTimeOffset(new DateTime(2000, 1, 1)), converter.Convert(new DateTimeOffset(new DateTime(2000, 1, 1)).Ticks, typeof(DateTimeOffset?)));
+            Assert.Null(converter.Convert(-1L, typeof(DateTimeOffset?)));
             Assert.True(converter.UsedOnly<DateTimeConverterFactory>());
         }
 
         [Fact]
-        public void ByteToDateTimeOffset()
+        public void ShortDateTimeOffset()
         {
             var converter = new TestObjectConverter();
-            Assert.Equal(DateTimeOffset.MinValue, converter.Convert((byte)0, typeof(DateTimeOffset)));
+            Assert.Equal(DateTimeOffset.MinValue, converter.Convert((short)DateTimeOffset.MinValue.Ticks, typeof(DateTimeOffset)));
+            Assert.Equal(default(DateTimeOffset), converter.Convert((short)-1, typeof(DateTimeOffset)));
             Assert.True(converter.UsedIn(typeof(DateTimeConverterFactory), typeof(NumericCastConverterFactory)));
         }
 
         [Fact]
-        public void ByteToNullableDateTimeOffset()
+        public void ShortToNullableDateTimeOffset()
         {
             var converter = new TestObjectConverter();
-            Assert.Null(converter.Convert((byte)0, typeof(DateTimeOffset?)));
+            Assert.Null(converter.Convert((short)-1, typeof(DateTimeOffset?)));
             Assert.True(converter.UsedIn(typeof(DateTimeConverterFactory), typeof(NumericCastConverterFactory)));
         }
     }
