@@ -429,5 +429,25 @@
             Assert.Equal(default(decimal?), converter.Convert(Single.MaxValue, typeof(decimal?)));
             Assert.True(converter.UsedOnly<DecimalConverterFactory>());
         }
+
+        [Fact]
+        public void StringToDecimal()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(Decimal.Zero, converter.Convert("0", typeof(decimal)));
+            Assert.Equal(Decimal.One, converter.Convert("1", typeof(decimal)));
+            Assert.Equal(default(decimal), converter.Convert(string.Empty, typeof(decimal)));
+            Assert.True(converter.UsedOnly<DecimalConverterFactory>());
+        }
+
+        [Fact]
+        public void StringToNullableDecimal()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(Decimal.Zero, converter.Convert("0", typeof(decimal?)));
+            Assert.Equal(Decimal.One, converter.Convert("1", typeof(decimal?)));
+            Assert.Null(converter.Convert(string.Empty, typeof(decimal?)));
+            Assert.True(converter.UsedOnly<DecimalConverterFactory>());
+        }
     }
 }
