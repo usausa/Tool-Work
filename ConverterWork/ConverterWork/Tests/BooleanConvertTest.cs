@@ -301,9 +301,8 @@
         public void UShortToBoolean()
         {
             var converter = new TestObjectConverter();
-            Assert.False((bool)converter.Convert((short)0, typeof(bool)));
-            Assert.True((bool)converter.Convert((short)1, typeof(bool)));
-            Assert.True((bool)converter.Convert((short)-1, typeof(bool)));
+            Assert.False((bool)converter.Convert((ushort)0, typeof(bool)));
+            Assert.True((bool)converter.Convert((ushort)1, typeof(bool)));
             Assert.True(converter.UsedOnly<BooleanConverterFactory>());
         }
 
@@ -311,9 +310,8 @@
         public void UShortToNullableBoolean()
         {
             var converter = new TestObjectConverter();
-            Assert.False((bool)converter.Convert((short)0, typeof(bool?)));
-            Assert.True((bool)converter.Convert((short)1, typeof(bool?)));
-            Assert.True((bool)converter.Convert((short)-1, typeof(bool?)));
+            Assert.False((bool)converter.Convert((ushort)0, typeof(bool?)));
+            Assert.True((bool)converter.Convert((ushort)1, typeof(bool?)));
             Assert.True(converter.UsedOnly<BooleanConverterFactory>());
         }
 
@@ -381,9 +379,8 @@
         public void ULongToBoolean()
         {
             var converter = new TestObjectConverter();
-            Assert.False((bool)converter.Convert(0L, typeof(bool)));
-            Assert.True((bool)converter.Convert(1L, typeof(bool)));
-            Assert.True((bool)converter.Convert(-1L, typeof(bool)));
+            Assert.False((bool)converter.Convert(0UL, typeof(bool)));
+            Assert.True((bool)converter.Convert(1UL, typeof(bool)));
             Assert.True(converter.UsedOnly<BooleanConverterFactory>());
         }
 
@@ -391,9 +388,8 @@
         public void ULongToNullableBoolean()
         {
             var converter = new TestObjectConverter();
-            Assert.False((bool)converter.Convert(0L, typeof(bool?)));
-            Assert.True((bool)converter.Convert(1L, typeof(bool?)));
-            Assert.True((bool)converter.Convert(-1L, typeof(bool?)));
+            Assert.False((bool)converter.Convert(0UL, typeof(bool?)));
+            Assert.True((bool)converter.Convert(1UL, typeof(bool?)));
             Assert.True(converter.UsedOnly<BooleanConverterFactory>());
         }
 

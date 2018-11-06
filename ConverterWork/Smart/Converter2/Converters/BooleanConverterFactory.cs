@@ -72,12 +72,7 @@
 
                 if (sourceType == typeof(string))
                 {
-                    if (targetType.IsNullableType())
-                    {
-                        return x => Boolean.TryParse((string)x, out var result) ? (object)result : null;
-                    }
-
-                    return x => Boolean.TryParse((string)x, out var result) ? result : default;
+                    return x => Boolean.TryParse((string)x, out var result) ? (object)result : null;
                 }
             }
 
