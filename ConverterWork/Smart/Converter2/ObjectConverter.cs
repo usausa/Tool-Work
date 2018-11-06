@@ -16,7 +16,7 @@
 
         private readonly TypePairHashArray converterCache = new TypePairHashArray();
 
-        private readonly IConverterFactory[] factories;
+        private IConverterFactory[] factories;
 
         public ObjectConverter()
         {
@@ -26,6 +26,12 @@
         public ObjectConverter(IEnumerable<IConverterFactory> converterFactories)
         {
             factories = converterFactories.ToArray();
+        }
+
+        public void SetFactories(IEnumerable<IConverterFactory> converterFactories)
+        {
+            factories = converterFactories.ToArray();
+            converterCache.Clear();
         }
 
         public void Reset()

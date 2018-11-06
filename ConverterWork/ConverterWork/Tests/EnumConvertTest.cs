@@ -231,6 +231,13 @@
             Assert.True(converter.UsedOnly<EnumConverterFactory>());
         }
 
+        [Fact]
+        public void CanNotConvertToEnum()
+        {
+            var converter = new TestObjectConverter();
+            Assert.False(converter.CanConvert(typeof(TestStruct), typeof(TestEnum)));
+        }
+
         //--------------------------------------------------------------------------------
         // EnumToNotEnum
         //--------------------------------------------------------------------------------
@@ -458,6 +465,13 @@
             Assert.Equal("Zero", converter.Convert(TestEnum.Zero, typeof(string)));
             Assert.Equal("One", converter.Convert(TestEnum.One, typeof(string)));
             Assert.True(converter.UsedOnly<EnumConverterFactory>());
+        }
+
+        [Fact]
+        public void CanNotConvertFromEnum()
+        {
+            var converter = new TestObjectConverter();
+            Assert.False(converter.CanConvert(typeof(TestEnum), typeof(TestStruct)));
         }
     }
 }

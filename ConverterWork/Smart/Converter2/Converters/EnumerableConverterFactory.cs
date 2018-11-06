@@ -49,7 +49,8 @@
             { typeof(HashSet<>), new ProviderPair(SameTypeHashSetBuilderProvider.Default, OtherTypeHashSetBuilderProvider.Default) },
             { typeof(IReadOnlyCollection<>), new ProviderPair(SameTypeReadOnlyCollectionBuilderProvider.Default, OtherTypeReadOnlyCollectionBuilderProvider.Default) },
             { typeof(IReadOnlyList<>), new ProviderPair(SameTypeReadOnlyCollectionBuilderProvider.Default, OtherTypeReadOnlyCollectionBuilderProvider.Default) },
-            { typeof(ReadOnlyCollection<>), new ProviderPair(SameTypeReadOnlyCollectionBuilderProvider.Default, OtherTypeReadOnlyCollectionBuilderProvider.Default) }
+            { typeof(ReadOnlyCollection<>), new ProviderPair(SameTypeReadOnlyCollectionBuilderProvider.Default, OtherTypeReadOnlyCollectionBuilderProvider.Default) },
+            { typeof(LinkedList<>), new ProviderPair(SameTypeLinkedListBuilderProvider.Default, OtherTypeLinkedListBuilderProvider.Default) }
         };
 
         // TODO

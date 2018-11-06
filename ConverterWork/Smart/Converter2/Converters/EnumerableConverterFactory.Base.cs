@@ -6,7 +6,7 @@
     public sealed partial class EnumerableConverterFactory
     {
         //--------------------------------------------------------------------------------
-        // Other type
+        // Other type by Initialize add
         //--------------------------------------------------------------------------------
 
         private abstract class OtherTypeCollectionFromArrayByInitializeAddBuilderBase<TSource, TDestination> : IConverterBuilder
@@ -81,6 +81,10 @@
             }
         }
 
+        //--------------------------------------------------------------------------------
+        // Other type by Add
+        //--------------------------------------------------------------------------------
+
         private abstract class OtherTypeCollectionFromEnumerableByAddBuilderBase<TSource, TDestination> : IConverterBuilder
         {
             private readonly Func<object, object> converter;
@@ -94,9 +98,8 @@
 
             public object Create(object source)
             {
-                var collectionSource = (IEnumerable<TSource>)source;
                 var collection = CreateCollection();
-                foreach (var value in collectionSource)
+                foreach (var value in (IEnumerable<TSource>)source)
                 {
                     collection.Add((TDestination)converter(value));
                 }
