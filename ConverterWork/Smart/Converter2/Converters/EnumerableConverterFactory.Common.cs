@@ -10,7 +10,7 @@
         // ArrayConvertStruct
         //--------------------------------------------------------------------------------
 
-        public struct ArrayConvertStructEnumerator<TSource, TDestination> : IEnumerator<TDestination>
+        private struct ArrayConvertStructEnumerator<TSource, TDestination> : IEnumerator<TDestination>
         {
             private readonly TSource[] source;
 
@@ -42,7 +42,7 @@
             }
         }
 
-        public readonly struct ArrayConvertStructList<TSource, TDestination> : IList<TDestination>
+        private readonly struct ArrayConvertStructList<TSource, TDestination> : IList<TDestination>
         {
             private readonly TSource[] source;
 
@@ -95,7 +95,7 @@
         // ListConvertStruct
         //--------------------------------------------------------------------------------
 
-        public struct ListConvertStructEnumerator<TSource, TDestination> : IEnumerator<TDestination>
+        private struct ListConvertStructEnumerator<TSource, TDestination> : IEnumerator<TDestination>
         {
             private readonly IList<TSource> source;
 
@@ -127,7 +127,7 @@
             }
         }
 
-        public readonly struct ListConvertStructList<TSource, TDestination> : IList<TDestination>
+        private readonly struct ListConvertStructList<TSource, TDestination> : IList<TDestination>
         {
             private readonly IList<TSource> source;
 
@@ -173,14 +173,57 @@
             {
                 get => (TDestination)converter(source[index]);
                 set => throw new NotSupportedException();
+            }
         }
+
+        //--------------------------------------------------------------------------------
+        // CollectionConvertStruct
+        //--------------------------------------------------------------------------------
+
+        private readonly struct CollectionConvertStructCollection<TSource, TDestination> : ICollection<TDestination>
+        {
+            private readonly ICollection<TSource> source;
+
+            private readonly Func<object, object> converter;
+
+            public CollectionConvertStructCollection(ICollection<TSource> source, Func<object, object> converter)
+            {
+                this.source = source;
+                this.converter = converter;
+            }
+
+            public IEnumerator<TDestination> GetEnumerator() => new EnumerableConvertStructEnumerator<TSource, TDestination>(source.GetEnumerator(), converter);
+
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+            public void Add(TDestination item) => throw new NotSupportedException();
+
+            public void Clear() => throw new NotSupportedException();
+
+            public bool Contains(TDestination item) => throw new NotSupportedException();
+
+            public void CopyTo(TDestination[] array, int arrayIndex)
+            {
+                var i = 0;
+                foreach (var value in source)
+                {
+                    array[arrayIndex + i] = (TDestination)converter(value);
+                    i++;
+                }
+            }
+
+            public bool Remove(TDestination item) => throw new NotSupportedException();
+
+            public int Count => source.Count;
+
+            public bool IsReadOnly => true;
         }
 
         //--------------------------------------------------------------------------------
         // EnumerableConvertStruct
         //--------------------------------------------------------------------------------
 
-        public struct EnumerableConvertStructEnumerator<TSource, TDestination> : IEnumerator<TDestination>
+        private struct EnumerableConvertStructEnumerator<TSource, TDestination> : IEnumerator<TDestination>
         {
             private readonly IEnumerator<TSource> source;
 
@@ -203,6 +246,23 @@
             public void Dispose()
             {
             }
+        }
+
+        private readonly struct EnumerableConvertStructEnumerable<TSource, TDestination> : IEnumerable<TDestination>
+        {
+            private readonly IEnumerable<TSource> source;
+
+            private readonly Func<object, object> converter;
+
+            public EnumerableConvertStructEnumerable(IEnumerable<TSource> source, Func<object, object> converter)
+            {
+                this.source = source;
+                this.converter = converter;
+            }
+
+            public IEnumerator<TDestination> GetEnumerator() => new EnumerableConvertStructEnumerator<TSource, TDestination>(source.GetEnumerator(), converter);
+
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         }
     }
 }

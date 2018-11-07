@@ -16,7 +16,6 @@
                 switch (sourceEnumerableType)
                 {
                     case SourceEnumerableType.Array:
-                        return typeof(SameTypeReadOnlyCollectionFromArrayBuilder<>);
                     case SourceEnumerableType.List:
                         return typeof(SameTypeReadOnlyCollectionFromListBuilder<>);
                     default:
@@ -37,6 +36,8 @@
                         return typeof(OtherTypeReadOnlyCollectionFromArrayBuilder<,>);
                     case SourceEnumerableType.List:
                         return typeof(OtherTypeReadOnlyCollectionFromListBuilder<,>);
+                    case SourceEnumerableType.Collection:
+                        return typeof(OtherTypeReadOnlyCollectionFromCollectionBuilder<,>);
                     default:
                         return typeof(OtherTypeReadOnlyCollectionFromEnumerableBuilder<,>);
                 }
@@ -46,14 +47,6 @@
         //--------------------------------------------------------------------------------
         // Same type
         //--------------------------------------------------------------------------------
-
-        private sealed class SameTypeReadOnlyCollectionFromArrayBuilder<TDestination> : IConverterBuilder
-        {
-            public object Create(object source)
-            {
-                return new ReadOnlyCollection<TDestination>((TDestination[])source);
-            }
-        }
 
         private sealed class SameTypeReadOnlyCollectionFromListBuilder<TDestination> : IConverterBuilder
         {
@@ -102,6 +95,28 @@
             public object Create(object source)
             {
                 return new ReadOnlyCollection<TDestination>(new ListConvertStructList<TSource, TDestination>((IList<TSource>)source, converter));
+            }
+        }
+
+        private sealed class OtherTypeReadOnlyCollectionFromCollectionBuilder<TSource, TDestination> : IConverterBuilder
+        {
+            private readonly Func<object, object> converter;
+
+            public OtherTypeReadOnlyCollectionFromCollectionBuilder(Func<object, object> converter)
+            {
+                this.converter = converter;
+            }
+
+            public object Create(object source)
+            {
+                var sourceCollection = (ICollection<TSource>)source;
+                var list = new List<TDestination>(sourceCollection.Count);
+                foreach (var value in sourceCollection)
+                {
+                    list.Add((TDestination)converter(value));
+                }
+
+                return new ReadOnlyCollection<TDestination>(list);
             }
         }
 

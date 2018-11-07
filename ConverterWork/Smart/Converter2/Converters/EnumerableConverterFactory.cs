@@ -50,7 +50,8 @@
             { typeof(IReadOnlyCollection<>), new ProviderPair(SameTypeReadOnlyCollectionBuilderProvider.Default, OtherTypeReadOnlyCollectionBuilderProvider.Default) },
             { typeof(IReadOnlyList<>), new ProviderPair(SameTypeReadOnlyCollectionBuilderProvider.Default, OtherTypeReadOnlyCollectionBuilderProvider.Default) },
             { typeof(ReadOnlyCollection<>), new ProviderPair(SameTypeReadOnlyCollectionBuilderProvider.Default, OtherTypeReadOnlyCollectionBuilderProvider.Default) },
-            { typeof(LinkedList<>), new ProviderPair(SameTypeLinkedListBuilderProvider.Default, OtherTypeLinkedListBuilderProvider.Default) }
+            { typeof(LinkedList<>), new ProviderPair(SameTypeLinkedListBuilderProvider.Default, OtherTypeLinkedListBuilderProvider.Default) },
+            { typeof(Queue<>), new ProviderPair(SameTypeQueueBuilderProvider.Default, OtherTypeQueueBuilderProvider.Default) }
         };
 
         // TODO
