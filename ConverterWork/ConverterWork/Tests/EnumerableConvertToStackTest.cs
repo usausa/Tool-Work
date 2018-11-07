@@ -37,11 +37,11 @@
         public void ListToSameElementStack()
         {
             var converter = new TestObjectConverter();
-            var source = new WrapperList<string>(new[] { "0", "1" });
-            var destination = (Stack<string>)converter.Convert(source, typeof(Stack<string>));
+            var source = new WrapperList<int>(new[] { 0, 1 });
+            var destination = (Stack<int>)converter.Convert(source, typeof(Stack<int>));
             Assert.Equal(2, destination.Count);
-            Assert.Contains("0", destination);
-            Assert.Contains("1", destination);
+            Assert.Contains(0, destination);
+            Assert.Contains(1, destination);
             Assert.True(converter.UsedOnly<EnumerableConverterFactory>());
         }
 
@@ -61,11 +61,11 @@
         public void CollectionToSameElementStack()
         {
             var converter = new TestObjectConverter();
-            var source = new WrapperCollection<string>(new[] { "0", "1" });
-            var destination = (Stack<string>)converter.Convert(source, typeof(Stack<string>));
+            var source = new WrapperCollection<int>(new[] { 0, 1 });
+            var destination = (Stack<int>)converter.Convert(source, typeof(Stack<int>));
             Assert.Equal(2, destination.Count);
-            Assert.Contains("0", destination);
-            Assert.Contains("1", destination);
+            Assert.Contains(0, destination);
+            Assert.Contains(1, destination);
             Assert.True(converter.UsedOnly<EnumerableConverterFactory>());
         }
 
@@ -85,11 +85,11 @@
         public void EnumerableToSameElementStack()
         {
             var converter = new TestObjectConverter();
-            var source = new[] { "0", "1" }.Select(x => x);
-            var destination = (Stack<string>)converter.Convert(source, typeof(Stack<string>));
+            var source = new[] { 0, 1 }.Select(x => x);
+            var destination = (Stack<int>)converter.Convert(source, typeof(Stack<int>));
             Assert.Equal(2, destination.Count);
-            Assert.Contains("0", destination);
-            Assert.Contains("1", destination);
+            Assert.Contains(0, destination);
+            Assert.Contains(1, destination);
             Assert.True(converter.UsedOnly<EnumerableConverterFactory>());
         }
 

@@ -37,11 +37,11 @@
         public void ListToSameElementReadOnlyCollection()
         {
             var converter = new TestObjectConverter();
-            var source = new WrapperList<string>(new[] { "0", "1" });
-            var destination = (ReadOnlyCollection<string>)converter.Convert(source, typeof(ReadOnlyCollection<string>));
+            var source = new WrapperList<int>(new[] { 0, 1 });
+            var destination = (ReadOnlyCollection<int>)converter.Convert(source, typeof(ReadOnlyCollection<int>));
             Assert.Equal(2, destination.Count);
-            Assert.Equal("0", destination[0]);
-            Assert.Equal("1", destination[1]);
+            Assert.Equal(0, destination[0]);
+            Assert.Equal(1, destination[1]);
             Assert.True(converter.UsedOnly<EnumerableConverterFactory>());
         }
 
@@ -61,11 +61,11 @@
         public void CollectionToSameElementReadOnlyCollection()
         {
             var converter = new TestObjectConverter();
-            var source = new WrapperCollection<string>(new[] { "0", "1" });
-            var destination = (ReadOnlyCollection<string>)converter.Convert(source, typeof(ReadOnlyCollection<string>));
+            var source = new WrapperCollection<int>(new[] { 0, 1 });
+            var destination = (ReadOnlyCollection<int>)converter.Convert(source, typeof(ReadOnlyCollection<int>));
             Assert.Equal(2, destination.Count);
-            Assert.Equal("0", destination[0]);
-            Assert.Equal("1", destination[1]);
+            Assert.Equal(0, destination[0]);
+            Assert.Equal(1, destination[1]);
             Assert.True(converter.UsedOnly<EnumerableConverterFactory>());
         }
 
@@ -85,11 +85,11 @@
         public void EnumerableToSameElementReadOnlyCollection()
         {
             var converter = new TestObjectConverter();
-            var source = new[] { "0", "1" }.Select(x => x);
-            var destination = (ReadOnlyCollection<string>)converter.Convert(source, typeof(ReadOnlyCollection<string>));
+            var source = new[] { 0, 1 }.Select(x => x);
+            var destination = (ReadOnlyCollection<int>)converter.Convert(source, typeof(ReadOnlyCollection<int>));
             Assert.Equal(2, destination.Count);
-            Assert.Equal("0", destination[0]);
-            Assert.Equal("1", destination[1]);
+            Assert.Equal(0, destination[0]);
+            Assert.Equal(1, destination[1]);
             Assert.True(converter.UsedOnly<EnumerableConverterFactory>());
         }
 
