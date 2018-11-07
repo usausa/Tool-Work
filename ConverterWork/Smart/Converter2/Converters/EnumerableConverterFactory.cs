@@ -51,13 +51,11 @@
             { typeof(IReadOnlyList<>), new ProviderPair(SameTypeReadOnlyCollectionBuilderProvider.Default, OtherTypeReadOnlyCollectionBuilderProvider.Default) },
             { typeof(ReadOnlyCollection<>), new ProviderPair(SameTypeReadOnlyCollectionBuilderProvider.Default, OtherTypeReadOnlyCollectionBuilderProvider.Default) },
             { typeof(LinkedList<>), new ProviderPair(SameTypeLinkedListBuilderProvider.Default, OtherTypeLinkedListBuilderProvider.Default) },
-            { typeof(Queue<>), new ProviderPair(SameTypeQueueBuilderProvider.Default, OtherTypeQueueBuilderProvider.Default) }
+            { typeof(Queue<>), new ProviderPair(SameTypeQueueBuilderProvider.Default, OtherTypeQueueBuilderProvider.Default) },
+            { typeof(Stack<>), new ProviderPair(SameTypeStackBuilderProvider.Default, OtherTypeStackBuilderProvider.Default) }
         };
 
         // TODO
-        // LinkedList,
-        // Queue,
-        // Stack,
         // ObservableCollection, ReadOnlyObservableCollection,
         // ConcurrentBag, ConcurrentQueue, ConcurrentStack, IProducerConsumerCollection
 
