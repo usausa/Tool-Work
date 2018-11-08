@@ -1,6 +1,7 @@
 ﻿namespace Smart.Converter2.Converters
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
@@ -54,11 +55,11 @@
             { typeof(Queue<>), new ProviderPair(SameTypeQueueBuilderProvider.Default, OtherTypeQueueBuilderProvider.Default) },
             { typeof(Stack<>), new ProviderPair(SameTypeStackBuilderProvider.Default, OtherTypeStackBuilderProvider.Default) },
             { typeof(ObservableCollection<>), new ProviderPair(SameTypeObservableCollectionBuilderProvider.Default, OtherTypeObservableCollectionBuilderProvider.Default) },
-            { typeof(ReadOnlyObservableCollection<>), new ProviderPair(SameTypeReadOnlyObservableCollectionBuilderProvider.Default, OtherTypeReadOnlyObservableCollectionBuilderProvider.Default) }
+            { typeof(ReadOnlyObservableCollection<>), new ProviderPair(SameTypeReadOnlyObservableCollectionBuilderProvider.Default, OtherTypeReadOnlyObservableCollectionBuilderProvider.Default) },
+            { typeof(ConcurrentQueue<>), new ProviderPair(SameTypeConcurrentQueueBuilderProvider.Default, OtherTypeConcurrentQueueBuilderProvider.Default) },
+            { typeof(ConcurrentStack<>), new ProviderPair(SameTypeConcurrentStackBuilderProvider.Default, OtherTypeConcurrentStackBuilderProvider.Default) },
+            { typeof(ConcurrentBag<>), new ProviderPair(SameTypeConcurrentBagBuilderProvider.Default, OtherTypeConcurrentBagBuilderProvider.Default) }
         };
-
-        // TODO
-        // ConcurrentBag, ConcurrentQueue, ConcurrentStack
 
         public Func<object, object> GetConverter(IObjectConverter context, Type sourceType, Type targetType)
         {
