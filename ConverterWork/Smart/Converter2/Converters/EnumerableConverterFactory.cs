@@ -52,12 +52,13 @@
             { typeof(ReadOnlyCollection<>), new ProviderPair(SameTypeReadOnlyCollectionBuilderProvider.Default, OtherTypeReadOnlyCollectionBuilderProvider.Default) },
             { typeof(LinkedList<>), new ProviderPair(SameTypeLinkedListBuilderProvider.Default, OtherTypeLinkedListBuilderProvider.Default) },
             { typeof(Queue<>), new ProviderPair(SameTypeQueueBuilderProvider.Default, OtherTypeQueueBuilderProvider.Default) },
-            { typeof(Stack<>), new ProviderPair(SameTypeStackBuilderProvider.Default, OtherTypeStackBuilderProvider.Default) }
+            { typeof(Stack<>), new ProviderPair(SameTypeStackBuilderProvider.Default, OtherTypeStackBuilderProvider.Default) },
+            { typeof(ObservableCollection<>), new ProviderPair(SameTypeObservableCollectionBuilderProvider.Default, OtherTypeObservableCollectionBuilderProvider.Default) },
+            { typeof(ReadOnlyObservableCollection<>), new ProviderPair(SameTypeReadOnlyObservableCollectionBuilderProvider.Default, OtherTypeReadOnlyObservableCollectionBuilderProvider.Default) }
         };
 
         // TODO
-        // ObservableCollection, ReadOnlyObservableCollection,
-        // ConcurrentBag, ConcurrentQueue, ConcurrentStack, IProducerConsumerCollection
+        // ConcurrentBag, ConcurrentQueue, ConcurrentStack
 
         public Func<object, object> GetConverter(IObjectConverter context, Type sourceType, Type targetType)
         {
