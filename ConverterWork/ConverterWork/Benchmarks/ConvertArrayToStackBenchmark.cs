@@ -78,5 +78,17 @@
         {
             return new Stack<int>(new ArrayConvertStructCollection<int>(array, converter));
         }
+
+        [Benchmark]
+        public Stack<int> ConstructorClassEnumerable()
+        {
+            return new Stack<int>(new ArrayConvertClassEnumerable<int>(array, converter));
+        }
+
+        [Benchmark]
+        public Stack<int> ConstructorClassCollection()
+        {
+            return new Stack<int>(new ArrayConvertClassCollection<int>(array, converter));
+        }
     }
 }

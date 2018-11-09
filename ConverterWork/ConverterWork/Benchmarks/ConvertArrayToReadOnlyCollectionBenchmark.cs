@@ -24,5 +24,11 @@
         {
             return new ReadOnlyCollection<int>(new ArrayConvertStructList<int>(array, converter));
         }
+
+        [Benchmark]
+        public ReadOnlyCollection<int> ConstructorClassList()
+        {
+            return new ReadOnlyCollection<int>(new ArrayConvertClassList<int>(array, converter));
+        }
     }
 }

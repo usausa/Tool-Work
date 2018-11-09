@@ -54,5 +54,17 @@
         {
             return new LinkedList<int>(new ArrayConvertStructCollection<int>(array, converter));
         }
+
+        [Benchmark]
+        public LinkedList<int> ConstructorClassEnumerable()
+        {
+            return new LinkedList<int>(new ArrayConvertClassEnumerable<int>(array, converter));
+        }
+
+        [Benchmark]
+        public LinkedList<int> ConstructorClassCollection()
+        {
+            return new LinkedList<int>(new ArrayConvertClassCollection<int>(array, converter));
+        }
     }
 }

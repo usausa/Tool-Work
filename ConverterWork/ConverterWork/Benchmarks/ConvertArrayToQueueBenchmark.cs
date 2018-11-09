@@ -78,5 +78,17 @@
         {
             return new Queue<int>(new ArrayConvertStructCollection<int>(array, converter));
         }
+
+        [Benchmark]
+        public Queue<int> ConstructorClassEnumerable()
+        {
+            return new Queue<int>(new ArrayConvertClassEnumerable<int>(array, converter));
+        }
+
+        [Benchmark]
+        public Queue<int> ConstructorClassCollection()
+        {
+            return new Queue<int>(new ArrayConvertClassCollection<int>(array, converter));
+        }
     }
 }

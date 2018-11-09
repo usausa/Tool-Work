@@ -78,5 +78,17 @@
         {
             return new HashSet<int>(new ArrayConvertStructCollection<int>(array, converter));
         }
+
+        [Benchmark]
+        public HashSet<int> ConstructorClassEnumerable()
+        {
+            return new HashSet<int>(new ArrayConvertClassEnumerable<int>(array, converter));
+        }
+
+        [Benchmark]
+        public HashSet<int> ConstructorClassCollection()
+        {
+            return new HashSet<int>(new ArrayConvertClassCollection<int>(array, converter));
+        }
     }
 }

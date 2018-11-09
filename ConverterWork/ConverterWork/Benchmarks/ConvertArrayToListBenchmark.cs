@@ -78,5 +78,17 @@
         {
             return new List<int>(new ArrayConvertStructCollection<int>(array, converter));
         }
+
+        [Benchmark]
+        public List<int> ConstructorClassEnumerable()
+        {
+            return new List<int>(new ArrayConvertClassEnumerable<int>(array, converter));
+        }
+
+        [Benchmark]
+        public List<int> ConstructorClassCollection()
+        {
+            return new List<int>(new ArrayConvertClassCollection<int>(array, converter));
+        }
     }
 }
