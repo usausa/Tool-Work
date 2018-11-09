@@ -10,7 +10,7 @@
         // ArrayConvertStruct
         //--------------------------------------------------------------------------------
 
-        private struct ArrayConvertStructEnumerator<TSource, TDestination> : IEnumerator<TDestination>
+        private sealed class ArrayConvertStructEnumerator<TSource, TDestination> : IEnumerator<TDestination>
         {
             private readonly TSource[] source;
 
@@ -95,7 +95,7 @@
         // ListConvertStruct
         //--------------------------------------------------------------------------------
 
-        private struct ListConvertStructEnumerator<TSource, TDestination> : IEnumerator<TDestination>
+        private sealed class ListConvertStructEnumerator<TSource, TDestination> : IEnumerator<TDestination>
         {
             private readonly IList<TSource> source;
 
@@ -223,7 +223,7 @@
         // EnumerableConvertStruct
         //--------------------------------------------------------------------------------
 
-        private struct EnumerableConvertStructEnumerator<TSource, TDestination> : IEnumerator<TDestination>
+        private sealed class EnumerableConvertStructEnumerator<TSource, TDestination> : IEnumerator<TDestination>
         {
             private readonly IEnumerator<TSource> source;
 
