@@ -64,7 +64,7 @@
 
             public object Create(object source)
             {
-                return new ReadOnlyObservableCollection<TDestination>(new ObservableCollection<TDestination>(new ArrayConvertStructList<TSource, TDestination>((TSource[])source, converter)));
+                return new ReadOnlyObservableCollection<TDestination>(new ObservableCollection<TDestination>(new ArrayConvertList<TSource, TDestination>((TSource[])source, converter)));
             }
         }
 
@@ -79,7 +79,7 @@
 
             public object Create(object source)
             {
-                return new ReadOnlyObservableCollection<TDestination>(new ObservableCollection<TDestination>(new ListConvertStructList<TSource, TDestination>((IList<TSource>)source, converter)));
+                return new ReadOnlyObservableCollection<TDestination>(new ObservableCollection<TDestination>(new ListConvertList<TSource, TDestination>((IList<TSource>)source, converter)));
             }
         }
 
@@ -94,7 +94,7 @@
 
             public object Create(object source)
             {
-                return new ReadOnlyObservableCollection<TDestination>(new ObservableCollection<TDestination>(new CollectionConvertStructCollection<TSource, TDestination>((ICollection<TSource>)source, converter)));
+                return new ReadOnlyObservableCollection<TDestination>(new ObservableCollection<TDestination>(new CollectionConvertCollection<TSource, TDestination>((ICollection<TSource>)source, converter)));
             }
         }
 
@@ -109,7 +109,7 @@
 
             public object Create(object source)
             {
-                return new ReadOnlyObservableCollection<TDestination>(new ObservableCollection<TDestination>(new EnumerableConvertStructEnumerable<TSource, TDestination>((IEnumerable<TSource>)source, converter)));
+                return new ReadOnlyObservableCollection<TDestination>(new ObservableCollection<TDestination>(new EnumerableConvertEnumerable<TSource, TDestination>((IEnumerable<TSource>)source, converter)));
             }
         }
     }

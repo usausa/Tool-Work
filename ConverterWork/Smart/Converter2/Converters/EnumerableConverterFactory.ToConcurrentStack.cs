@@ -63,7 +63,7 @@
 
             public object Create(object source)
             {
-                return new ConcurrentStack<TDestination>(new ArrayConvertStructList<TSource, TDestination>((TSource[])source, converter));
+                return new ConcurrentStack<TDestination>(new ArrayConvertList<TSource, TDestination>((TSource[])source, converter));
             }
         }
 
@@ -78,7 +78,7 @@
 
             public object Create(object source)
             {
-                return new ConcurrentStack<TDestination>(new ListConvertStructList<TSource, TDestination>((IList<TSource>)source, converter));
+                return new ConcurrentStack<TDestination>(new ListConvertList<TSource, TDestination>((IList<TSource>)source, converter));
             }
         }
 
@@ -93,7 +93,7 @@
 
             public object Create(object source)
             {
-                return new ConcurrentStack<TDestination>(new CollectionConvertStructCollection<TSource, TDestination>((ICollection<TSource>)source, converter));
+                return new ConcurrentStack<TDestination>(new CollectionConvertCollection<TSource, TDestination>((ICollection<TSource>)source, converter));
             }
         }
 
@@ -108,7 +108,7 @@
 
             public object Create(object source)
             {
-                return new ConcurrentStack<TDestination>(new EnumerableConvertStructEnumerable<TSource, TDestination>((IEnumerable<TSource>)source, converter));
+                return new ConcurrentStack<TDestination>(new EnumerableConvertEnumerable<TSource, TDestination>((IEnumerable<TSource>)source, converter));
             }
         }
     }

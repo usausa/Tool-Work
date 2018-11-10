@@ -20,7 +20,6 @@
                         // Used assignable
                         throw new NotSupportedException();
                     case SourceEnumerableType.List:
-                        return typeof(SameTypeArrayFromListBuilder<>);
                     case SourceEnumerableType.Collection:
                         return typeof(SameTypeArrayFromCollectionBuilder<>);
                     default:
@@ -52,18 +51,6 @@
         //--------------------------------------------------------------------------------
         // Same type
         //--------------------------------------------------------------------------------
-
-        private sealed class SameTypeArrayFromListBuilder<TDestination> : IConverterBuilder
-        {
-            public object Create(object source)
-            {
-                var sourceList = (IList<TDestination>)source;
-                var array = new TDestination[sourceList.Count];
-                sourceList.CopyTo(array, 0);
-
-                return array;
-            }
-        }
 
         private sealed class SameTypeArrayFromCollectionBuilder<TDestination> : IConverterBuilder
         {

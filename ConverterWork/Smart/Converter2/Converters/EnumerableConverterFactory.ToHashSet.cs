@@ -41,14 +41,25 @@
         // Other type
         //--------------------------------------------------------------------------------
 
-        private sealed class OtherTypeHashSetFromEnumerableBuilder<TSource, TDestination> : OtherTypeCollectionFromEnumerableByAddBuilderBase<TSource, TDestination>
+        private sealed class OtherTypeHashSetFromEnumerableBuilder<TSource, TDestination> : IConverterBuilder
         {
+            private readonly Func<object, object> converter;
+
             public OtherTypeHashSetFromEnumerableBuilder(Func<object, object> converter)
-                : base(converter)
             {
+                this.converter = converter;
             }
 
-            protected override ICollection<TDestination> CreateCollection() => new HashSet<TDestination>();
+            public object Create(object source)
+            {
+                var collection = new HashSet<TDestination>();
+                foreach (var value in (IEnumerable<TSource>)source)
+                {
+                    collection.Add((TDestination)converter(value));
+                }
+
+                return collection;
+            }
         }
     }
 }

@@ -79,7 +79,7 @@
 
             public object Create(object source)
             {
-                return new ReadOnlyCollection<TDestination>(new ArrayConvertStructList<TSource, TDestination>((TSource[])source, converter));
+                return new ReadOnlyCollection<TDestination>(new ArrayConvertList<TSource, TDestination>((TSource[])source, converter));
             }
         }
 
@@ -94,7 +94,7 @@
 
             public object Create(object source)
             {
-                return new ReadOnlyCollection<TDestination>(new ListConvertStructList<TSource, TDestination>((IList<TSource>)source, converter));
+                return new ReadOnlyCollection<TDestination>(new ListConvertList<TSource, TDestination>((IList<TSource>)source, converter));
             }
         }
 

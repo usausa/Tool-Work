@@ -7,10 +7,10 @@
     public sealed partial class EnumerableConverterFactory
     {
         //--------------------------------------------------------------------------------
-        // ArrayConvertStruct
+        // ArrayConvertEnumerator
         //--------------------------------------------------------------------------------
 
-        private sealed class ArrayConvertStructEnumerator<TSource, TDestination> : IEnumerator<TDestination>
+        private sealed class ArrayConvertEnumerator<TSource, TDestination> : IEnumerator<TDestination>
         {
             private readonly TSource[] source;
 
@@ -18,7 +18,7 @@
 
             private int index;
 
-            public ArrayConvertStructEnumerator(TSource[] source, Func<object, object> converter)
+            public ArrayConvertEnumerator(TSource[] source, Func<object, object> converter)
             {
                 this.source = source;
                 this.converter = converter;
@@ -42,19 +42,19 @@
             }
         }
 
-        private readonly struct ArrayConvertStructList<TSource, TDestination> : IList<TDestination>
+        private readonly struct ArrayConvertList<TSource, TDestination> : IList<TDestination>
         {
             private readonly TSource[] source;
 
             private readonly Func<object, object> converter;
 
-            public ArrayConvertStructList(TSource[] source, Func<object, object> converter)
+            public ArrayConvertList(TSource[] source, Func<object, object> converter)
             {
                 this.source = source;
                 this.converter = converter;
             }
 
-            public IEnumerator<TDestination> GetEnumerator() => new ArrayConvertStructEnumerator<TSource, TDestination>(source, converter);
+            public IEnumerator<TDestination> GetEnumerator() => new ArrayConvertEnumerator<TSource, TDestination>(source, converter);
 
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
@@ -92,10 +92,10 @@
         }
 
         //--------------------------------------------------------------------------------
-        // ListConvertStruct
+        // ListConvertList
         //--------------------------------------------------------------------------------
 
-        private sealed class ListConvertStructEnumerator<TSource, TDestination> : IEnumerator<TDestination>
+        private sealed class ListConvertEnumerator<TSource, TDestination> : IEnumerator<TDestination>
         {
             private readonly IList<TSource> source;
 
@@ -103,7 +103,7 @@
 
             private int index;
 
-            public ListConvertStructEnumerator(IList<TSource> source, Func<object, object> converter)
+            public ListConvertEnumerator(IList<TSource> source, Func<object, object> converter)
             {
                 this.source = source;
                 this.converter = converter;
@@ -127,19 +127,19 @@
             }
         }
 
-        private readonly struct ListConvertStructList<TSource, TDestination> : IList<TDestination>
+        private readonly struct ListConvertList<TSource, TDestination> : IList<TDestination>
         {
             private readonly IList<TSource> source;
 
             private readonly Func<object, object> converter;
 
-            public ListConvertStructList(IList<TSource> source, Func<object, object> converter)
+            public ListConvertList(IList<TSource> source, Func<object, object> converter)
             {
                 this.source = source;
                 this.converter = converter;
             }
 
-            public IEnumerator<TDestination> GetEnumerator() => new ListConvertStructEnumerator<TSource, TDestination>(source, converter);
+            public IEnumerator<TDestination> GetEnumerator() => new ListConvertEnumerator<TSource, TDestination>(source, converter);
 
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
@@ -177,22 +177,22 @@
         }
 
         //--------------------------------------------------------------------------------
-        // CollectionConvertStruct
+        // CollectionConvertCollection
         //--------------------------------------------------------------------------------
 
-        private readonly struct CollectionConvertStructCollection<TSource, TDestination> : ICollection<TDestination>
+        private readonly struct CollectionConvertCollection<TSource, TDestination> : ICollection<TDestination>
         {
             private readonly ICollection<TSource> source;
 
             private readonly Func<object, object> converter;
 
-            public CollectionConvertStructCollection(ICollection<TSource> source, Func<object, object> converter)
+            public CollectionConvertCollection(ICollection<TSource> source, Func<object, object> converter)
             {
                 this.source = source;
                 this.converter = converter;
             }
 
-            public IEnumerator<TDestination> GetEnumerator() => new EnumerableConvertStructEnumerator<TSource, TDestination>(source.GetEnumerator(), converter);
+            public IEnumerator<TDestination> GetEnumerator() => new EnumerableConvertEnumerator<TSource, TDestination>(source.GetEnumerator(), converter);
 
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
@@ -220,16 +220,16 @@
         }
 
         //--------------------------------------------------------------------------------
-        // EnumerableConvertStruct
+        // EnumerableConvertEnumerable
         //--------------------------------------------------------------------------------
 
-        private sealed class EnumerableConvertStructEnumerator<TSource, TDestination> : IEnumerator<TDestination>
+        private sealed class EnumerableConvertEnumerator<TSource, TDestination> : IEnumerator<TDestination>
         {
             private readonly IEnumerator<TSource> source;
 
             private readonly Func<object, object> converter;
 
-            public EnumerableConvertStructEnumerator(IEnumerator<TSource> source, Func<object, object> converter)
+            public EnumerableConvertEnumerator(IEnumerator<TSource> source, Func<object, object> converter)
             {
                 this.source = source;
                 this.converter = converter;
@@ -248,19 +248,19 @@
             }
         }
 
-        private readonly struct EnumerableConvertStructEnumerable<TSource, TDestination> : IEnumerable<TDestination>
+        private readonly struct EnumerableConvertEnumerable<TSource, TDestination> : IEnumerable<TDestination>
         {
             private readonly IEnumerable<TSource> source;
 
             private readonly Func<object, object> converter;
 
-            public EnumerableConvertStructEnumerable(IEnumerable<TSource> source, Func<object, object> converter)
+            public EnumerableConvertEnumerable(IEnumerable<TSource> source, Func<object, object> converter)
             {
                 this.source = source;
                 this.converter = converter;
             }
 
-            public IEnumerator<TDestination> GetEnumerator() => new EnumerableConvertStructEnumerator<TSource, TDestination>(source.GetEnumerator(), converter);
+            public IEnumerator<TDestination> GetEnumerator() => new EnumerableConvertEnumerator<TSource, TDestination>(source.GetEnumerator(), converter);
 
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         }

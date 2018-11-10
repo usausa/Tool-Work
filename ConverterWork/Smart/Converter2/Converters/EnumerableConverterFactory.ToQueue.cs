@@ -62,7 +62,7 @@
 
             public object Create(object source)
             {
-                return new Queue<TDestination>(new ArrayConvertStructList<TSource, TDestination>((TSource[])source, converter));
+                return new Queue<TDestination>(new ArrayConvertList<TSource, TDestination>((TSource[])source, converter));
             }
         }
 
@@ -77,7 +77,7 @@
 
             public object Create(object source)
             {
-                return new Queue<TDestination>(new ListConvertStructList<TSource, TDestination>((IList<TSource>)source, converter));
+                return new Queue<TDestination>(new ListConvertList<TSource, TDestination>((IList<TSource>)source, converter));
             }
         }
 
@@ -92,7 +92,7 @@
 
             public object Create(object source)
             {
-                return new Queue<TDestination>(new CollectionConvertStructCollection<TSource, TDestination>((ICollection<TSource>)source, converter));
+                return new Queue<TDestination>(new CollectionConvertCollection<TSource, TDestination>((ICollection<TSource>)source, converter));
             }
         }
 
@@ -107,7 +107,13 @@
 
             public object Create(object source)
             {
-                return new Queue<TDestination>(new EnumerableConvertStructEnumerable<TSource, TDestination>((IEnumerable<TSource>)source, converter));
+                var collection = new Queue<TDestination>();
+                foreach (var value in (IEnumerable<TSource>)source)
+                {
+                    collection.Enqueue((TDestination)converter(value));
+                }
+
+                return collection;
             }
         }
     }

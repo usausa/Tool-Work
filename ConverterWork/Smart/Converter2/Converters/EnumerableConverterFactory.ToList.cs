@@ -51,44 +51,70 @@
         // Other type
         //--------------------------------------------------------------------------------
 
-        private sealed class OtherTypeListFromArrayBuilder<TSource, TDestination> : OtherTypeCollectionFromArrayByInitializeAddBuilderBase<TSource, TDestination>
+        private sealed class OtherTypeListFromArrayBuilder<TSource, TDestination> : IConverterBuilder
         {
+            private readonly Func<object, object> converter;
+
             public OtherTypeListFromArrayBuilder(Func<object, object> converter)
-                : base(converter)
             {
+                this.converter = converter;
             }
 
-            protected override ICollection<TDestination> CreateCollection(int size) => new List<TDestination>(size);
+            public object Create(object source)
+            {
+                return new List<TDestination>(new ArrayConvertList<TSource, TDestination>((TSource[])source, converter));
+            }
         }
 
-        private sealed class OtherTypeListFromListBuilder<TSource, TDestination> : OtherTypeCollectionFromListByInitializeAddBuilderBase<TSource, TDestination>
+        private sealed class OtherTypeListFromListBuilder<TSource, TDestination> : IConverterBuilder
         {
+            private readonly Func<object, object> converter;
+
             public OtherTypeListFromListBuilder(Func<object, object> converter)
-                : base(converter)
             {
+                this.converter = converter;
             }
 
-            protected override ICollection<TDestination> CreateCollection(int size) => new List<TDestination>(size);
+            public object Create(object source)
+            {
+                return new List<TDestination>(new ListConvertList<TSource, TDestination>((IList<TSource>)source, converter));
+            }
         }
 
-        private sealed class OtherTypeListFromCollectionBuilder<TSource, TDestination> : OtherTypeCollectionFromCollectionByInitializeAddBuilderBase<TSource, TDestination>
+        private sealed class OtherTypeListFromCollectionBuilder<TSource, TDestination> : IConverterBuilder
         {
+            private readonly Func<object, object> converter;
+
             public OtherTypeListFromCollectionBuilder(Func<object, object> converter)
-                : base(converter)
             {
+                this.converter = converter;
             }
 
-            protected override ICollection<TDestination> CreateCollection(int size) => new List<TDestination>(size);
+            public object Create(object source)
+            {
+                return new List<TDestination>(new CollectionConvertCollection<TSource, TDestination>((ICollection<TSource>)source, converter));
+            }
         }
 
-        private sealed class OtherTypeListFromEnumerableBuilder<TSource, TDestination> : OtherTypeCollectionFromEnumerableByAddBuilderBase<TSource, TDestination>
+        private sealed class OtherTypeListFromEnumerableBuilder<TSource, TDestination> : IConverterBuilder
         {
+            private readonly Func<object, object> converter;
+
             public OtherTypeListFromEnumerableBuilder(Func<object, object> converter)
-                : base(converter)
             {
+                this.converter = converter;
             }
 
-            protected override ICollection<TDestination> CreateCollection() => new List<TDestination>();
+            public object Create(object source)
+            {
+                var collection = new List<TDestination>();
+                foreach (var value in (IEnumerable<TSource>)source)
+                {
+                    collection.Add((TDestination)converter(value));
+                }
+
+                return collection;
+            }
         }
     }
 }
