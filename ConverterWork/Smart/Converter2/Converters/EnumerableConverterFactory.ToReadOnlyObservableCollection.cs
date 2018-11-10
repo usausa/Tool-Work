@@ -43,7 +43,7 @@
 
         private sealed class SameTypeReadOnlyObservableCollectionFromEnumerableConverter<TDestination> : IConverter
         {
-            public object Create(object source)
+            public object Convert(object source)
             {
                 return new ReadOnlyObservableCollection<TDestination>(new ObservableCollection<TDestination>((IEnumerable<TDestination>)source));
             }
@@ -62,7 +62,7 @@
                 this.converter = converter;
             }
 
-            public object Create(object source)
+            public object Convert(object source)
             {
                 return new ReadOnlyObservableCollection<TDestination>(new ObservableCollection<TDestination>(new ArrayConvertList<TSource, TDestination>((TSource[])source, converter)));
             }
@@ -77,7 +77,7 @@
                 this.converter = converter;
             }
 
-            public object Create(object source)
+            public object Convert(object source)
             {
                 return new ReadOnlyObservableCollection<TDestination>(new ObservableCollection<TDestination>(new ListConvertList<TSource, TDestination>((IList<TSource>)source, converter)));
             }
@@ -92,7 +92,7 @@
                 this.converter = converter;
             }
 
-            public object Create(object source)
+            public object Convert(object source)
             {
                 return new ReadOnlyObservableCollection<TDestination>(new ObservableCollection<TDestination>(new CollectionConvertCollection<TSource, TDestination>((ICollection<TSource>)source, converter)));
             }
@@ -107,7 +107,7 @@
                 this.converter = converter;
             }
 
-            public object Create(object source)
+            public object Convert(object source)
             {
                 return new ReadOnlyObservableCollection<TDestination>(new ObservableCollection<TDestination>(new EnumerableConvertEnumerable<TSource, TDestination>((IEnumerable<TSource>)source, converter)));
             }

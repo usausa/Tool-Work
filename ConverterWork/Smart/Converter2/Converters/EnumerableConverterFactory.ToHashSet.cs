@@ -31,7 +31,7 @@
 
         private sealed class SameTypeHashSetFromEnumerableConverter<TDestination> : IConverter
         {
-            public object Create(object source)
+            public object Convert(object source)
             {
                 return new HashSet<TDestination>((IEnumerable<TDestination>)source);
             }
@@ -50,7 +50,7 @@
                 this.converter = converter;
             }
 
-            public object Create(object source)
+            public object Convert(object source)
             {
                 var collection = new HashSet<TDestination>();
                 foreach (var value in (IEnumerable<TSource>)source)

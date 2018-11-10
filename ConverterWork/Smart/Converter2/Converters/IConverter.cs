@@ -1,7 +1,7 @@
 ﻿namespace Smart.Converter2.Converters
 {
-    public interface IConverter
+    internal interface IConverter
     {
-        object Create(object source);
+        object Convert(object source);
     }
 }

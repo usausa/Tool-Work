@@ -50,7 +50,7 @@
 
         private sealed class SameTypeReadOnlyCollectionFromListConverter<TDestination> : IConverter
         {
-            public object Create(object source)
+            public object Convert(object source)
             {
                 return new ReadOnlyCollection<TDestination>((IList<TDestination>)source);
             }
@@ -58,7 +58,7 @@
 
         private sealed class SameTypeReadOnlyCollectionFromEnumerableConverter<TDestination> : IConverter
         {
-            public object Create(object source)
+            public object Convert(object source)
             {
                 return new ReadOnlyCollection<TDestination>(((IEnumerable<TDestination>)source).ToList());
             }
@@ -77,7 +77,7 @@
                 this.converter = converter;
             }
 
-            public object Create(object source)
+            public object Convert(object source)
             {
                 return new ReadOnlyCollection<TDestination>(new ArrayConvertList<TSource, TDestination>((TSource[])source, converter));
             }
@@ -92,7 +92,7 @@
                 this.converter = converter;
             }
 
-            public object Create(object source)
+            public object Convert(object source)
             {
                 return new ReadOnlyCollection<TDestination>(new ListConvertList<TSource, TDestination>((IList<TSource>)source, converter));
             }
@@ -107,7 +107,7 @@
                 this.converter = converter;
             }
 
-            public object Create(object source)
+            public object Convert(object source)
             {
                 var sourceCollection = (ICollection<TSource>)source;
                 var list = new List<TDestination>(sourceCollection.Count);
@@ -129,7 +129,7 @@
                 this.converter = converter;
             }
 
-            public object Create(object source)
+            public object Convert(object source)
             {
                 var list = new List<TDestination>();
                 foreach (var value in (IEnumerable<TSource>)source)

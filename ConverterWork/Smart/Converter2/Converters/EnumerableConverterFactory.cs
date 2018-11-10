@@ -69,7 +69,7 @@
                     {
                         // IE<T> to T[]
                         return ((IConverter)Activator.CreateInstance(
-                            SameTypeArrayProvider.Default.GetBuilderType(enumerableType).MakeGenericType(targetElementType))).Create;
+                            SameTypeArrayProvider.Default.GetBuilderType(enumerableType).MakeGenericType(targetElementType))).Convert;
                     }
 
                     var converter = context.CreateConverter(sourceElementType, targetElementType);
@@ -78,7 +78,7 @@
                         // IE<T1> to T2[]
                         return ((IConverter)Activator.CreateInstance(
                             OtherTypeArrayProvider.Default.GetBuilderType(enumerableType).MakeGenericType(sourceElementType, targetElementType),
-                            converter)).Create;
+                            converter)).Convert;
                     }
                 }
 
@@ -97,7 +97,7 @@
                     {
                         // IE<T> to IE<T>
                         return ((IConverter)Activator.CreateInstance(
-                            providerPair.SameTypeProvider.GetBuilderType(enumerableType).MakeGenericType(targetElementType))).Create;
+                            providerPair.SameTypeProvider.GetBuilderType(enumerableType).MakeGenericType(targetElementType))).Convert;
                     }
 
                     var converter = context.CreateConverter(sourceElementType, targetElementType);
@@ -106,7 +106,7 @@
                         // IE<T1> to IE<T2>
                         return ((IConverter)Activator.CreateInstance(
                             providerPair.OtherTypeProvider.GetBuilderType(enumerableType).MakeGenericType(sourceElementType, targetElementType),
-                            converter)).Create;
+                            converter)).Convert;
                     }
                 }
 

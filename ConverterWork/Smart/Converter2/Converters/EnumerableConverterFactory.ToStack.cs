@@ -41,7 +41,7 @@
 
         private sealed class SameTypeStackFromEnumerableConverter<TDestination> : IConverter
         {
-            public object Create(object source)
+            public object Convert(object source)
             {
                 return new Stack<TDestination>((IEnumerable<TDestination>)source);
             }
@@ -60,7 +60,7 @@
                 this.converter = converter;
             }
 
-            public object Create(object source)
+            public object Convert(object source)
             {
                 return new Stack<TDestination>(new ArrayConvertList<TSource, TDestination>((TSource[])source, converter));
             }
@@ -75,7 +75,7 @@
                 this.converter = converter;
             }
 
-            public object Create(object source)
+            public object Convert(object source)
             {
                 return new Stack<TDestination>(new ListConvertList<TSource, TDestination>((IList<TSource>)source, converter));
             }
@@ -90,7 +90,7 @@
                 this.converter = converter;
             }
 
-            public object Create(object source)
+            public object Convert(object source)
             {
                 return new Stack<TDestination>(new CollectionConvertCollection<TSource, TDestination>((ICollection<TSource>)source, converter));
             }
@@ -105,7 +105,7 @@
                 this.converter = converter;
             }
 
-            public object Create(object source)
+            public object Convert(object source)
             {
                 var collection = new Stack<TDestination>();
                 foreach (var value in (IEnumerable<TSource>)source)

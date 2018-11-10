@@ -39,7 +39,7 @@
 
         private sealed class SameTypeLinkedListFromEnumerable<TDestination> : IConverter
         {
-            public object Create(object source)
+            public object Convert(object source)
             {
                 return new LinkedList<TDestination>((IEnumerable<TDestination>)source);
             }
@@ -58,7 +58,7 @@
                 this.converter = converter;
             }
 
-            public object Create(object source)
+            public object Convert(object source)
             {
                 var arraySource = (TSource[])source;
                 var collection = new LinkedList<TDestination>();
@@ -80,7 +80,7 @@
                 this.converter = converter;
             }
 
-            public object Create(object source)
+            public object Convert(object source)
             {
                 var listSource = (IList<TSource>)source;
                 var collection = new LinkedList<TDestination>();
@@ -102,7 +102,7 @@
                 this.converter = converter;
             }
 
-            public object Create(object source)
+            public object Convert(object source)
             {
                 var collection = new LinkedList<TDestination>();
                 foreach (var value in (IEnumerable<TSource>)source)

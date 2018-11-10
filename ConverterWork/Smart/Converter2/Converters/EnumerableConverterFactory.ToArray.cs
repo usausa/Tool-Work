@@ -54,7 +54,7 @@
 
         private sealed class SameTypeArrayFromCollectionConverter<TDestination> : IConverter
         {
-            public object Create(object source)
+            public object Convert(object source)
             {
                 var sourceCollection = (ICollection<TDestination>)source;
                 var array = new TDestination[sourceCollection.Count];
@@ -66,7 +66,7 @@
 
         private sealed class SameTypeArrayFromEnumerableConverter<TDestination> : IConverter
         {
-            public object Create(object source)
+            public object Convert(object source)
             {
                 var buffer = new ArrayBuffer<TDestination>(0);
                 foreach (var value in (IEnumerable)source)
@@ -91,7 +91,7 @@
                 this.converter = converter;
             }
 
-            public object Create(object source)
+            public object Convert(object source)
             {
                 var sourceArray = (TSource[])source;
                 var array = new TDestination[sourceArray.Length];
@@ -113,7 +113,7 @@
                 this.converter = converter;
             }
 
-            public object Create(object source)
+            public object Convert(object source)
             {
                 var sourceList = (IList<TSource>)source;
                 var array = new TDestination[sourceList.Count];
@@ -135,7 +135,7 @@
                 this.converter = converter;
             }
 
-            public object Create(object source)
+            public object Convert(object source)
             {
                 var sourceCollection = (ICollection<TSource>)source;
                 var array = new TDestination[sourceCollection.Count];
@@ -159,7 +159,7 @@
                 this.converter = converter;
             }
 
-            public object Create(object source)
+            public object Convert(object source)
             {
                 var buffer = new ArrayBuffer<TDestination>(0);
                 foreach (var value in (IEnumerable<TSource>)source)
