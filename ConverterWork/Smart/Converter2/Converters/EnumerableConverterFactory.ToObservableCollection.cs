@@ -11,7 +11,7 @@
         {
             public static IEnumerableConverterProvider Default { get; } = new SameTypeObservableCollectionProvider();
 
-            public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
+            public Type GetConverterType(SourceEnumerableType sourceEnumerableType)
             {
                 return typeof(SameTypeObservableCollectionFromEnumerableConverter<>);
             }
@@ -21,7 +21,7 @@
         {
             public static IEnumerableConverterProvider Default { get; } = new OtherTypeObservableCollectionProvider();
 
-            public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
+            public Type GetConverterType(SourceEnumerableType sourceEnumerableType)
             {
                 switch (sourceEnumerableType)
                 {

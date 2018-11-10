@@ -10,7 +10,7 @@
         {
             public static IEnumerableConverterProvider Default { get; } = new SameTypeConcurrentQueueProvider();
 
-            public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
+            public Type GetConverterType(SourceEnumerableType sourceEnumerableType)
             {
                 return typeof(SameTypeConcurrentQueueFromEnumerableConverter<>);
             }
@@ -20,7 +20,7 @@
         {
             public static IEnumerableConverterProvider Default { get; } = new OtherTypeConcurrentQueueProvider();
 
-            public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
+            public Type GetConverterType(SourceEnumerableType sourceEnumerableType)
             {
                 switch (sourceEnumerableType)
                 {

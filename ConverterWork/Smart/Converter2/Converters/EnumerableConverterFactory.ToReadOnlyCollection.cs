@@ -11,7 +11,7 @@
         {
             public static IEnumerableConverterProvider Default { get; } = new SameTypeReadOnlyCollectionProvider();
 
-            public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
+            public Type GetConverterType(SourceEnumerableType sourceEnumerableType)
             {
                 switch (sourceEnumerableType)
                 {
@@ -28,7 +28,7 @@
         {
             public static IEnumerableConverterProvider Default { get; } = new OtherTypeReadOnlyCollectionProvider();
 
-            public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
+            public Type GetConverterType(SourceEnumerableType sourceEnumerableType)
             {
                 switch (sourceEnumerableType)
                 {

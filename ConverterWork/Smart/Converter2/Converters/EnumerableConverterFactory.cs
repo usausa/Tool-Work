@@ -19,7 +19,7 @@
 
         private interface IEnumerableConverterProvider
         {
-            Type GetBuilderType(SourceEnumerableType sourceEnumerableType);
+            Type GetConverterType(SourceEnumerableType sourceEnumerableType);
         }
 
         private sealed class ProviderPair
@@ -69,7 +69,7 @@
                     {
                         // IE<T> to T[]
                         return ((IConverter)Activator.CreateInstance(
-                            SameTypeArrayProvider.Default.GetBuilderType(enumerableType).MakeGenericType(targetElementType))).Convert;
+                            SameTypeArrayProvider.Default.GetConverterType(enumerableType).MakeGenericType(targetElementType))).Convert;
                     }
 
                     var converter = context.CreateConverter(sourceElementType, targetElementType);
@@ -77,7 +77,7 @@
                     {
                         // IE<T1> to T2[]
                         return ((IConverter)Activator.CreateInstance(
-                            OtherTypeArrayProvider.Default.GetBuilderType(enumerableType).MakeGenericType(sourceElementType, targetElementType),
+                            OtherTypeArrayProvider.Default.GetConverterType(enumerableType).MakeGenericType(sourceElementType, targetElementType),
                             converter)).Convert;
                     }
                 }
@@ -97,7 +97,7 @@
                     {
                         // IE<T> to IE<T>
                         return ((IConverter)Activator.CreateInstance(
-                            providerPair.SameTypeProvider.GetBuilderType(enumerableType).MakeGenericType(targetElementType))).Convert;
+                            providerPair.SameTypeProvider.GetConverterType(enumerableType).MakeGenericType(targetElementType))).Convert;
                     }
 
                     var converter = context.CreateConverter(sourceElementType, targetElementType);
@@ -105,7 +105,7 @@
                     {
                         // IE<T1> to IE<T2>
                         return ((IConverter)Activator.CreateInstance(
-                            providerPair.OtherTypeProvider.GetBuilderType(enumerableType).MakeGenericType(sourceElementType, targetElementType),
+                            providerPair.OtherTypeProvider.GetConverterType(enumerableType).MakeGenericType(sourceElementType, targetElementType),
                             converter)).Convert;
                     }
                 }

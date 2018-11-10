@@ -9,7 +9,7 @@
         {
             public static IEnumerableConverterProvider Default { get; } = new SameTypeHashSetProvider();
 
-            public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
+            public Type GetConverterType(SourceEnumerableType sourceEnumerableType)
             {
                 return typeof(SameTypeHashSetFromEnumerableConverter<>);
             }
@@ -19,7 +19,7 @@
         {
             public static IEnumerableConverterProvider Default { get; } = new OtherTypeHashSetProvider();
 
-            public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
+            public Type GetConverterType(SourceEnumerableType sourceEnumerableType)
             {
                 return typeof(OtherTypeHashSetFromEnumerableConverter<,>);
             }

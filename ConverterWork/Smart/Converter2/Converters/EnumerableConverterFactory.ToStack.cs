@@ -9,7 +9,7 @@
         {
             public static IEnumerableConverterProvider Default { get; } = new SameTypeStackProvider();
 
-            public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
+            public Type GetConverterType(SourceEnumerableType sourceEnumerableType)
             {
                 return typeof(SameTypeStackFromEnumerableConverter<>);
             }
@@ -19,7 +19,7 @@
         {
             public static IEnumerableConverterProvider Default { get; } = new OtherTypeStackProvider();
 
-            public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
+            public Type GetConverterType(SourceEnumerableType sourceEnumerableType)
             {
                 switch (sourceEnumerableType)
                 {

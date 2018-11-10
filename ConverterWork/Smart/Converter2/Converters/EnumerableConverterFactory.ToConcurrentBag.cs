@@ -10,7 +10,7 @@
         {
             public static IEnumerableConverterProvider Default { get; } = new SameTypeConcurrentBagProvider();
 
-            public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
+            public Type GetConverterType(SourceEnumerableType sourceEnumerableType)
             {
                 return typeof(SameTypeConcurrentBagFromEnumerableConverter<>);
             }
@@ -20,7 +20,7 @@
         {
             public static IEnumerableConverterProvider Default { get; } = new OtherTypeConcurrentBagProvider();
 
-            public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
+            public Type GetConverterType(SourceEnumerableType sourceEnumerableType)
             {
                 switch (sourceEnumerableType)
                 {

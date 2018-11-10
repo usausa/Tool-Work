@@ -12,7 +12,7 @@
         {
             public static IEnumerableConverterProvider Default { get; } = new SameTypeArrayProvider();
 
-            public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
+            public Type GetConverterType(SourceEnumerableType sourceEnumerableType)
             {
                 switch (sourceEnumerableType)
                 {
@@ -32,7 +32,7 @@
         {
             public static IEnumerableConverterProvider Default { get; } = new OtherTypeArrayProvider();
 
-            public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
+            public Type GetConverterType(SourceEnumerableType sourceEnumerableType)
             {
                 switch (sourceEnumerableType)
                 {
