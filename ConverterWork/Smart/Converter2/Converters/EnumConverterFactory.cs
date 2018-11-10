@@ -23,7 +23,7 @@
                 // String to Enum
                 if (sourceType == typeof(string))
                 {
-                    return source => Enum.Parse(targetEnumType, (string)source, true);
+                    return ((IConverter)Activator.CreateInstance(typeof(StringToEnumConverter<>).MakeGenericType(targetEnumType))).Convert;
                 }
 
                 // Assignable
@@ -50,7 +50,7 @@
                 // Enum to String
                 if (targetType == typeof(string))
                 {
-                    return source => ((Enum)source).ToString();
+                    return ((IConverter)Activator.CreateInstance(typeof(EnumToStringConverter<>).MakeGenericType(sourceEnumType))).Convert;
                 }
 
                 // Assignable
@@ -72,6 +72,24 @@
             }
 
             return null;
+        }
+
+        private sealed class EnumToStringConverter<T> : IConverter
+            where T : struct
+        {
+            public object Convert(object source)
+            {
+                return EnumHelper<T>.GetName((T)source);
+            }
+        }
+
+        private sealed class StringToEnumConverter<T> : IConverter
+            where T : struct
+        {
+            public object Convert(object source)
+            {
+                return EnumHelper<T>.TryParseValue((string)source, out var value) ? value : default(T);
+            }
         }
     }
 }
