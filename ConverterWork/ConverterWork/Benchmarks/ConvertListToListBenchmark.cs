@@ -91,6 +91,18 @@
         {
             return new List<int>(new ListConvertClassCollection<int>(source, converter));
         }
+
+        [Benchmark]
+        public List<int> ConstructorMixEnumerable()
+        {
+            return new List<int>(new ListConvertMixEnumerable<int>(source, converter));
+        }
+
+        [Benchmark]
+        public List<int> ConstructorMixCollection()
+        {
+            return new List<int>(new ListConvertMixCollection<int>(source, converter));
+        }
     }
 
     public readonly struct ListConvertStructEnumerable<T> : IEnumerable<T>
@@ -271,6 +283,84 @@
         private readonly Func<object, object> converter;
 
         public ListConvertClassCollection(IList<T> source, Func<object, object> converter)
+        {
+            this.source = source;
+            this.converter = converter;
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return new ListConvertClassEnumerator<T>(source, converter);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public void Add(T item) => throw new NotSupportedException();
+
+        public void Clear() => throw new NotSupportedException();
+
+        public bool Contains(T item) => throw new NotSupportedException();
+
+        public void CopyTo(T[] array, int arrayIndex)
+        {
+            for (var i = 0; i < source.Count; i++)
+            {
+                array[arrayIndex + i] = (T)converter(source[i]);
+            }
+        }
+
+        public bool Remove(T item) => throw new NotSupportedException();
+
+        public int Count => source.Count;
+
+        public bool IsReadOnly => true;
+
+        public int IndexOf(T item) => throw new NotSupportedException();
+
+        public void Insert(int index, T item) => throw new NotSupportedException();
+
+        public void RemoveAt(int index) => throw new NotSupportedException();
+
+        public T this[int index]
+        {
+            get => source[index];
+            set => source[index] = value;
+        }
+    }
+
+    public readonly struct ListConvertMixEnumerable<T> : IEnumerable<T>
+    {
+        private readonly IList<T> source;
+
+        private readonly Func<object, object> converter;
+
+        public ListConvertMixEnumerable(IList<T> source, Func<object, object> converter)
+        {
+            this.source = source;
+            this.converter = converter;
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return new ListConvertClassEnumerator<T>(source, converter);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+    }
+
+    public readonly struct ListConvertMixCollection<T> : IList<T>
+    {
+        private readonly IList<T> source;
+
+        private readonly Func<object, object> converter;
+
+        public ListConvertMixCollection(IList<T> source, Func<object, object> converter)
         {
             this.source = source;
             this.converter = converter;

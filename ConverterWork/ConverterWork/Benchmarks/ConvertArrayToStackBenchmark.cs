@@ -90,5 +90,17 @@
         {
             return new Stack<int>(new ArrayConvertClassCollection<int>(array, converter));
         }
+
+        [Benchmark]
+        public Stack<int> ConstructorMixEnumerable()
+        {
+            return new Stack<int>(new ArrayConvertMixEnumerable<int>(array, converter));
+        }
+
+        [Benchmark]
+        public Stack<int> ConstructorMixCollection()
+        {
+            return new Stack<int>(new ArrayConvertMixCollection<int>(array, converter));
+        }
     }
 }

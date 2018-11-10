@@ -90,5 +90,17 @@
         {
             return new Queue<int>(new ArrayConvertClassCollection<int>(array, converter));
         }
+
+        [Benchmark]
+        public Queue<int> ConstructorMixEnumerable()
+        {
+            return new Queue<int>(new ArrayConvertMixEnumerable<int>(array, converter));
+        }
+
+        [Benchmark]
+        public Queue<int> ConstructorMixCollection()
+        {
+            return new Queue<int>(new ArrayConvertMixCollection<int>(array, converter));
+        }
     }
 }
