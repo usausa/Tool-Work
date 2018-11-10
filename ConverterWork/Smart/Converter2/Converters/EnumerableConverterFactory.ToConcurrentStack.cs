@@ -6,32 +6,32 @@
 
     public sealed partial class EnumerableConverterFactory
     {
-        private sealed class SameTypeConcurrentStackBuilderProvider : IConverterBuilderProvider
+        private sealed class SameTypeConcurrentStackProvider : IEnumerableConverterProvider
         {
-            public static IConverterBuilderProvider Default { get; } = new SameTypeConcurrentStackBuilderProvider();
+            public static IEnumerableConverterProvider Default { get; } = new SameTypeConcurrentStackProvider();
 
             public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
             {
-                return typeof(SameTypeConcurrentStackFromEnumerableBuilder<>);
+                return typeof(SameTypeConcurrentStackFromEnumerableConverter<>);
             }
         }
 
-        private sealed class OtherTypeConcurrentStackBuilderProvider : IConverterBuilderProvider
+        private sealed class OtherTypeConcurrentStackProvider : IEnumerableConverterProvider
         {
-            public static IConverterBuilderProvider Default { get; } = new OtherTypeConcurrentStackBuilderProvider();
+            public static IEnumerableConverterProvider Default { get; } = new OtherTypeConcurrentStackProvider();
 
             public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
             {
                 switch (sourceEnumerableType)
                 {
                     case SourceEnumerableType.Array:
-                        return typeof(OtherTypeConcurrentStackFromArrayBuilder<,>);
+                        return typeof(OtherTypeConcurrentStackFromArrayConverter<,>);
                     case SourceEnumerableType.List:
-                        return typeof(OtherTypeConcurrentStackFromListBuilder<,>);
+                        return typeof(OtherTypeConcurrentStackFromListConverter<,>);
                     case SourceEnumerableType.Collection:
-                        return typeof(OtherTypeConcurrentStackFromCollectionBuilder<,>);
+                        return typeof(OtherTypeConcurrentStackFromCollectionConverter<,>);
                     default:
-                        return typeof(OtherTypeConcurrentStackFromEnumerableBuilder<,>);
+                        return typeof(OtherTypeConcurrentStackFromEnumerableConverter<,>);
                 }
             }
         }
@@ -40,7 +40,7 @@
         // Same type
         //--------------------------------------------------------------------------------
 
-        private sealed class SameTypeConcurrentStackFromEnumerableBuilder<TDestination> : IConverterBuilder
+        private sealed class SameTypeConcurrentStackFromEnumerableConverter<TDestination> : IConverter
         {
             public object Create(object source)
             {
@@ -52,11 +52,11 @@
         // Other type
         //--------------------------------------------------------------------------------
 
-        private sealed class OtherTypeConcurrentStackFromArrayBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeConcurrentStackFromArrayConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeConcurrentStackFromArrayBuilder(Func<object, object> converter)
+            public OtherTypeConcurrentStackFromArrayConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }
@@ -67,11 +67,11 @@
             }
         }
 
-        private sealed class OtherTypeConcurrentStackFromListBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeConcurrentStackFromListConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeConcurrentStackFromListBuilder(Func<object, object> converter)
+            public OtherTypeConcurrentStackFromListConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }
@@ -82,11 +82,11 @@
             }
         }
 
-        private sealed class OtherTypeConcurrentStackFromCollectionBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeConcurrentStackFromCollectionConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeConcurrentStackFromCollectionBuilder(Func<object, object> converter)
+            public OtherTypeConcurrentStackFromCollectionConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }
@@ -97,11 +97,11 @@
             }
         }
 
-        private sealed class OtherTypeConcurrentStackFromEnumerableBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeConcurrentStackFromEnumerableConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeConcurrentStackFromEnumerableBuilder(Func<object, object> converter)
+            public OtherTypeConcurrentStackFromEnumerableConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }

@@ -5,30 +5,30 @@
 
     public sealed partial class EnumerableConverterFactory
     {
-        private sealed class SameTypeLinkedListBuilderProvider : IConverterBuilderProvider
+        private sealed class SameTypeLinkedListProvider : IEnumerableConverterProvider
         {
-            public static IConverterBuilderProvider Default { get; } = new SameTypeLinkedListBuilderProvider();
+            public static IEnumerableConverterProvider Default { get; } = new SameTypeLinkedListProvider();
 
             public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
             {
-                return typeof(SameTypeLinkedListFromEnumerableBuilder<>);
+                return typeof(SameTypeLinkedListFromEnumerable<>);
             }
         }
 
-        private sealed class OtherTypeLinkedListBuilderProvider : IConverterBuilderProvider
+        private sealed class OtherTypeLinkedListProvider : IEnumerableConverterProvider
         {
-            public static IConverterBuilderProvider Default { get; } = new OtherTypeLinkedListBuilderProvider();
+            public static IEnumerableConverterProvider Default { get; } = new OtherTypeLinkedListProvider();
 
             public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
             {
                 switch (sourceEnumerableType)
                 {
                     case SourceEnumerableType.Array:
-                        return typeof(OtherTypeLinkedListFromArrayBuilder<,>);
+                        return typeof(OtherTypeLinkedListFromArrayConverter<,>);
                     case SourceEnumerableType.List:
-                        return typeof(OtherTypeLinkedListFromListBuilder<,>);
+                        return typeof(OtherTypeLinkedListFromListConverter<,>);
                     default:
-                        return typeof(OtherTypeLinkedListFromEnumerableBuilder<,>);
+                        return typeof(OtherTypeLinkedListFromEnumerableConverter<,>);
                 }
             }
         }
@@ -37,7 +37,7 @@
         // Same type
         //--------------------------------------------------------------------------------
 
-        private sealed class SameTypeLinkedListFromEnumerableBuilder<TDestination> : IConverterBuilder
+        private sealed class SameTypeLinkedListFromEnumerable<TDestination> : IConverter
         {
             public object Create(object source)
             {
@@ -49,11 +49,11 @@
         // Other type
         //--------------------------------------------------------------------------------
 
-        private sealed class OtherTypeLinkedListFromArrayBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeLinkedListFromArrayConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeLinkedListFromArrayBuilder(Func<object, object> converter)
+            public OtherTypeLinkedListFromArrayConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }
@@ -71,11 +71,11 @@
             }
         }
 
-        private sealed class OtherTypeLinkedListFromListBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeLinkedListFromListConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeLinkedListFromListBuilder(Func<object, object> converter)
+            public OtherTypeLinkedListFromListConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }
@@ -93,11 +93,11 @@
             }
         }
 
-        private sealed class OtherTypeLinkedListFromEnumerableBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeLinkedListFromEnumerableConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeLinkedListFromEnumerableBuilder(Func<object, object> converter)
+            public OtherTypeLinkedListFromEnumerableConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }

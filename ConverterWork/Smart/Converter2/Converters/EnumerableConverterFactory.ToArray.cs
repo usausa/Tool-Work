@@ -8,9 +8,9 @@
 
     public sealed partial class EnumerableConverterFactory
     {
-        private sealed class SameTypeArrayBuilderProvider : IConverterBuilderProvider
+        private sealed class SameTypeArrayProvider : IEnumerableConverterProvider
         {
-            public static IConverterBuilderProvider Default { get; } = new SameTypeArrayBuilderProvider();
+            public static IEnumerableConverterProvider Default { get; } = new SameTypeArrayProvider();
 
             public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
             {
@@ -21,29 +21,29 @@
                         throw new NotSupportedException();
                     case SourceEnumerableType.List:
                     case SourceEnumerableType.Collection:
-                        return typeof(SameTypeArrayFromCollectionBuilder<>);
+                        return typeof(SameTypeArrayFromCollectionConverter<>);
                     default:
-                        return typeof(SameTypeArrayFromEnumerableBuilder<>);
+                        return typeof(SameTypeArrayFromEnumerableConverter<>);
                 }
             }
         }
 
-        private sealed class OtherTypeArrayBuilderProvider : IConverterBuilderProvider
+        private sealed class OtherTypeArrayProvider : IEnumerableConverterProvider
         {
-            public static IConverterBuilderProvider Default { get; } = new OtherTypeArrayBuilderProvider();
+            public static IEnumerableConverterProvider Default { get; } = new OtherTypeArrayProvider();
 
             public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
             {
                 switch (sourceEnumerableType)
                 {
                     case SourceEnumerableType.Array:
-                        return typeof(OtherTypeArrayFromArrayBuilder<,>);
+                        return typeof(OtherTypeArrayFromArrayConverter<,>);
                     case SourceEnumerableType.List:
-                        return typeof(OtherTypeArrayFromListBuilder<,>);
+                        return typeof(OtherTypeArrayFromListConverter<,>);
                     case SourceEnumerableType.Collection:
-                        return typeof(OtherTypeArrayFromCollectionBuilder<,>);
+                        return typeof(OtherTypeArrayFromCollectionConverter<,>);
                     default:
-                        return typeof(OtherTypeArrayFromEnumerableBuilder<,>);
+                        return typeof(OtherTypeArrayFromEnumerableConverter<,>);
                 }
             }
         }
@@ -52,7 +52,7 @@
         // Same type
         //--------------------------------------------------------------------------------
 
-        private sealed class SameTypeArrayFromCollectionBuilder<TDestination> : IConverterBuilder
+        private sealed class SameTypeArrayFromCollectionConverter<TDestination> : IConverter
         {
             public object Create(object source)
             {
@@ -64,7 +64,7 @@
             }
         }
 
-        private sealed class SameTypeArrayFromEnumerableBuilder<TDestination> : IConverterBuilder
+        private sealed class SameTypeArrayFromEnumerableConverter<TDestination> : IConverter
         {
             public object Create(object source)
             {
@@ -82,11 +82,11 @@
         // Builder to other type Array from Collection
         //--------------------------------------------------------------------------------
 
-        public sealed class OtherTypeArrayFromArrayBuilder<TSource, TDestination> : IConverterBuilder
+        public sealed class OtherTypeArrayFromArrayConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeArrayFromArrayBuilder(Func<object, object> converter)
+            public OtherTypeArrayFromArrayConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }
@@ -104,11 +104,11 @@
             }
         }
 
-        private sealed class OtherTypeArrayFromListBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeArrayFromListConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeArrayFromListBuilder(Func<object, object> converter)
+            public OtherTypeArrayFromListConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }
@@ -126,11 +126,11 @@
             }
         }
 
-        private sealed class OtherTypeArrayFromCollectionBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeArrayFromCollectionConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeArrayFromCollectionBuilder(Func<object, object> converter)
+            public OtherTypeArrayFromCollectionConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }
@@ -150,11 +150,11 @@
             }
         }
 
-        private sealed class OtherTypeArrayFromEnumerableBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeArrayFromEnumerableConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeArrayFromEnumerableBuilder(Func<object, object> converter)
+            public OtherTypeArrayFromEnumerableConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }

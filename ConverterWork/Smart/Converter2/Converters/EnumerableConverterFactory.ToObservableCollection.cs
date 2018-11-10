@@ -7,32 +7,32 @@
 
     public sealed partial class EnumerableConverterFactory
     {
-        private sealed class SameTypeObservableCollectionBuilderProvider : IConverterBuilderProvider
+        private sealed class SameTypeObservableCollectionProvider : IEnumerableConverterProvider
         {
-            public static IConverterBuilderProvider Default { get; } = new SameTypeObservableCollectionBuilderProvider();
+            public static IEnumerableConverterProvider Default { get; } = new SameTypeObservableCollectionProvider();
 
             public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
             {
-                return typeof(SameTypeObservableCollectionFromEnumerableBuilder<>);
+                return typeof(SameTypeObservableCollectionFromEnumerableConverter<>);
             }
         }
 
-        private sealed class OtherTypeObservableCollectionBuilderProvider : IConverterBuilderProvider
+        private sealed class OtherTypeObservableCollectionProvider : IEnumerableConverterProvider
         {
-            public static IConverterBuilderProvider Default { get; } = new OtherTypeObservableCollectionBuilderProvider();
+            public static IEnumerableConverterProvider Default { get; } = new OtherTypeObservableCollectionProvider();
 
             public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
             {
                 switch (sourceEnumerableType)
                 {
                     case SourceEnumerableType.Array:
-                        return typeof(OtherTypeObservableCollectionFromArrayBuilder<,>);
+                        return typeof(OtherTypeObservableCollectionFromArrayConverter<,>);
                     case SourceEnumerableType.List:
-                        return typeof(OtherTypeObservableCollectionFromListBuilder<,>);
+                        return typeof(OtherTypeObservableCollectionFromListConverter<,>);
                     case SourceEnumerableType.Collection:
-                        return typeof(OtherTypeObservableCollectionFromCollectionBuilder<,>);
+                        return typeof(OtherTypeObservableCollectionFromCollectionConverter<,>);
                     default:
-                        return typeof(OtherTypeObservableCollectionFromEnumerableBuilder<,>);
+                        return typeof(OtherTypeObservableCollectionFromEnumerableConverter<,>);
                 }
             }
         }
@@ -41,7 +41,7 @@
         // Same type
         //--------------------------------------------------------------------------------
 
-        private sealed class SameTypeObservableCollectionFromEnumerableBuilder<TDestination> : IConverterBuilder
+        private sealed class SameTypeObservableCollectionFromEnumerableConverter<TDestination> : IConverter
         {
             public object Create(object source)
             {
@@ -53,11 +53,11 @@
         // Other type
         //--------------------------------------------------------------------------------
 
-        private sealed class OtherTypeObservableCollectionFromArrayBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeObservableCollectionFromArrayConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeObservableCollectionFromArrayBuilder(Func<object, object> converter)
+            public OtherTypeObservableCollectionFromArrayConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }
@@ -68,11 +68,11 @@
             }
         }
 
-        private sealed class OtherTypeObservableCollectionFromListBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeObservableCollectionFromListConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeObservableCollectionFromListBuilder(Func<object, object> converter)
+            public OtherTypeObservableCollectionFromListConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }
@@ -83,11 +83,11 @@
             }
         }
 
-        private sealed class OtherTypeObservableCollectionFromCollectionBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeObservableCollectionFromCollectionConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeObservableCollectionFromCollectionBuilder(Func<object, object> converter)
+            public OtherTypeObservableCollectionFromCollectionConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }
@@ -98,11 +98,11 @@
             }
         }
 
-        private sealed class OtherTypeObservableCollectionFromEnumerableBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeObservableCollectionFromEnumerableConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeObservableCollectionFromEnumerableBuilder(Func<object, object> converter)
+            public OtherTypeObservableCollectionFromEnumerableConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }

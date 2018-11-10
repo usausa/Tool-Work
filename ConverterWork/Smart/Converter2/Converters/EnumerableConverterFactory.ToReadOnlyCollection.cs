@@ -7,9 +7,9 @@
 
     public sealed partial class EnumerableConverterFactory
     {
-        private sealed class SameTypeReadOnlyCollectionBuilderProvider : IConverterBuilderProvider
+        private sealed class SameTypeReadOnlyCollectionProvider : IEnumerableConverterProvider
         {
-            public static IConverterBuilderProvider Default { get; } = new SameTypeReadOnlyCollectionBuilderProvider();
+            public static IEnumerableConverterProvider Default { get; } = new SameTypeReadOnlyCollectionProvider();
 
             public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
             {
@@ -17,29 +17,29 @@
                 {
                     case SourceEnumerableType.Array:
                     case SourceEnumerableType.List:
-                        return typeof(SameTypeReadOnlyCollectionFromListBuilder<>);
+                        return typeof(SameTypeReadOnlyCollectionFromListConverter<>);
                     default:
-                        return typeof(SameTypeReadOnlyCollectionFromEnumerableBuilder<>);
+                        return typeof(SameTypeReadOnlyCollectionFromEnumerableConverter<>);
                 }
             }
         }
 
-        private sealed class OtherTypeReadOnlyCollectionBuilderProvider : IConverterBuilderProvider
+        private sealed class OtherTypeReadOnlyCollectionProvider : IEnumerableConverterProvider
         {
-            public static IConverterBuilderProvider Default { get; } = new OtherTypeReadOnlyCollectionBuilderProvider();
+            public static IEnumerableConverterProvider Default { get; } = new OtherTypeReadOnlyCollectionProvider();
 
             public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
             {
                 switch (sourceEnumerableType)
                 {
                     case SourceEnumerableType.Array:
-                        return typeof(OtherTypeReadOnlyCollectionFromArrayBuilder<,>);
+                        return typeof(OtherTypeReadOnlyCollectionFromArrayConverter<,>);
                     case SourceEnumerableType.List:
-                        return typeof(OtherTypeReadOnlyCollectionFromListBuilder<,>);
+                        return typeof(OtherTypeReadOnlyCollectionFromListConverter<,>);
                     case SourceEnumerableType.Collection:
-                        return typeof(OtherTypeReadOnlyCollectionFromCollectionBuilder<,>);
+                        return typeof(OtherTypeReadOnlyCollectionFromCollectionConverter<,>);
                     default:
-                        return typeof(OtherTypeReadOnlyCollectionFromEnumerableBuilder<,>);
+                        return typeof(OtherTypeReadOnlyCollectionFromEnumerableConverter<,>);
                 }
             }
         }
@@ -48,7 +48,7 @@
         // Same type
         //--------------------------------------------------------------------------------
 
-        private sealed class SameTypeReadOnlyCollectionFromListBuilder<TDestination> : IConverterBuilder
+        private sealed class SameTypeReadOnlyCollectionFromListConverter<TDestination> : IConverter
         {
             public object Create(object source)
             {
@@ -56,7 +56,7 @@
             }
         }
 
-        private sealed class SameTypeReadOnlyCollectionFromEnumerableBuilder<TDestination> : IConverterBuilder
+        private sealed class SameTypeReadOnlyCollectionFromEnumerableConverter<TDestination> : IConverter
         {
             public object Create(object source)
             {
@@ -68,11 +68,11 @@
         // Other type
         //--------------------------------------------------------------------------------
 
-        private sealed class OtherTypeReadOnlyCollectionFromArrayBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeReadOnlyCollectionFromArrayConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeReadOnlyCollectionFromArrayBuilder(Func<object, object> converter)
+            public OtherTypeReadOnlyCollectionFromArrayConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }
@@ -83,11 +83,11 @@
             }
         }
 
-        private sealed class OtherTypeReadOnlyCollectionFromListBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeReadOnlyCollectionFromListConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeReadOnlyCollectionFromListBuilder(Func<object, object> converter)
+            public OtherTypeReadOnlyCollectionFromListConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }
@@ -98,11 +98,11 @@
             }
         }
 
-        private sealed class OtherTypeReadOnlyCollectionFromCollectionBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeReadOnlyCollectionFromCollectionConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeReadOnlyCollectionFromCollectionBuilder(Func<object, object> converter)
+            public OtherTypeReadOnlyCollectionFromCollectionConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }
@@ -120,11 +120,11 @@
             }
         }
 
-        private sealed class OtherTypeReadOnlyCollectionFromEnumerableBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeReadOnlyCollectionFromEnumerableConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeReadOnlyCollectionFromEnumerableBuilder(Func<object, object> converter)
+            public OtherTypeReadOnlyCollectionFromEnumerableConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }

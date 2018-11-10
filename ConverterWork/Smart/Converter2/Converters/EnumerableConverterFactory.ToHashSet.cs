@@ -5,23 +5,23 @@
 
     public sealed partial class EnumerableConverterFactory
     {
-        private sealed class SameTypeHashSetBuilderProvider : IConverterBuilderProvider
+        private sealed class SameTypeHashSetProvider : IEnumerableConverterProvider
         {
-            public static IConverterBuilderProvider Default { get; } = new SameTypeHashSetBuilderProvider();
+            public static IEnumerableConverterProvider Default { get; } = new SameTypeHashSetProvider();
 
             public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
             {
-                return typeof(SameTypeHashSetFromEnumerableBuilder<>);
+                return typeof(SameTypeHashSetFromEnumerableConverter<>);
             }
         }
 
-        private sealed class OtherTypeHashSetBuilderProvider : IConverterBuilderProvider
+        private sealed class OtherTypeHashSetProvider : IEnumerableConverterProvider
         {
-            public static IConverterBuilderProvider Default { get; } = new OtherTypeHashSetBuilderProvider();
+            public static IEnumerableConverterProvider Default { get; } = new OtherTypeHashSetProvider();
 
             public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
             {
-                return typeof(OtherTypeHashSetFromEnumerableBuilder<,>);
+                return typeof(OtherTypeHashSetFromEnumerableConverter<,>);
             }
         }
 
@@ -29,7 +29,7 @@
         // Same type
         //--------------------------------------------------------------------------------
 
-        private sealed class SameTypeHashSetFromEnumerableBuilder<TDestination> : IConverterBuilder
+        private sealed class SameTypeHashSetFromEnumerableConverter<TDestination> : IConverter
         {
             public object Create(object source)
             {
@@ -41,11 +41,11 @@
         // Other type
         //--------------------------------------------------------------------------------
 
-        private sealed class OtherTypeHashSetFromEnumerableBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeHashSetFromEnumerableConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeHashSetFromEnumerableBuilder(Func<object, object> converter)
+            public OtherTypeHashSetFromEnumerableConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }

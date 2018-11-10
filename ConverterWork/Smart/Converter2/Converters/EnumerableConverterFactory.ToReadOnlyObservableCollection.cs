@@ -7,32 +7,32 @@
 
     public sealed partial class EnumerableConverterFactory
     {
-        private sealed class SameTypeReadOnlyObservableCollectionBuilderProvider : IConverterBuilderProvider
+        private sealed class SameTypeReadOnlyObservableCollectionProvider : IEnumerableConverterProvider
         {
-            public static IConverterBuilderProvider Default { get; } = new SameTypeReadOnlyObservableCollectionBuilderProvider();
+            public static IEnumerableConverterProvider Default { get; } = new SameTypeReadOnlyObservableCollectionProvider();
 
             public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
             {
-                return typeof(SameTypeReadOnlyObservableCollectionFromEnumerableBuilder<>);
+                return typeof(SameTypeReadOnlyObservableCollectionFromEnumerableConverter<>);
             }
         }
 
-        private sealed class OtherTypeReadOnlyObservableCollectionBuilderProvider : IConverterBuilderProvider
+        private sealed class OtherTypeReadOnlyObservableCollectionProvider : IEnumerableConverterProvider
         {
-            public static IConverterBuilderProvider Default { get; } = new OtherTypeReadOnlyObservableCollectionBuilderProvider();
+            public static IEnumerableConverterProvider Default { get; } = new OtherTypeReadOnlyObservableCollectionProvider();
 
             public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
             {
                 switch (sourceEnumerableType)
                 {
                     case SourceEnumerableType.Array:
-                        return typeof(OtherTypeReadOnlyObservableCollectionFromArrayBuilder<,>);
+                        return typeof(OtherTypeReadOnlyObservableCollectionFromArrayConverter<,>);
                     case SourceEnumerableType.List:
-                        return typeof(OtherTypeReadOnlyObservableCollectionFromListBuilder<,>);
+                        return typeof(OtherTypeReadOnlyObservableCollectionFromListConverter<,>);
                     case SourceEnumerableType.Collection:
-                        return typeof(OtherTypeReadOnlyObservableCollectionFromCollectionBuilder<,>);
+                        return typeof(OtherTypeReadOnlyObservableCollectionFromCollectionConverter<,>);
                     default:
-                        return typeof(OtherTypeReadOnlyObservableCollectionFromEnumerableBuilder<,>);
+                        return typeof(OtherTypeReadOnlyObservableCollectionFromEnumerableConverter<,>);
                 }
             }
         }
@@ -41,7 +41,7 @@
         // Same type
         //--------------------------------------------------------------------------------
 
-        private sealed class SameTypeReadOnlyObservableCollectionFromEnumerableBuilder<TDestination> : IConverterBuilder
+        private sealed class SameTypeReadOnlyObservableCollectionFromEnumerableConverter<TDestination> : IConverter
         {
             public object Create(object source)
             {
@@ -53,11 +53,11 @@
         // Other type
         //--------------------------------------------------------------------------------
 
-        private sealed class OtherTypeReadOnlyObservableCollectionFromArrayBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeReadOnlyObservableCollectionFromArrayConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeReadOnlyObservableCollectionFromArrayBuilder(Func<object, object> converter)
+            public OtherTypeReadOnlyObservableCollectionFromArrayConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }
@@ -68,11 +68,11 @@
             }
         }
 
-        private sealed class OtherTypeReadOnlyObservableCollectionFromListBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeReadOnlyObservableCollectionFromListConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeReadOnlyObservableCollectionFromListBuilder(Func<object, object> converter)
+            public OtherTypeReadOnlyObservableCollectionFromListConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }
@@ -83,11 +83,11 @@
             }
         }
 
-        private sealed class OtherTypeReadOnlyObservableCollectionFromCollectionBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeReadOnlyObservableCollectionFromCollectionConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeReadOnlyObservableCollectionFromCollectionBuilder(Func<object, object> converter)
+            public OtherTypeReadOnlyObservableCollectionFromCollectionConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }
@@ -98,11 +98,11 @@
             }
         }
 
-        private sealed class OtherTypeReadOnlyObservableCollectionFromEnumerableBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeReadOnlyObservableCollectionFromEnumerableConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeReadOnlyObservableCollectionFromEnumerableBuilder(Func<object, object> converter)
+            public OtherTypeReadOnlyObservableCollectionFromEnumerableConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }

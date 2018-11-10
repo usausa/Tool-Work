@@ -6,32 +6,32 @@
 
     public sealed partial class EnumerableConverterFactory
     {
-        private sealed class SameTypeConcurrentBagBuilderProvider : IConverterBuilderProvider
+        private sealed class SameTypeConcurrentBagProvider : IEnumerableConverterProvider
         {
-            public static IConverterBuilderProvider Default { get; } = new SameTypeConcurrentBagBuilderProvider();
+            public static IEnumerableConverterProvider Default { get; } = new SameTypeConcurrentBagProvider();
 
             public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
             {
-                return typeof(SameTypeConcurrentBagFromEnumerableBuilder<>);
+                return typeof(SameTypeConcurrentBagFromEnumerableConverter<>);
             }
         }
 
-        private sealed class OtherTypeConcurrentBagBuilderProvider : IConverterBuilderProvider
+        private sealed class OtherTypeConcurrentBagProvider : IEnumerableConverterProvider
         {
-            public static IConverterBuilderProvider Default { get; } = new OtherTypeConcurrentBagBuilderProvider();
+            public static IEnumerableConverterProvider Default { get; } = new OtherTypeConcurrentBagProvider();
 
             public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
             {
                 switch (sourceEnumerableType)
                 {
                     case SourceEnumerableType.Array:
-                        return typeof(OtherTypeConcurrentBagFromArrayBuilder<,>);
+                        return typeof(OtherTypeConcurrentBagFromArrayConverter<,>);
                     case SourceEnumerableType.List:
-                        return typeof(OtherTypeConcurrentBagFromListBuilder<,>);
+                        return typeof(OtherTypeConcurrentBagFromListConverter<,>);
                     case SourceEnumerableType.Collection:
-                        return typeof(OtherTypeConcurrentBagFromCollectionBuilder<,>);
+                        return typeof(OtherTypeConcurrentBagFromCollectionConverter<,>);
                     default:
-                        return typeof(OtherTypeConcurrentBagFromEnumerableBuilder<,>);
+                        return typeof(OtherTypeConcurrentBagFromEnumerableConverter<,>);
                 }
             }
         }
@@ -40,7 +40,7 @@
         // Same type
         //--------------------------------------------------------------------------------
 
-        private sealed class SameTypeConcurrentBagFromEnumerableBuilder<TDestination> : IConverterBuilder
+        private sealed class SameTypeConcurrentBagFromEnumerableConverter<TDestination> : IConverter
         {
             public object Create(object source)
             {
@@ -52,11 +52,11 @@
         // Other type
         //--------------------------------------------------------------------------------
 
-        private sealed class OtherTypeConcurrentBagFromArrayBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeConcurrentBagFromArrayConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeConcurrentBagFromArrayBuilder(Func<object, object> converter)
+            public OtherTypeConcurrentBagFromArrayConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }
@@ -67,11 +67,11 @@
             }
         }
 
-        private sealed class OtherTypeConcurrentBagFromListBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeConcurrentBagFromListConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeConcurrentBagFromListBuilder(Func<object, object> converter)
+            public OtherTypeConcurrentBagFromListConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }
@@ -82,11 +82,11 @@
             }
         }
 
-        private sealed class OtherTypeConcurrentBagFromCollectionBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeConcurrentBagFromCollectionConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeConcurrentBagFromCollectionBuilder(Func<object, object> converter)
+            public OtherTypeConcurrentBagFromCollectionConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }
@@ -97,11 +97,11 @@
             }
         }
 
-        private sealed class OtherTypeConcurrentBagFromEnumerableBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeConcurrentBagFromEnumerableConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeConcurrentBagFromEnumerableBuilder(Func<object, object> converter)
+            public OtherTypeConcurrentBagFromEnumerableConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }

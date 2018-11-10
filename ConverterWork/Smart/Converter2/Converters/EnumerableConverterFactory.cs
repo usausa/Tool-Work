@@ -17,23 +17,18 @@
             List
         }
 
-        public interface IConverterBuilder
-        {
-            object Create(object source);
-        }
-
-        private interface IConverterBuilderProvider
+        private interface IEnumerableConverterProvider
         {
             Type GetBuilderType(SourceEnumerableType sourceEnumerableType);
         }
 
         private sealed class ProviderPair
         {
-            public IConverterBuilderProvider SameTypeProvider { get; }
+            public IEnumerableConverterProvider SameTypeProvider { get; }
 
-            public IConverterBuilderProvider OtherTypeProvider { get; }
+            public IEnumerableConverterProvider OtherTypeProvider { get; }
 
-            public ProviderPair(IConverterBuilderProvider sameTypeProvider, IConverterBuilderProvider otherTypeProvider)
+            public ProviderPair(IEnumerableConverterProvider sameTypeProvider, IEnumerableConverterProvider otherTypeProvider)
             {
                 SameTypeProvider = sameTypeProvider;
                 OtherTypeProvider = otherTypeProvider;
@@ -42,23 +37,23 @@
 
         private static readonly Dictionary<Type, ProviderPair> Providers = new Dictionary<Type, ProviderPair>
         {
-            { typeof(IEnumerable<>), new ProviderPair(SameTypeListBuilderProvider.Default, OtherTypeListBuilderProvider.Default) },
-            { typeof(ICollection<>), new ProviderPair(SameTypeListBuilderProvider.Default, OtherTypeListBuilderProvider.Default) },
-            { typeof(IList<>), new ProviderPair(SameTypeListBuilderProvider.Default, OtherTypeListBuilderProvider.Default) },
-            { typeof(List<>), new ProviderPair(SameTypeListBuilderProvider.Default, OtherTypeListBuilderProvider.Default) },
-            { typeof(ISet<>), new ProviderPair(SameTypeHashSetBuilderProvider.Default, OtherTypeHashSetBuilderProvider.Default) },
-            { typeof(HashSet<>), new ProviderPair(SameTypeHashSetBuilderProvider.Default, OtherTypeHashSetBuilderProvider.Default) },
-            { typeof(IReadOnlyCollection<>), new ProviderPair(SameTypeReadOnlyCollectionBuilderProvider.Default, OtherTypeReadOnlyCollectionBuilderProvider.Default) },
-            { typeof(IReadOnlyList<>), new ProviderPair(SameTypeReadOnlyCollectionBuilderProvider.Default, OtherTypeReadOnlyCollectionBuilderProvider.Default) },
-            { typeof(ReadOnlyCollection<>), new ProviderPair(SameTypeReadOnlyCollectionBuilderProvider.Default, OtherTypeReadOnlyCollectionBuilderProvider.Default) },
-            { typeof(LinkedList<>), new ProviderPair(SameTypeLinkedListBuilderProvider.Default, OtherTypeLinkedListBuilderProvider.Default) },
-            { typeof(Queue<>), new ProviderPair(SameTypeQueueBuilderProvider.Default, OtherTypeQueueBuilderProvider.Default) },
-            { typeof(Stack<>), new ProviderPair(SameTypeStackBuilderProvider.Default, OtherTypeStackBuilderProvider.Default) },
-            { typeof(ObservableCollection<>), new ProviderPair(SameTypeObservableCollectionBuilderProvider.Default, OtherTypeObservableCollectionBuilderProvider.Default) },
-            { typeof(ReadOnlyObservableCollection<>), new ProviderPair(SameTypeReadOnlyObservableCollectionBuilderProvider.Default, OtherTypeReadOnlyObservableCollectionBuilderProvider.Default) },
-            { typeof(ConcurrentQueue<>), new ProviderPair(SameTypeConcurrentQueueBuilderProvider.Default, OtherTypeConcurrentQueueBuilderProvider.Default) },
-            { typeof(ConcurrentStack<>), new ProviderPair(SameTypeConcurrentStackBuilderProvider.Default, OtherTypeConcurrentStackBuilderProvider.Default) },
-            { typeof(ConcurrentBag<>), new ProviderPair(SameTypeConcurrentBagBuilderProvider.Default, OtherTypeConcurrentBagBuilderProvider.Default) }
+            { typeof(IEnumerable<>), new ProviderPair(SameTypeListProvider.Default, OtherTypeListProvider.Default) },
+            { typeof(ICollection<>), new ProviderPair(SameTypeListProvider.Default, OtherTypeListProvider.Default) },
+            { typeof(IList<>), new ProviderPair(SameTypeListProvider.Default, OtherTypeListProvider.Default) },
+            { typeof(List<>), new ProviderPair(SameTypeListProvider.Default, OtherTypeListProvider.Default) },
+            { typeof(ISet<>), new ProviderPair(SameTypeHashSetProvider.Default, OtherTypeHashSetProvider.Default) },
+            { typeof(HashSet<>), new ProviderPair(SameTypeHashSetProvider.Default, OtherTypeHashSetProvider.Default) },
+            { typeof(IReadOnlyCollection<>), new ProviderPair(SameTypeReadOnlyCollectionProvider.Default, OtherTypeReadOnlyCollectionProvider.Default) },
+            { typeof(IReadOnlyList<>), new ProviderPair(SameTypeReadOnlyCollectionProvider.Default, OtherTypeReadOnlyCollectionProvider.Default) },
+            { typeof(ReadOnlyCollection<>), new ProviderPair(SameTypeReadOnlyCollectionProvider.Default, OtherTypeReadOnlyCollectionProvider.Default) },
+            { typeof(LinkedList<>), new ProviderPair(SameTypeLinkedListProvider.Default, OtherTypeLinkedListProvider.Default) },
+            { typeof(Queue<>), new ProviderPair(SameTypeQueueProvider.Default, OtherTypeQueueProvider.Default) },
+            { typeof(Stack<>), new ProviderPair(SameTypeStackProvider.Default, OtherTypeStackProvider.Default) },
+            { typeof(ObservableCollection<>), new ProviderPair(SameTypeObservableCollectionProvider.Default, OtherTypeObservableCollectionProvider.Default) },
+            { typeof(ReadOnlyObservableCollection<>), new ProviderPair(SameTypeReadOnlyObservableCollectionProvider.Default, OtherTypeReadOnlyObservableCollectionProvider.Default) },
+            { typeof(ConcurrentQueue<>), new ProviderPair(SameTypeConcurrentQueueProvider.Default, OtherTypeConcurrentQueueProvider.Default) },
+            { typeof(ConcurrentStack<>), new ProviderPair(SameTypeConcurrentStackProvider.Default, OtherTypeConcurrentStackProvider.Default) },
+            { typeof(ConcurrentBag<>), new ProviderPair(SameTypeConcurrentBagProvider.Default, OtherTypeConcurrentBagProvider.Default) }
         };
 
         public Func<object, object> GetConverter(IObjectConverter context, Type sourceType, Type targetType)
@@ -73,16 +68,16 @@
                     if (sourceElementType == targetElementType)
                     {
                         // IE<T> to T[]
-                        return ((IConverterBuilder)Activator.CreateInstance(
-                            SameTypeArrayBuilderProvider.Default.GetBuilderType(enumerableType).MakeGenericType(targetElementType))).Create;
+                        return ((IConverter)Activator.CreateInstance(
+                            SameTypeArrayProvider.Default.GetBuilderType(enumerableType).MakeGenericType(targetElementType))).Create;
                     }
 
                     var converter = context.CreateConverter(sourceElementType, targetElementType);
                     if (converter != null)
                     {
                         // IE<T1> to T2[]
-                        return ((IConverterBuilder)Activator.CreateInstance(
-                            OtherTypeArrayBuilderProvider.Default.GetBuilderType(enumerableType).MakeGenericType(sourceElementType, targetElementType),
+                        return ((IConverter)Activator.CreateInstance(
+                            OtherTypeArrayProvider.Default.GetBuilderType(enumerableType).MakeGenericType(sourceElementType, targetElementType),
                             converter)).Create;
                     }
                 }
@@ -101,7 +96,7 @@
                     if (sourceElementType == targetElementType)
                     {
                         // IE<T> to IE<T>
-                        return ((IConverterBuilder)Activator.CreateInstance(
+                        return ((IConverter)Activator.CreateInstance(
                             providerPair.SameTypeProvider.GetBuilderType(enumerableType).MakeGenericType(targetElementType))).Create;
                     }
 
@@ -109,7 +104,7 @@
                     if (converter != null)
                     {
                         // IE<T1> to IE<T2>
-                        return ((IConverterBuilder)Activator.CreateInstance(
+                        return ((IConverter)Activator.CreateInstance(
                             providerPair.OtherTypeProvider.GetBuilderType(enumerableType).MakeGenericType(sourceElementType, targetElementType),
                             converter)).Create;
                     }

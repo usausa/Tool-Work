@@ -6,32 +6,32 @@
 
     public sealed partial class EnumerableConverterFactory
     {
-        private sealed class SameTypeConcurrentQueueBuilderProvider : IConverterBuilderProvider
+        private sealed class SameTypeConcurrentQueueProvider : IEnumerableConverterProvider
         {
-            public static IConverterBuilderProvider Default { get; } = new SameTypeConcurrentQueueBuilderProvider();
+            public static IEnumerableConverterProvider Default { get; } = new SameTypeConcurrentQueueProvider();
 
             public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
             {
-                return typeof(SameTypeConcurrentQueueFromEnumerableBuilder<>);
+                return typeof(SameTypeConcurrentQueueFromEnumerableConverter<>);
             }
         }
 
-        private sealed class OtherTypeConcurrentQueueBuilderProvider : IConverterBuilderProvider
+        private sealed class OtherTypeConcurrentQueueProvider : IEnumerableConverterProvider
         {
-            public static IConverterBuilderProvider Default { get; } = new OtherTypeConcurrentQueueBuilderProvider();
+            public static IEnumerableConverterProvider Default { get; } = new OtherTypeConcurrentQueueProvider();
 
             public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
             {
                 switch (sourceEnumerableType)
                 {
                     case SourceEnumerableType.Array:
-                        return typeof(OtherTypeConcurrentQueueFromArrayBuilder<,>);
+                        return typeof(OtherTypeConcurrentQueueFromArrayConverter<,>);
                     case SourceEnumerableType.List:
-                        return typeof(OtherTypeConcurrentQueueFromListBuilder<,>);
+                        return typeof(OtherTypeConcurrentQueueFromListConverter<,>);
                     case SourceEnumerableType.Collection:
-                        return typeof(OtherTypeConcurrentQueueFromCollectionBuilder<,>);
+                        return typeof(OtherTypeConcurrentQueueFromCollectionConverter<,>);
                     default:
-                        return typeof(OtherTypeConcurrentQueueFromEnumerableBuilder<,>);
+                        return typeof(OtherTypeConcurrentQueueFromEnumerableConverter<,>);
                 }
             }
         }
@@ -40,7 +40,7 @@
         // Same type
         //--------------------------------------------------------------------------------
 
-        private sealed class SameTypeConcurrentQueueFromEnumerableBuilder<TDestination> : IConverterBuilder
+        private sealed class SameTypeConcurrentQueueFromEnumerableConverter<TDestination> : IConverter
         {
             public object Create(object source)
             {
@@ -52,11 +52,11 @@
         // Other type
         //--------------------------------------------------------------------------------
 
-        private sealed class OtherTypeConcurrentQueueFromArrayBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeConcurrentQueueFromArrayConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeConcurrentQueueFromArrayBuilder(Func<object, object> converter)
+            public OtherTypeConcurrentQueueFromArrayConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }
@@ -67,11 +67,11 @@
             }
         }
 
-        private sealed class OtherTypeConcurrentQueueFromListBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeConcurrentQueueFromListConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeConcurrentQueueFromListBuilder(Func<object, object> converter)
+            public OtherTypeConcurrentQueueFromListConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }
@@ -82,11 +82,11 @@
             }
         }
 
-        private sealed class OtherTypeConcurrentQueueFromCollectionBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeConcurrentQueueFromCollectionConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeConcurrentQueueFromCollectionBuilder(Func<object, object> converter)
+            public OtherTypeConcurrentQueueFromCollectionConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }
@@ -97,11 +97,11 @@
             }
         }
 
-        private sealed class OtherTypeConcurrentQueueFromEnumerableBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeConcurrentQueueFromEnumerableConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeConcurrentQueueFromEnumerableBuilder(Func<object, object> converter)
+            public OtherTypeConcurrentQueueFromEnumerableConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }

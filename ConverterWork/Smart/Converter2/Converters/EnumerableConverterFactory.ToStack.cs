@@ -5,32 +5,32 @@
 
     public sealed partial class EnumerableConverterFactory
     {
-        private sealed class SameTypeStackBuilderProvider : IConverterBuilderProvider
+        private sealed class SameTypeStackProvider : IEnumerableConverterProvider
         {
-            public static IConverterBuilderProvider Default { get; } = new SameTypeStackBuilderProvider();
+            public static IEnumerableConverterProvider Default { get; } = new SameTypeStackProvider();
 
             public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
             {
-                return typeof(SameTypeStackFromEnumerableBuilder<>);
+                return typeof(SameTypeStackFromEnumerableConverter<>);
             }
         }
 
-        private sealed class OtherTypeStackBuilderProvider : IConverterBuilderProvider
+        private sealed class OtherTypeStackProvider : IEnumerableConverterProvider
         {
-            public static IConverterBuilderProvider Default { get; } = new OtherTypeStackBuilderProvider();
+            public static IEnumerableConverterProvider Default { get; } = new OtherTypeStackProvider();
 
             public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
             {
                 switch (sourceEnumerableType)
                 {
                     case SourceEnumerableType.Array:
-                        return typeof(OtherTypeStackFromArrayBuilder<,>);
+                        return typeof(OtherTypeStackFromArrayConverter<,>);
                     case SourceEnumerableType.List:
-                        return typeof(OtherTypeStackFromListBuilder<,>);
+                        return typeof(OtherTypeStackFromListConverter<,>);
                     case SourceEnumerableType.Collection:
-                        return typeof(OtherTypeStackFromCollectionBuilder<,>);
+                        return typeof(OtherTypeStackFromCollectionConverter<,>);
                     default:
-                        return typeof(OtherTypeStackFromEnumerableBuilder<,>);
+                        return typeof(OtherTypeStackFromEnumerableConverter<,>);
                 }
             }
         }
@@ -39,7 +39,7 @@
         // Same type
         //--------------------------------------------------------------------------------
 
-        private sealed class SameTypeStackFromEnumerableBuilder<TDestination> : IConverterBuilder
+        private sealed class SameTypeStackFromEnumerableConverter<TDestination> : IConverter
         {
             public object Create(object source)
             {
@@ -51,11 +51,11 @@
         // Other type
         //--------------------------------------------------------------------------------
 
-        private sealed class OtherTypeStackFromArrayBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeStackFromArrayConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeStackFromArrayBuilder(Func<object, object> converter)
+            public OtherTypeStackFromArrayConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }
@@ -66,11 +66,11 @@
             }
         }
 
-        private sealed class OtherTypeStackFromListBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeStackFromListConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeStackFromListBuilder(Func<object, object> converter)
+            public OtherTypeStackFromListConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }
@@ -81,11 +81,11 @@
             }
         }
 
-        private sealed class OtherTypeStackFromCollectionBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeStackFromCollectionConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeStackFromCollectionBuilder(Func<object, object> converter)
+            public OtherTypeStackFromCollectionConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }
@@ -96,11 +96,11 @@
             }
         }
 
-        private sealed class OtherTypeStackFromEnumerableBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeStackFromEnumerableConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeStackFromEnumerableBuilder(Func<object, object> converter)
+            public OtherTypeStackFromEnumerableConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }

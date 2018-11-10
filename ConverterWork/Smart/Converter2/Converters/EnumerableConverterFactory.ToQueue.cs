@@ -5,32 +5,32 @@
 
     public sealed partial class EnumerableConverterFactory
     {
-        private sealed class SameTypeQueueBuilderProvider : IConverterBuilderProvider
+        private sealed class SameTypeQueueProvider : IEnumerableConverterProvider
         {
-            public static IConverterBuilderProvider Default { get; } = new SameTypeQueueBuilderProvider();
+            public static IEnumerableConverterProvider Default { get; } = new SameTypeQueueProvider();
 
             public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
             {
-                return typeof(SameTypeQueueFromEnumerableBuilder<>);
+                return typeof(SameTypeQueueFromEnumerableConverter<>);
             }
         }
 
-        private sealed class OtherTypeQueueBuilderProvider : IConverterBuilderProvider
+        private sealed class OtherTypeQueueProvider : IEnumerableConverterProvider
         {
-            public static IConverterBuilderProvider Default { get; } = new OtherTypeQueueBuilderProvider();
+            public static IEnumerableConverterProvider Default { get; } = new OtherTypeQueueProvider();
 
             public Type GetBuilderType(SourceEnumerableType sourceEnumerableType)
             {
                 switch (sourceEnumerableType)
                 {
                     case SourceEnumerableType.Array:
-                        return typeof(OtherTypeQueueFromArrayBuilder<,>);
+                        return typeof(OtherTypeQueueFromArrayConverter<,>);
                     case SourceEnumerableType.List:
-                        return typeof(OtherTypeQueueFromListBuilder<,>);
+                        return typeof(OtherTypeQueueFromListConverter<,>);
                     case SourceEnumerableType.Collection:
-                        return typeof(OtherTypeQueueFromCollectionBuilder<,>);
+                        return typeof(OtherTypeQueueFromCollectionConverter<,>);
                     default:
-                        return typeof(OtherTypeQueueFromEnumerableBuilder<,>);
+                        return typeof(OtherTypeQueueFromEnumerableConverter<,>);
                 }
             }
         }
@@ -39,7 +39,7 @@
         // Same type
         //--------------------------------------------------------------------------------
 
-        private sealed class SameTypeQueueFromEnumerableBuilder<TDestination> : IConverterBuilder
+        private sealed class SameTypeQueueFromEnumerableConverter<TDestination> : IConverter
         {
             public object Create(object source)
             {
@@ -51,11 +51,11 @@
         // Other type
         //--------------------------------------------------------------------------------
 
-        private sealed class OtherTypeQueueFromArrayBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeQueueFromArrayConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeQueueFromArrayBuilder(Func<object, object> converter)
+            public OtherTypeQueueFromArrayConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }
@@ -66,11 +66,11 @@
             }
         }
 
-        private sealed class OtherTypeQueueFromListBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeQueueFromListConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeQueueFromListBuilder(Func<object, object> converter)
+            public OtherTypeQueueFromListConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }
@@ -81,11 +81,11 @@
             }
         }
 
-        private sealed class OtherTypeQueueFromCollectionBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeQueueFromCollectionConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeQueueFromCollectionBuilder(Func<object, object> converter)
+            public OtherTypeQueueFromCollectionConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }
@@ -96,11 +96,11 @@
             }
         }
 
-        private sealed class OtherTypeQueueFromEnumerableBuilder<TSource, TDestination> : IConverterBuilder
+        private sealed class OtherTypeQueueFromEnumerableConverter<TSource, TDestination> : IConverter
         {
             private readonly Func<object, object> converter;
 
-            public OtherTypeQueueFromEnumerableBuilder(Func<object, object> converter)
+            public OtherTypeQueueFromEnumerableConverter(Func<object, object> converter)
             {
                 this.converter = converter;
             }
