@@ -1,23 +1,10 @@
 ﻿namespace Smart.Converter2.Converters
 {
     using System;
-    using System.Collections.Generic;
     using System.Globalization;
 
     public sealed class EnumConverterFactory : IConverterFactory
     {
-        private static readonly HashSet<Type> UnderlyingTypes = new HashSet<Type>
-        {
-            { typeof(byte) },
-            { typeof(sbyte) },
-            { typeof(short) },
-            { typeof(ushort) },
-            { typeof(int) },
-            { typeof(uint) },
-            { typeof(long) },
-            { typeof(ulong) }
-        };
-
         public Func<object, object> GetConverter(IObjectConverter context, Type sourceType, Type targetType)
         {
             var sourceEnumType = sourceType.GetEnumType();
@@ -40,10 +27,17 @@
                 }
 
                 // Assignable
-                if (UnderlyingTypes.Contains(sourceType))
+                var targetUnderlyingType = Enum.GetUnderlyingType(targetEnumType);
+                if (sourceType.IsAssignableFrom(targetUnderlyingType))
                 {
-                    var targetUnderlyingType = targetType.IsNullableType() ? Nullable.GetUnderlyingType(targetType) : targetType;
-                    return source => Enum.ToObject(targetUnderlyingType, source);
+                    return source => Enum.ToObject(targetEnumType, source);
+                }
+
+                // Not Assignable
+                var converter = context.CreateConverter(sourceType, targetUnderlyingType);
+                if (converter != null)
+                {
+                    return source => Enum.ToObject(targetEnumType, converter(source));
                 }
 
                 return null;
@@ -59,11 +53,19 @@
                     return ((IConverter)Activator.CreateInstance(typeof(EnumToStringConverter<>).MakeGenericType(sourceEnumType))).Convert;
                 }
 
-                // Enum to Numeric
-                var targetUnderlyingType = targetType.IsNullableType() ? Nullable.GetUnderlyingType(targetType) : targetType;
-                if (UnderlyingTypes.Contains(targetUnderlyingType))
+                // Assignable
+                var sourceUnderlyingType = Enum.GetUnderlyingType(sourceEnumType);
+                if (targetType.IsAssignableFrom(sourceUnderlyingType))
                 {
-                    return source => Convert.ChangeType(source, targetUnderlyingType, CultureInfo.CurrentCulture);
+                    targetType = targetType.IsNullableType() ? Nullable.GetUnderlyingType(targetType) : targetType;
+                    return source => Convert.ChangeType(source, targetType, CultureInfo.CurrentCulture);
+                }
+
+                // Not Assignable
+                var converter = context.CreateConverter(sourceUnderlyingType, targetType);
+                if (converter != null)
+                {
+                    return source => converter(Convert.ChangeType(source, sourceUnderlyingType, CultureInfo.CurrentCulture));
                 }
 
                 return null;
