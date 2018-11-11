@@ -59,6 +59,14 @@
             Assert.True(converter.UsedOnly<ConversionOperatorConverterFactory>());
         }
 
+        [Fact]
+        public void ConvertIntToNullableImplicitNullable()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(1, converter.Convert<TestNullableImplicit?>(1)?.Value);
+            Assert.True(converter.UsedOnly<ConversionOperatorConverterFactory>());
+        }
+
         //--------------------------------------------------------------------------------
         // Explicit
         //--------------------------------------------------------------------------------
@@ -109,6 +117,14 @@
         {
             var converter = new TestObjectConverter();
             Assert.Equal(1, converter.Convert<TestNullableExplicit>(1).Value);
+            Assert.True(converter.UsedOnly<ConversionOperatorConverterFactory>());
+        }
+
+        [Fact]
+        public void ConvertIntToNullableExplicitNullable()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(1, converter.Convert<TestNullableExplicit?>(1)?.Value);
             Assert.True(converter.UsedOnly<ConversionOperatorConverterFactory>());
         }
     }
