@@ -59,7 +59,7 @@
         {
             var converter = new TestObjectConverter();
             Assert.Equal((byte)new DateTime(2000, 1, 1).Ticks, converter.Convert(new DateTime(2000, 1, 1), typeof(byte)));
-            Assert.True(converter.UsedIn(typeof(DateTimeConverterFactory), typeof(NumericCastConverterFactory)));
+            Assert.True(converter.UsedOnly<DateTimeConverterFactory>());
         }
 
         [Fact]
@@ -67,7 +67,7 @@
         {
             var converter = new TestObjectConverter();
             Assert.Equal((byte)new DateTime(2000, 1, 1).Ticks, converter.Convert(new DateTime(2000, 1, 1), typeof(byte?)));
-            Assert.True(converter.UsedIn(typeof(DateTimeConverterFactory), typeof(NumericCastConverterFactory)));
+            Assert.True(converter.UsedOnly<DateTimeConverterFactory>());
         }
 
         [Fact]
@@ -186,7 +186,7 @@
         {
             var converter = new TestObjectConverter();
             Assert.Equal((byte)new DateTimeOffset(new DateTime(2000, 1, 1)).Ticks, converter.Convert(new DateTimeOffset(new DateTime(2000, 1, 1)), typeof(byte)));
-            Assert.True(converter.UsedIn(typeof(DateTimeConverterFactory), typeof(NumericCastConverterFactory)));
+            Assert.True(converter.UsedOnly<DateTimeConverterFactory>());
         }
 
         [Fact]
@@ -194,7 +194,7 @@
         {
             var converter = new TestObjectConverter();
             Assert.Equal((byte)new DateTimeOffset(new DateTime(2000, 1, 1)).Ticks, converter.Convert(new DateTimeOffset(new DateTime(2000, 1, 1)), typeof(byte?)));
-            Assert.True(converter.UsedIn(typeof(DateTimeConverterFactory), typeof(NumericCastConverterFactory)));
+            Assert.True(converter.UsedOnly<DateTimeConverterFactory>());
         }
 
         [Fact]
@@ -296,7 +296,7 @@
         {
             var converter = new TestObjectConverter();
             Assert.Equal((byte)new TimeSpan(0, 0, 1).Ticks, converter.Convert(new TimeSpan(0, 0, 1), typeof(byte)));
-            Assert.True(converter.UsedIn(typeof(DateTimeConverterFactory), typeof(NumericCastConverterFactory)));
+            Assert.True(converter.UsedOnly<DateTimeConverterFactory>());
         }
 
         [Fact]
@@ -304,7 +304,7 @@
         {
             var converter = new TestObjectConverter();
             Assert.Equal((byte)new TimeSpan(0, 0, 1).Ticks, converter.Convert(new TimeSpan(0, 0, 1), typeof(byte?)));
-            Assert.True(converter.UsedIn(typeof(DateTimeConverterFactory), typeof(NumericCastConverterFactory)));
+            Assert.True(converter.UsedOnly<DateTimeConverterFactory>());
         }
 
         [Fact]

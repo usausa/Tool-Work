@@ -1,9 +1,57 @@
 ﻿namespace Smart.Converter2.Converters
 {
     using System;
+    using System.Collections.Generic;
 
     public sealed class DateTimeConverterFactory : IConverterFactory
     {
+        private static readonly Dictionary<Type, Func<object, object>> DateTimeTickConverter = new Dictionary<Type, Func<object, object>>
+        {
+            { typeof(byte), source => (byte)((DateTime)source).Ticks },
+            { typeof(sbyte), source => (sbyte)((DateTime)source).Ticks },
+            { typeof(short), source => (short)((DateTime)source).Ticks },
+            { typeof(ushort), source => (ushort)((DateTime)source).Ticks },
+            { typeof(int), source => (int)((DateTime)source).Ticks },
+            { typeof(uint), source => (uint)((DateTime)source).Ticks },
+            { typeof(long), source => ((DateTime)source).Ticks },
+            { typeof(ulong), source => (ulong)((DateTime)source).Ticks },
+            { typeof(char), source => (char)((DateTime)source).Ticks },
+            { typeof(double), source => (double)((DateTime)source).Ticks },
+            { typeof(float), source => (float)((DateTime)source).Ticks }
+        };
+
+        private static readonly Dictionary<Type, Func<object, object>> DateTimeOffsetTickConverter = new Dictionary<Type, Func<object, object>>
+        {
+            { typeof(byte), source => (byte)((DateTimeOffset)source).Ticks },
+            { typeof(sbyte), source => (sbyte)((DateTimeOffset)source).Ticks },
+            { typeof(short), source => (short)((DateTimeOffset)source).Ticks },
+            { typeof(ushort), source => (ushort)((DateTimeOffset)source).Ticks },
+            { typeof(int), source => (int)((DateTimeOffset)source).Ticks },
+            { typeof(uint), source => (uint)((DateTimeOffset)source).Ticks },
+            { typeof(long), source => ((DateTimeOffset)source).Ticks },
+            { typeof(ulong), source => (ulong)((DateTimeOffset)source).Ticks },
+            { typeof(char), source => (char)((DateTimeOffset)source).Ticks },
+            { typeof(double), source => (double)((DateTimeOffset)source).Ticks },
+            { typeof(float), source => (float)((DateTimeOffset)source).Ticks }
+        };
+
+        private static readonly Dictionary<Type, Func<object, object>> TimeSpanTickConverter = new Dictionary<Type, Func<object, object>>
+        {
+            { typeof(byte), source => (byte)((TimeSpan)source).Ticks },
+            { typeof(sbyte), source => (sbyte)((TimeSpan)source).Ticks },
+            { typeof(short), source => (short)((TimeSpan)source).Ticks },
+            { typeof(ushort), source => (ushort)((TimeSpan)source).Ticks },
+            { typeof(int), source => (int)((TimeSpan)source).Ticks },
+            { typeof(uint), source => (uint)((TimeSpan)source).Ticks },
+            { typeof(long), source => ((TimeSpan)source).Ticks },
+            { typeof(ulong), source => (ulong)((TimeSpan)source).Ticks },
+            { typeof(char), source => (char)((TimeSpan)source).Ticks },
+            { typeof(double), source => (double)((TimeSpan)source).Ticks },
+            { typeof(float), source => (float)((TimeSpan)source).Ticks }
+        };
+
+        // TODO
+
         public Func<object, object> GetConverter(IObjectConverter context, Type sourceType, Type targetType)
         {
             // From DateTime
@@ -34,17 +82,10 @@
                     };
                 }
 
-                // DateTime to long
-                if (underlyingTargetType == typeof(long))
+                // DateTime to numeric
+                if (DateTimeTickConverter.TryGetValue(underlyingTargetType, out var converter))
                 {
-                    return source => ((DateTime)source).Ticks;
-                }
-
-                // DateTime to can convert from long
-                var converter = context.CreateConverter(typeof(long), targetType);
-                if (converter != null)
-                {
-                    return source => converter(((DateTime)source).Ticks);
+                    return converter;
                 }
 
                 return null;
@@ -67,17 +108,10 @@
                     return source => ((DateTimeOffset)source).DateTime;
                 }
 
-                // DateTimeOffset to long
-                if (underlyingTargetType == typeof(long))
+                // DateTimeOffset to numeric
+                if (DateTimeOffsetTickConverter.TryGetValue(underlyingTargetType, out var converter))
                 {
-                    return source => ((DateTimeOffset)source).Ticks;
-                }
-
-                // DateTimeOffset to can convert from long
-                var converter = context.CreateConverter(typeof(long), targetType);
-                if (converter != null)
-                {
-                    return source => converter(((DateTimeOffset)source).Ticks);
+                    return converter;
                 }
 
                 return null;
@@ -94,17 +128,10 @@
 
                 var underlyingTargetType = targetType.IsNullableType() ? Nullable.GetUnderlyingType(targetType) : targetType;
 
-                // TimeSpan to long
-                if (underlyingTargetType == typeof(long))
+                // TimeSpan to numeric
+                if (TimeSpanTickConverter.TryGetValue(underlyingTargetType, out var converter))
                 {
-                    return source => ((TimeSpan)source).Ticks;
-                }
-
-                // TimeSpan to can convert from long
-                var converter = context.CreateConverter(typeof(long), targetType);
-                if (converter != null)
-                {
-                    return source => converter(((TimeSpan)source).Ticks);
+                    return converter;
                 }
 
                 return null;
@@ -139,6 +166,7 @@
                 return null;
             }
 
+            // TODO underlyingTargetTypeベースで3numericにする
             // From long
             if (sourceType == typeof(long))
             {
@@ -198,6 +226,7 @@
                 return null;
             }
 
+            // TODO *3
             // From can convert to long
             var type = targetType.IsNullableType() ? Nullable.GetUnderlyingType(targetType) : targetType;
             if (type == typeof(DateTime))
