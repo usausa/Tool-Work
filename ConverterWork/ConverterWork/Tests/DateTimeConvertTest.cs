@@ -262,5 +262,112 @@
             Assert.Null(converter.Convert((short)-1, typeof(DateTimeOffset?)));
             Assert.True(converter.UsedIn(typeof(DateTimeConverterFactory), typeof(NumericCastConverterFactory)));
         }
+
+        //--------------------------------------------------------------------------------
+        // TimeSpan to
+        //--------------------------------------------------------------------------------
+
+        [Fact]
+        public void TimeSpanToString()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal("01:01:01", converter.Convert(new TimeSpan(1, 1, 1), typeof(string)));
+            Assert.True(converter.UsedOnly<DateTimeConverterFactory>());
+        }
+
+        [Fact]
+        public void TimeSpanToLong()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(new TimeSpan(1, 1, 1).Ticks, converter.Convert(new TimeSpan(1, 1, 1), typeof(long)));
+            Assert.True(converter.UsedOnly<DateTimeConverterFactory>());
+        }
+
+        [Fact]
+        public void TimeSpanToNullableLong()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(new TimeSpan(1, 1, 1).Ticks, converter.Convert(new TimeSpan(1, 1, 1), typeof(long?)));
+            Assert.True(converter.UsedOnly<DateTimeConverterFactory>());
+        }
+
+        [Fact]
+        public void TimeSpanToByte()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal((byte)new TimeSpan(0, 0, 1).Ticks, converter.Convert(new TimeSpan(0, 0, 1), typeof(byte)));
+            Assert.True(converter.UsedIn(typeof(DateTimeConverterFactory), typeof(NumericCastConverterFactory)));
+        }
+
+        [Fact]
+        public void TimeSpanToNullableByte()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal((byte)new TimeSpan(0, 0, 1).Ticks, converter.Convert(new TimeSpan(0, 0, 1), typeof(byte?)));
+            Assert.True(converter.UsedIn(typeof(DateTimeConverterFactory), typeof(NumericCastConverterFactory)));
+        }
+
+        [Fact]
+        public void TimeSpanCanNotCovert()
+        {
+            var converter = new TestObjectConverter();
+            Assert.False(converter.CanConvert(typeof(TimeSpan), typeof(TestStruct)));
+        }
+
+        //--------------------------------------------------------------------------------
+        // string to TimeSpan
+        //--------------------------------------------------------------------------------
+
+        [Fact]
+        public void StringToTimeSpan()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(new TimeSpan(1, 1, 1), converter.Convert("01:01:01", typeof(TimeSpan)));
+            Assert.True(converter.UsedOnly<DateTimeConverterFactory>());
+        }
+
+        [Fact]
+        public void StringToNullableTimeSpan()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(new TimeSpan(1, 1, 1), converter.Convert("01:01:01", typeof(TimeSpan?)));
+            Assert.True(converter.UsedOnly<DateTimeConverterFactory>());
+        }
+
+        //--------------------------------------------------------------------------------
+        // Numeric to TimeSpan
+        //--------------------------------------------------------------------------------
+
+        [Fact]
+        public void LongToTimeSpan()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(new TimeSpan(1, 1, 1), converter.Convert(new TimeSpan(1, 1, 1).Ticks, typeof(TimeSpan)));
+            Assert.True(converter.UsedOnly<DateTimeConverterFactory>());
+        }
+
+        [Fact]
+        public void LongToNullableTimeSpan()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(new TimeSpan(1, 1, 1), converter.Convert(new TimeSpan(1, 1, 1).Ticks, typeof(TimeSpan?)));
+            Assert.True(converter.UsedOnly<DateTimeConverterFactory>());
+        }
+
+        [Fact]
+        public void ShortToTimeSpan()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(new TimeSpan(0L), converter.Convert((short)0, typeof(TimeSpan)));
+            Assert.True(converter.UsedIn(typeof(DateTimeConverterFactory), typeof(NumericCastConverterFactory)));
+        }
+
+        [Fact]
+        public void ShortToNullableTimeSpan()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal(new TimeSpan(0L), converter.Convert((short)0, typeof(TimeSpan?)));
+            Assert.True(converter.UsedIn(typeof(DateTimeConverterFactory), typeof(NumericCastConverterFactory)));
+        }
     }
 }

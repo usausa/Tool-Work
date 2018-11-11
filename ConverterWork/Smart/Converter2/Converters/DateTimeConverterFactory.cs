@@ -83,6 +83,33 @@
                 return null;
             }
 
+            // From TimeSpan
+            if (sourceType == typeof(TimeSpan))
+            {
+                // TimeSpan to String
+                if (targetType == typeof(string))
+                {
+                    return source => ((TimeSpan)source).ToString();
+                }
+
+                var underlyingTargetType = targetType.IsNullableType() ? Nullable.GetUnderlyingType(targetType) : targetType;
+
+                // TimeSpan to long
+                if (underlyingTargetType == typeof(long))
+                {
+                    return source => ((TimeSpan)source).Ticks;
+                }
+
+                // TimeSpan to can convert from long
+                var converter = context.CreateConverter(typeof(long), targetType);
+                if (converter != null)
+                {
+                    return source => converter(((TimeSpan)source).Ticks);
+                }
+
+                return null;
+            }
+
             // From string
             if (sourceType == typeof(string))
             {
@@ -101,6 +128,15 @@
                     var defaultValue = targetType.IsNullableType() ? null : (object)default(DateTimeOffset);
                     return source => DateTimeOffset.TryParse((string)source, out var result) ? result : defaultValue;
                 }
+
+                // String to TimeSpan(Nullable)
+                if (underlyingTargetType == typeof(TimeSpan))
+                {
+                    var defaultValue = targetType.IsNullableType() ? null : (object)default(TimeSpan);
+                    return source => TimeSpan.TryParse((string)source, out var result) ? result : defaultValue;
+                }
+
+                return null;
             }
 
             // From long
@@ -141,6 +177,25 @@
                         }
                     };
                 }
+
+                // long to TimeSpan(Nullable)
+                if (underlyingTargetType == typeof(TimeSpan))
+                {
+                    var defaultValue = targetType.IsNullableType() ? null : (object)default(TimeSpan);
+                    return source =>
+                    {
+                        try
+                        {
+                            return new TimeSpan((long)source);
+                        }
+                        catch (ArgumentOutOfRangeException)
+                        {
+                            return defaultValue;
+                        }
+                    };
+                }
+
+                return null;
             }
 
             // From can convert to long
@@ -178,6 +233,27 @@
                         try
                         {
                             return new DateTimeOffset(new DateTime((long)converter(source)));
+                        }
+                        catch (ArgumentOutOfRangeException)
+                        {
+                            return defaultValue;
+                        }
+                    };
+                }
+            }
+
+            if (type == typeof(TimeSpan))
+            {
+                // Can convert long to TimeSpan
+                var converter = context.CreateConverter(sourceType, typeof(long));
+                if (converter != null)
+                {
+                    var defaultValue = targetType.IsNullableType() ? null : (object)default(TimeSpan);
+                    return source =>
+                    {
+                        try
+                        {
+                            return new TimeSpan((long)converter(source));
                         }
                         catch (ArgumentOutOfRangeException)
                         {
