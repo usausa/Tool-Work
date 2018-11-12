@@ -125,7 +125,7 @@
             var converter = new TestObjectConverter();
             Assert.Equal(new DateTime(0L), converter.Convert((short)0, typeof(DateTime)));
             Assert.Equal(default(DateTime), converter.Convert((short)-1, typeof(DateTime)));
-            Assert.True(converter.UsedIn(typeof(DateTimeConverterFactory), typeof(NumericCastConverterFactory)));
+            Assert.True(converter.UsedOnly<DateTimeConverterFactory>());
         }
 
         [Fact]
@@ -134,7 +134,7 @@
             var converter = new TestObjectConverter();
             Assert.Equal(new DateTime(0L), converter.Convert((short)0, typeof(DateTime?)));
             Assert.Null(converter.Convert((short)-1, typeof(DateTime?)));
-            Assert.True(converter.UsedIn(typeof(DateTimeConverterFactory), typeof(NumericCastConverterFactory)));
+            Assert.True(converter.UsedOnly<DateTimeConverterFactory>());
         }
 
         //--------------------------------------------------------------------------------
@@ -252,7 +252,7 @@
             var converter = new TestObjectConverter();
             Assert.Equal(DateTimeOffset.MinValue, converter.Convert((short)DateTimeOffset.MinValue.Ticks, typeof(DateTimeOffset)));
             Assert.Equal(default(DateTimeOffset), converter.Convert((short)-1, typeof(DateTimeOffset)));
-            Assert.True(converter.UsedIn(typeof(DateTimeConverterFactory), typeof(NumericCastConverterFactory)));
+            Assert.True(converter.UsedOnly<DateTimeConverterFactory>());
         }
 
         [Fact]
@@ -260,7 +260,7 @@
         {
             var converter = new TestObjectConverter();
             Assert.Null(converter.Convert((short)-1, typeof(DateTimeOffset?)));
-            Assert.True(converter.UsedIn(typeof(DateTimeConverterFactory), typeof(NumericCastConverterFactory)));
+            Assert.True(converter.UsedOnly<DateTimeConverterFactory>());
         }
 
         //--------------------------------------------------------------------------------
@@ -359,7 +359,7 @@
         {
             var converter = new TestObjectConverter();
             Assert.Equal(new TimeSpan(0L), converter.Convert((short)0, typeof(TimeSpan)));
-            Assert.True(converter.UsedIn(typeof(DateTimeConverterFactory), typeof(NumericCastConverterFactory)));
+            Assert.True(converter.UsedOnly<DateTimeConverterFactory>());
         }
 
         [Fact]
@@ -367,7 +367,7 @@
         {
             var converter = new TestObjectConverter();
             Assert.Equal(new TimeSpan(0L), converter.Convert((short)0, typeof(TimeSpan?)));
-            Assert.True(converter.UsedIn(typeof(DateTimeConverterFactory), typeof(NumericCastConverterFactory)));
+            Assert.True(converter.UsedOnly<DateTimeConverterFactory>());
         }
     }
 }
