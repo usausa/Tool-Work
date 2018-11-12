@@ -16,10 +16,11 @@
                 new DBNullConverterFactory(),               // DBNull
                 new AssignableConverterFactory(),           // IsAssignableFrom
                 new BooleanConverterFactory(),              // Boolean
+                new DateTimeConverterFactory(),             // DateTime/DateTimeOffset
+                new GuidConverterFactory(),                 // Guid
+                new DecimalConverterFactory(),              // Decimal
                 new NumericCastConverterFactory(),          // Numeric cast
                 new NumericParseConverterFactory(),         // Numeric parse
-                new DecimalConverterFactory(),              // Decimal
-                new DateTimeConverterFactory(),             // DateTime/DateTimeOffset
                 new EnumConverterFactory(),                 // Enum to Enum, String to Enum, Assignable to Enum, Enum to Assignable
                 new EnumerableConverterFactory(),           // Enumerable
                 new ConversionOperatorConverterFactory(),   // Implicit/Explicit operator
