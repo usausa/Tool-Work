@@ -30,6 +30,7 @@
             { Tuple.Create(typeof(Decimal), typeof(double?)), x => { try { return Decimal.ToDouble((decimal)x); } catch (OverflowException) { return default(double?); } } },
             { Tuple.Create(typeof(Decimal), typeof(float)), x => { try { return Decimal.ToSingle((decimal)x); } catch (OverflowException) { return default(float); } } },
             { Tuple.Create(typeof(Decimal), typeof(float?)), x => { try { return Decimal.ToSingle((decimal)x); } catch (OverflowException) { return default(float?); } } },
+            { Tuple.Create(typeof(Decimal), typeof(string)), x => ((decimal)x).ToString() },
             // To Decimal
             { Tuple.Create(typeof(byte), typeof(Decimal)), x => new Decimal((byte)x) },
             { Tuple.Create(typeof(sbyte), typeof(Decimal)), x => new Decimal((sbyte)x) },

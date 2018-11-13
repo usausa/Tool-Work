@@ -228,6 +228,15 @@
             Assert.True(converter.UsedOnly<DecimalConverterFactory>());
         }
 
+        [Fact]
+        public void DecimalToString()
+        {
+            var converter = new TestObjectConverter();
+            Assert.Equal("-79228162514264337593543950335", converter.Convert(Decimal.MinValue, typeof(string)));
+            Assert.Equal("79228162514264337593543950335", converter.Convert(Decimal.MaxValue, typeof(string)));
+            Assert.True(converter.UsedOnly<DecimalConverterFactory>());
+        }
+
         //--------------------------------------------------------------------------------
         // ToDecimal
         //--------------------------------------------------------------------------------
