@@ -17,7 +17,7 @@
 
         private static readonly Type StringType = typeof(string);
 
-        private readonly Smart.Converter2.ObjectConverter converter2 = Smart.Converter2.ObjectConverter.Default;
+        private readonly Smart.Converter.ObjectConverter converter2 = Smart.Converter.ObjectConverter.Default;
 
         // null ->
 

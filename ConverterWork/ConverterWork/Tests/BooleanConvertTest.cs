@@ -1,6 +1,6 @@
 ﻿namespace Smart.Tests
 {
-    using Smart.Converter2.Converters;
+    using Smart.Converter.Converters;
 
     using Xunit;
 

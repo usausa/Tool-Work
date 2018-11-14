@@ -2,7 +2,7 @@
 {
     using System;
 
-    using Smart.Converter2;
+    using Smart.Converter;
 
     public sealed class TestConverterFactory : IConverterFactory
     {

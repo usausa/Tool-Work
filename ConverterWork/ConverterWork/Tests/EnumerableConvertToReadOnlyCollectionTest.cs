@@ -3,7 +3,7 @@
     using System.Collections.ObjectModel;
     using System.Linq;
 
-    using Smart.Converter2.Converters;
+    using Smart.Converter.Converters;
 
     using Xunit;
 

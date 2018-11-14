@@ -4,8 +4,8 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using Smart.Converter2;
-    using Smart.Converter2.Converters;
+    using Smart.Converter;
+    using Smart.Converter.Converters;
 
     public sealed class TestObjectConverter : IObjectConverter
     {

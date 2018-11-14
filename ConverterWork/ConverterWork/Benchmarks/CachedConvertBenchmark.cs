@@ -4,7 +4,7 @@
 
     using BenchmarkDotNet.Attributes;
 
-    using Smart.Converter2;
+    using Smart.Converter;
 
     [Config(typeof(BenchmarkConfig))]
     public class CachedConvertBenchmark

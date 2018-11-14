@@ -2,7 +2,7 @@
 {
     using System;
 
-    using Smart.Converter2.Converters;
+    using Smart.Converter.Converters;
 
     using Xunit;
 

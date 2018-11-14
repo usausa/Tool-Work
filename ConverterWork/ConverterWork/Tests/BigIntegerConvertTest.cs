@@ -3,7 +3,7 @@
     using System;
     using System.Numerics;
 
-    using Smart.Converter2.Converters;
+    using Smart.Converter.Converters;
 
     using Xunit;
 
