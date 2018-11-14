@@ -19,6 +19,7 @@
                 new DateTimeConverterFactory(),             // DateTime/DateTimeOffset
                 new GuidConverterFactory(),                 // Guid
                 new DecimalConverterFactory(),              // Decimal
+                new BigIntegerConverterFactory(),           // BigInteger
                 new NumericCastConverterFactory(),          // Numeric cast
                 new NumericParseConverterFactory(),         // Numeric parse
                 new EnumConverterFactory(),                 // Enum to Enum, String to Enum, Assignable to Enum, Enum to Assignable

@@ -36,7 +36,6 @@
             { Tuple.Create(typeof(BigInteger), typeof(string)), x => ((BigInteger)x).ToString() },
             // To BigInteger
             { Tuple.Create(typeof(byte), typeof(BigInteger)), x => new BigInteger((byte)x) },
-            { Tuple.Create(typeof(byte), typeof(BigInteger)), x => new BigInteger((byte)x) },
             { Tuple.Create(typeof(sbyte), typeof(BigInteger)), x => new BigInteger((sbyte)x) },
             { Tuple.Create(typeof(short), typeof(BigInteger)), x => new BigInteger((short)x) },
             { Tuple.Create(typeof(ushort), typeof(BigInteger)), x => new BigInteger((ushort)x) },
@@ -61,6 +60,7 @@
             { Tuple.Create(typeof(char), typeof(BigInteger?)), x => new BigInteger((char)x) },
             { Tuple.Create(typeof(double), typeof(BigInteger?)), x => { try { return new BigInteger((double)x); } catch (OverflowException) { return default(BigInteger?); } } },
             { Tuple.Create(typeof(float), typeof(BigInteger?)), x => { try { return new BigInteger((float)x); } catch (OverflowException) { return default(BigInteger?); } } },
+            { Tuple.Create(typeof(decimal), typeof(BigInteger?)), x => { try { return new BigInteger((decimal)x); } catch (OverflowException) { return default(BigInteger?); } } },
             { Tuple.Create(typeof(string), typeof(BigInteger?)), x => BigInteger.TryParse((string)x, out var result) ? result : default(BigInteger?) }
         };
 

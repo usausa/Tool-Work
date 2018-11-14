@@ -104,7 +104,17 @@
             public Func<object, object> Build()
             {
                 var func = (Func<TSource, TDestination>)Delegate.CreateDelegate(typeof(Func<TSource, TDestination>), mi);
-                return source => func((TSource)source);
+                return source =>
+                {
+                    try
+                    {
+                        return func((TSource)source);
+                    }
+                    catch (Exception)
+                    {
+                        return default(TDestination);
+                    }
+                };
             }
         }
     }
