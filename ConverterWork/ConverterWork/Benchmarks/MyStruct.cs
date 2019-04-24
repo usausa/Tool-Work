@@ -1,9 +1,0 @@
-﻿namespace Smart.Benchmarks
-{
-    public struct MyStruct
-    {
-        public int X { get; set; }
-
-        public int Y { get; set; }
-    }
-}
