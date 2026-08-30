@@ -1,4 +1,4 @@
-﻿namespace TemperTest
+namespace TemperTest
 {
     using System;
     using System.Diagnostics;

@@ -1,4 +1,4 @@
-﻿namespace TapTest
+namespace TapTest
 {
     using System;
     using System.Diagnostics;
